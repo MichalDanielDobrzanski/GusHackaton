@@ -1,8 +1,11 @@
 package com.gus.hackaton;
 
+import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -12,8 +15,11 @@ import com.gus.hackaton.net.Api;
 import com.gus.hackaton.net.ApiService;
 import com.gus.hackaton.ranking.RankingActivity;
 
+import org.w3c.dom.Text;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import me.dm7.barcodescanner.zbar.Result;
 import me.dm7.barcodescanner.zbar.ZBarScannerView;
 import retrofit2.Call;
@@ -28,6 +34,21 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
 
     @BindView(R.id.display_view)
     CameraView mCameraView;
+
+    @BindView(R.id.name_l)
+    TextView name_l;
+    @BindView(R.id.health_indicator_l)
+    TextView health_indicator_l;
+    @BindView(R.id.calories_l)
+    TextView calories_l;
+    @BindView(R.id.fat_l)
+    TextView fat_l;
+    @BindView(R.id.carbohydrate_l)
+    TextView carbohydrate_l;
+    @BindView(R.id.protein_l)
+    TextView protein_l;
+    @BindView(R.id.sugar_l)
+    TextView sugar_l;
 
     @BindView(R.id.name)
     TextView name;
@@ -66,6 +87,30 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
         }
     }
 
+    private void toggleVisibility(boolean visible) {
+        name_l.setVisibility(visible ? View.VISIBLE : View.GONE);
+
+        health_indicator_l.setVisibility(visible ? View.VISIBLE : View.GONE);
+        calories_l.setVisibility(visible ? View.VISIBLE : View.GONE);
+        fat_l.setVisibility(visible ? View.VISIBLE : View.GONE);
+
+        carbohydrate_l.setVisibility(visible ? View.VISIBLE : View.GONE);
+        protein_l.setVisibility(visible ? View.VISIBLE : View.GONE);
+        sugar_l.setVisibility(visible ? View.VISIBLE : View.GONE);
+
+
+        name.setVisibility(visible ? View.VISIBLE : View.GONE);
+
+        health_indicator.setVisibility(visible ? View.VISIBLE : View.GONE);
+        calories.setVisibility(visible ? View.VISIBLE : View.GONE);
+        fat.setVisibility(visible ? View.VISIBLE : View.GONE);
+
+        carbohydrate.setVisibility(visible ? View.VISIBLE : View.GONE);
+        protein.setVisibility(visible ? View.VISIBLE : View.GONE);
+        sugar.setVisibility(visible ? View.VISIBLE : View.GONE);
+
+    }
+
     @Override
     public void onPause() {
         if(!scanned)
@@ -86,7 +131,11 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
         mScannerView.stopCamera();
         scanned = true;
         setContentView(R.layout.scan_activity);
+
         ButterKnife.bind(this);
+
+        toggleVisibility(false);
+
         mCameraView.start();
         sendRequest(rawResult.getContents());
     }
@@ -98,19 +147,27 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
         api.getProductInfo(id).enqueue(new Callback<ProductInfo>()
         {
             @Override
-            public void onResponse(Call<ProductInfo> call, Response<ProductInfo> response)
+            public void onResponse(@NonNull Call<ProductInfo> call, @NonNull Response<ProductInfo> response)
             {
                 ProductInfo productInfo = response.body();
-                Log.d(TAG, "onResponse: " + productInfo.name);
-                name.setText(productInfo.name);
-                health_indicator.setText(String.valueOf(productInfo.health_indicator));
-                calories.setText(String.valueOf(productInfo.nutricalInfo.calories));
-                fat.setText(String.valueOf(productInfo.nutricalInfo.fat));
-                carbohydrate.setText(String.valueOf(productInfo.nutricalInfo.carbohydrate));
-                sugar.setText(String.valueOf(productInfo.nutricalInfo.sugar));
-                protein.setText(String.valueOf(productInfo.nutricalInfo.protein));
+                if (productInfo != null) {
 
-                //mCameraView.start();
+                    toggleVisibility(true);
+
+                    Log.d(TAG, "onResponse: " + productInfo.name);
+                    name.setText(productInfo.name);
+                    health_indicator.setText(String.valueOf(productInfo.health_indicator));
+                    calories.setText(String.valueOf(productInfo.nutricalInfo.calories));
+                    fat.setText(String.valueOf(productInfo.nutricalInfo.fat));
+                    carbohydrate.setText(String.valueOf(productInfo.nutricalInfo.carbohydrate));
+                    sugar.setText(String.valueOf(productInfo.nutricalInfo.sugar));
+                    protein.setText(String.valueOf(productInfo.nutricalInfo.protein));
+                } else {
+                    Log.d(TAG, "onResponse: productInfo is NULL");
+
+                }
+
+
             }
 
             @Override
@@ -120,5 +177,10 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
                 t.printStackTrace();
             }
         });
+    }
+
+    @OnClick(R.id.scanTryButton)
+    public void tryAgainButton() {
+        startActivity(new Intent(this, ScanActivity.class));
     }
 }
