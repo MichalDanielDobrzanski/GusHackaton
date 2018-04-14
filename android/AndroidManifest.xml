@@ -26,14 +26,26 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
         <activity
             android:name=".ScanActivity"
+            android:screenOrientation="landscape"
             android:theme="@style/Theme.AppCompat.NoActionBar">
         </activity>
         <activity
-            android:name=".AR_Activity"
+            android:name=".ar.ARActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar">
         </activity>
+
+
+        <activity
+            android:name=".ranking.RankingActivity"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+        </activity>
+
+
     </application>
 
 </manifest>
