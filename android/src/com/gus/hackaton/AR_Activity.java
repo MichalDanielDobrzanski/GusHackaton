@@ -205,8 +205,8 @@ public class AR_Activity extends AppCompatActivity implements GLSurfaceView.Rend
             planeRenderer.createOnGlThread(/*context=*/ this, "models/trigrid.png");
             pointCloudRenderer.createOnGlThread(/*context=*/ this);
 
-            virtualObject.createOnGlThread(/*context=*/ this, "models/andy.obj", "models/andy.png");
-            virtualObject.setMaterialProperties(0.0f, 2.0f, 0.5f, 6.0f);
+            virtualObject.createOnGlThread(/*context=*/ this, "marchew.obj", "marchew.png");
+            //virtualObject.setMaterialProperties(0.0f, 2.0f, 0.5f, 6.0f);
 
             virtualObjectShadow.createOnGlThread(
           /*context=*/ this, "models/andy_shadow.obj", "models/andy_shadow.png");
