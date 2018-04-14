@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
+import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
@@ -25,6 +26,8 @@ public class HeroGame extends ApplicationAdapter {
     public static final float HEIGHT = 100;
 
     private ShapeRenderer shapeRenderer;
+
+    private CameraInputController cameraInputController;
 
     private ModelBatch modelBatch;
     private Model model;
@@ -63,6 +66,10 @@ public class HeroGame extends ApplicationAdapter {
                 VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal); // Position, Color, Normal and TextureCoordinates is supported
         boxInstance = new ModelInstance(model);
 
+        // MOVING THE CAMERA:
+        cameraInputController = new CameraInputController(perspectiveCamera);
+        Gdx.input.setInputProcessor(cameraInputController);
+
 	}
 
 	@Override
@@ -70,6 +77,8 @@ public class HeroGame extends ApplicationAdapter {
         Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		//Gdx.gl.glClearColor(0, 0, 0, 0);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+
+        cameraInputController.update();
 
 		batch.begin();
 		batch.draw(img, 0, 0);
