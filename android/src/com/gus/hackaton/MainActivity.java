@@ -23,6 +23,7 @@ import com.badlogic.gdx.backends.android.AndroidFragmentApplication;
 import com.google.android.flexbox.FlexWrap;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.gus.hackaton.fridge.FridgeAdapter;
+import com.gus.hackaton.ranking.RankingActivity;
 import com.gus.hackaton.utils.ZoomAnimator;
 
 import butterknife.BindView;
@@ -46,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
     @BindView(R.id.questsRecyclerView)
     RecyclerView questsRecyclerView;
 
-	@BindView(R.id.scan_barcode)
+	@BindView(R.id.scanBarcodeButton)
 	Button scanBarcode;
 
 	@BindView(R.id.expanded_fridge_item)
@@ -141,9 +142,13 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
         }
     }
 
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
+    public void launchRanking(View view) {
+	    startActivity(new Intent(this, RankingActivity.class));
+    }
 }
