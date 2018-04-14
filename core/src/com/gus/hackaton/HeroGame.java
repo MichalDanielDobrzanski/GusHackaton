@@ -77,7 +77,6 @@ public class HeroGame extends ApplicationAdapter {
         carrotInstance = new ModelInstance(model);
 
         AnimationController animationController = new AnimationController(carrotInstance);
-        animationController.setAnimation()
 
 
         // MOVING THE CAMERA:
