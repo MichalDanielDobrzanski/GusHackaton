@@ -2,6 +2,7 @@ package com.gus.hackaton;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.loaders.ModelLoader;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
@@ -15,6 +16,8 @@ import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
+import com.badlogic.gdx.graphics.g3d.loader.ObjLoader;
+import com.badlogic.gdx.graphics.g3d.utils.AnimationController;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -29,11 +32,14 @@ public class HeroGame extends ApplicationAdapter {
 
     private CameraInputController cameraInputController;
 
+    // models:
     private ModelBatch modelBatch;
     private Model model;
     private ModelInstance boxInstance;
+    private ModelInstance carrotInstance;
 
     private SpriteBatch batch;
+
 	private Texture img;
 
     private PerspectiveCamera perspectiveCamera;
@@ -66,6 +72,14 @@ public class HeroGame extends ApplicationAdapter {
                 VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal); // Position, Color, Normal and TextureCoordinates is supported
         boxInstance = new ModelInstance(model);
 
+        ModelLoader loader = new ObjLoader();
+        model = loader.loadModel(Gdx.files.internal("marchew.obj"));
+        carrotInstance = new ModelInstance(model);
+
+        AnimationController animationController = new AnimationController(carrotInstance);
+        animationController.setAnimation()
+
+
         // MOVING THE CAMERA:
         cameraInputController = new CameraInputController(perspectiveCamera);
         Gdx.input.setInputProcessor(cameraInputController);
@@ -85,7 +99,8 @@ public class HeroGame extends ApplicationAdapter {
 		batch.end();
 
         modelBatch.begin(perspectiveCamera);
-        modelBatch.render(boxInstance, environment);
+        //modelBatch.render(boxInstance, environment);
+        modelBatch.render(carrotInstance, environment);
         modelBatch.end();
 	}
 	
