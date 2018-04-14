@@ -1,8 +1,16 @@
 package com.gus.hackaton.ranking;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 public class RankingItem {
 
+    @SerializedName("username")
+    @Expose
     private String userName;
+
+    @SerializedName("points")
+    @Expose
     private int points;
 
 

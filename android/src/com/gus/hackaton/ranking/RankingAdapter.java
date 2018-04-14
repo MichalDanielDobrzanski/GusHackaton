@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.gus.hackaton.R;
 
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -17,6 +18,10 @@ import butterknife.ButterKnife;
 public class RankingAdapter extends RecyclerView.Adapter<RankingAdapter.ViewHolder> {
 
     private List<RankingItem> rankingItemList;
+
+    RankingAdapter() {
+        rankingItemList = Collections.emptyList();
+    }
 
     @NonNull
     @Override
