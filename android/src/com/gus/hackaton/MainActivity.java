@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
 	Button scanBarcode;
 
 	@BindView(R.id.expanded_fridge_item)
-    ImageView expandedFridgeItem;
+    View expandedFridgeItem;
 
 	@BindView(R.id.mainContainer)
     View mainContainer;
@@ -83,12 +83,7 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
             ZoomAnimator.zoomImageFromThumb(view, expandedFridgeItem, mainContainer);
         });
 
-
         recyclerView.setAdapter(fridgeAdapter);
-
-    }
-
-    private void zoomImageFromThumb(int sticky_note) {
 
     }
 

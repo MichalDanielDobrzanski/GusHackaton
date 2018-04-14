@@ -8,7 +8,6 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.ImageView;
 
 
 /**
@@ -43,7 +42,7 @@ public class ZoomAnimator {
      *       simultaneously, from the starting bounds to the ending bounds.</li>
      *   <li>Zoom back out by running the reverse animation on click.</li>
      */
-    public static void zoomImageFromThumb(final View smallView, ImageView largeView, View containerView) {
+    public static void zoomImageFromThumb(final View smallView, View largeView, View containerView) {
         // If there's an animation in progress, cancel it immediately and proceed with this one.
         if (mCurrentAnimator != null) {
             mCurrentAnimator.cancel();
