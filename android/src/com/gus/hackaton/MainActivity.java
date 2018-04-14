@@ -66,9 +66,6 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
 	@BindView(R.id.mainContainer)
     View mainContainer;
 
-	@BindView(R.id.test_button)
-    Button testButton;
-
     private FridgeAdapter badgesAdapter;
     private FridgeAdapter questsAdapter;
 

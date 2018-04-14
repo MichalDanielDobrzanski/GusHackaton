@@ -2,14 +2,10 @@ package com.gus.hackaton;
 
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.view.View;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.google.ar.core.Anchor;
@@ -41,8 +37,6 @@ import com.gus.hackaton.rendering.PointCloudRenderer;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.concurrent.ArrayBlockingQueue;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -205,7 +199,7 @@ public class AR_Activity extends AppCompatActivity implements GLSurfaceView.Rend
             planeRenderer.createOnGlThread(/*context=*/ this, "models/trigrid.png");
             pointCloudRenderer.createOnGlThread(/*context=*/ this);
 
-            virtualObject.createOnGlThread(/*context=*/ this, "marchew.obj", "marchew.png");
+            virtualObject.createOnGlThread(/*context=*/ this, "marchew_better_textured.obj", "marchew_better_textured.png");
             //virtualObject.setMaterialProperties(0.0f, 2.0f, 0.5f, 6.0f);
 
             virtualObjectShadow.createOnGlThread(
