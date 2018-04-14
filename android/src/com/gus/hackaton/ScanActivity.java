@@ -6,11 +6,17 @@ import android.util.Log;
 import android.widget.TextView;
 
 import com.google.android.cameraview.CameraView;
+import com.gus.hackaton.model.ProductInfo;
+import com.gus.hackaton.net.Api;
+import com.gus.hackaton.net.ApiService;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.dm7.barcodescanner.zbar.Result;
 import me.dm7.barcodescanner.zbar.ZBarScannerView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class ScanActivity extends AppCompatActivity implements ZBarScannerView.ResultHandler
@@ -62,10 +68,34 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
 
         // If you would like to resume scanning, call this method below:
         //mScannerView.resumeCameraPreview(this);
+        mScannerView.stopCamera();
         scanned = true;
         setContentView(R.layout.activity_scan);
         ButterKnife.bind(this);
         mCameraView.start();
-        textView.setText(rawResult.getContents());
+        sendRequest(rawResult.getContents());
+    }
+
+    private void sendRequest(String id)
+    {
+        ApiService api = Api.getApi();
+        Log.d(TAG, "sendRequest: " + id);
+        api.getProductInfo(id).enqueue(new Callback<ProductInfo>()
+        {
+            @Override
+            public void onResponse(Call<ProductInfo> call, Response<ProductInfo> response)
+            {
+                ProductInfo productInfo = response.body();
+                Log.d(TAG, "onResponse: " + productInfo.name);
+                textView.setText(productInfo.name);
+                //mCameraView.start();
+            }
+
+            @Override
+            public void onFailure(Call<ProductInfo> call, Throwable t)
+            {
+                t.printStackTrace();
+            }
+        });
     }
 }

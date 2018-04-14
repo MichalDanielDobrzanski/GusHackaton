@@ -23,6 +23,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:background="#07000000"
-        android:text="test"/>
+        android:text=""/>
 
 </FrameLayout>
