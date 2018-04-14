@@ -20,7 +20,7 @@ android {
     defaultConfig {
         applicationId "com.gus.hackaton"
         minSdkVersion 21
-        targetSdkVersion 27
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
     }
@@ -74,6 +74,11 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
     implementation 'com.google.code.gson:gson:2.8.2'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+    //implementation 'com.google.ar:core:1.1.0'
+    implementation 'com.google.ar:core:1.1.0'
+    // Obj - a simple Wavefront OBJ file loader
+    // https://github.com/javagl/Obj
+    implementation 'de.javagl:obj:0.2.1'
 
     compile 'uk.co.chrisjenx:calligraphy:2.3.0'
 
@@ -142,8 +147,7 @@ eclipse {
         sourceCompatibility = 1.6
         targetCompatibility = 1.6
     }
-
-    classpath {plusConfigurations += [ project.configurations.compile]
+        classpath {plusConfigurations +=[ project.configurations.compile]
         containers 'com.android.ide.eclipse.adt.ANDROID_FRAMEWORK', 'com.android.ide.eclipse.adt.LIBRARIES'
     }
 

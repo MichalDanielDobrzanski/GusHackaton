@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.badlogic.gdx.backends.android.AndroidFragmentApplication;
 import com.google.android.flexbox.FlexWrap;
 import com.google.android.flexbox.FlexboxLayoutManager;
+import com.gus.hackaton.ar.ARActivity;
 import com.gus.hackaton.fridge.FridgeAdapter;
 import com.gus.hackaton.ranking.RankingActivity;
 import com.gus.hackaton.utils.ZoomAnimator;
@@ -40,6 +41,7 @@ import static com.gus.hackaton.fridge.FridgeUtils.DUMMY_QUEST_LIST;
 public class MainActivity extends AppCompatActivity implements AndroidFragmentApplication.Callbacks {
 
     public static final int CAMERA_PERMISSION = 101;
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     @BindView(R.id.badgesRecyclerView)
     RecyclerView badgesRecyclerView;
@@ -49,6 +51,9 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
 
 	@BindView(R.id.scanBarcodeButton)
 	Button scanBarcode;
+	
+    @BindView(R.id.showAr)
+    Button showAr;
 
 	@BindView(R.id.expanded_fridge_item)
     View expandedFridgeItem;
@@ -72,6 +77,11 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
 
 		scanBarcode.setOnClickListener(v -> {
             Intent myIntent = new Intent(MainActivity.this, ScanActivity.class);
+            startActivity(myIntent);
+        });
+
+        showAr.setOnClickListener(v -> {
+            Intent myIntent = new Intent(MainActivity.this, ARActivity.class);
             startActivity(myIntent);
         });
 
