@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -36,6 +38,9 @@ public class RankingActivity extends AppCompatActivity {
     @BindView(R.id.rankingRecyclerView)
     RecyclerView recyclerView;
 
+    @BindView(R.id.rankingProgressBar)
+    ProgressBar progressBar;
+
     private RankingAdapter rankingAdapter;
 
     @Override
@@ -62,9 +67,16 @@ public class RankingActivity extends AppCompatActivity {
 
         ApiService api = Api.getApi();
 
+        recyclerView.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
+
         api.getRanking().enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+
+                progressBar.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
+
                 JsonObject jsonObject = response.body();
 
                 JsonElement yourJson = jsonObject.get("list");
