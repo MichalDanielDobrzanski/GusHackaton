@@ -13,21 +13,21 @@ public class Utils {
     public static final int COLUMNS_COUNT = 2;
 
     public static List<FridgeItem> DUMMY_BADGE_LIST = Arrays.asList(
-            new FridgeItem("apple", FridgeType.Badge, R.drawable.sticky_note_small),
-            new FridgeItem("banana",FridgeType.Badge, R.drawable.sticky_note_small),
-            new FridgeItem("vodka",FridgeType.Badge, R.drawable.sticky_note_small),
-            new FridgeItem("vodka",FridgeType.Badge, R.drawable.sticky_note_small),
-            new FridgeItem("vodka",FridgeType.Badge, R.drawable.sticky_note_small),
-            new FridgeItem("vodka",FridgeType.Badge, R.drawable.sticky_note_small),
-            new FridgeItem("vodka",FridgeType.Badge, R.drawable.sticky_note_small));
+            new FridgeItem("apple",FridgeType.Badge, R.drawable.apple),
+            new FridgeItem("banana",FridgeType.Badge, R.drawable.banana),
+            new FridgeItem("orange",FridgeType.Badge, R.drawable.orange),
+            new FridgeItem("pomato",FridgeType.Badge, R.drawable.pomato),
+            new FridgeItem("milk",FridgeType.Badge, R.drawable.milk),
+            new FridgeItem("yogurt",FridgeType.Badge, R.drawable.yoghurt),
+            new FridgeItem("cheese",FridgeType.Badge, R.drawable.cheese));
 
     public static List<FridgeItem> DUMMY_QUEST_LIST = Arrays.asList(
-            new FridgeItem("find_beer",FridgeType.Quest, R.drawable.sticky_note_small),
-            new FridgeItem("find_beer",FridgeType.Quest, R.drawable.sticky_note_small),
-            new FridgeItem("find_beer",FridgeType.Quest, R.drawable.sticky_note_small),
-            new FridgeItem("find_beer",FridgeType.Quest, R.drawable.sticky_note_small),
-            new FridgeItem("find_beer",FridgeType.Quest, R.drawable.sticky_note_small),
-            new FridgeItem("find_beer",FridgeType.Quest, R.drawable.sticky_note_small));
+            new FridgeItem("Bread",FridgeType.Quest, R.drawable.bread),
+            new FridgeItem("Egg",FridgeType.Quest, R.drawable.egg),
+            new FridgeItem("CornFlakes",FridgeType.Quest, R.drawable.cornflakes),
+            new FridgeItem("Fish",FridgeType.Quest, R.drawable.fish),
+            new FridgeItem("Rice",FridgeType.Quest, R.drawable.rice),
+            new FridgeItem("Olive",FridgeType.Quest, R.drawable.olive));
 
 
     public static List<RankingItem> DUMMY_RANKING_LIST = Arrays.asList(
