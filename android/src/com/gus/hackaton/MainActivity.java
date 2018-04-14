@@ -12,15 +12,19 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.badlogic.gdx.backends.android.AndroidFragmentApplication;
+import com.gus.hackaton.fridge.FridgeAdapter;
+import com.gus.hackaton.fridge.FridgeItem;
+import com.gus.hackaton.fridge.FridgeUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.gus.hackaton.FridgeAdapter.COLUMNS_COUNT;
+import static com.gus.hackaton.fridge.FridgeUtils.COLUMNS_COUNT;
 
 public class MainActivity extends AppCompatActivity implements AndroidFragmentApplication.Callbacks {
 
@@ -64,8 +68,17 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(this, COLUMNS_COUNT));
 
-        fridgeAdapter = new FridgeAdapter();
+        fridgeAdapter = new FridgeAdapter(v -> {
+            FridgeItem fridgeItem = fridgeAdapter.getData().get(recyclerView.getChildLayoutPosition(v));
+
+            Toast.makeText(this, fridgeItem.toString(), Toast.LENGTH_SHORT).show();
+
+
+        });
+        fridgeAdapter.invalidateData(FridgeUtils.DUMMY_LIST);
+
         recyclerView.setAdapter(fridgeAdapter);
+
     }
 
     @Override
