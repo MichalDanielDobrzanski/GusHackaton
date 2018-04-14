@@ -13,11 +13,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.badlogic.gdx.backends.android.AndroidFragmentApplication;
 import com.gus.hackaton.fridge.FridgeAdapter;
+import com.gus.hackaton.utils.ZoomAnimator;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,6 +40,12 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
 
 	@BindView(R.id.scan_barcode)
 	Button scanBarcode;
+
+	@BindView(R.id.expanded_fridge_item)
+    ImageView expandedFridgeItem;
+
+	@BindView(R.id.mainContainer)
+    View mainContainer;
 
     private FridgeAdapter fridgeAdapter;
 
@@ -69,10 +78,17 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
         // in content do not change the layout size of the RecyclerView
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(this, COLUMNS_COUNT, LinearLayoutManager.HORIZONTAL, false));
-        fridgeAdapter = new FridgeAdapter(DUMMY_LIST,
-                fridgeItem -> Toast.makeText(this, "fridgeItem " + fridgeItem, Toast.LENGTH_SHORT).show());
+        fridgeAdapter = new FridgeAdapter(DUMMY_LIST, (fridgeItem, view) -> {
+
+            ZoomAnimator.zoomImageFromThumb(view, expandedFridgeItem, mainContainer);
+        });
+
 
         recyclerView.setAdapter(fridgeAdapter);
+
+    }
+
+    private void zoomImageFromThumb(int sticky_note) {
 
     }
 
