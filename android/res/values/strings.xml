@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">gus-hackaton</string>
+    <string name="app_name">HealthPet</string>
     <string name="error_no_permission">Do działania tej aplikacji potrzebne jest pozwolenie na kamerę</string>
     <string name="success_permission">Pozwolenie na uzycie kamery przydzielone</string>
 
