@@ -93,7 +93,6 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
         badgesRecyclerView.setLayoutManager(layoutManager);
 
 
-
         FridgeAdapter.OnFridgeItemClicked onFridgeItemClicked = createFridgeItemHandler();
 
 
