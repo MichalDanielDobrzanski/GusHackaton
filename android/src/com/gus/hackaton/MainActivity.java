@@ -4,7 +4,6 @@ package com.gus.hackaton;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -43,11 +42,12 @@ import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import butterknife.OnClick;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-import static com.gus.hackaton.fridge.FridgeUtils.COLUMNS_COUNT;
-import static com.gus.hackaton.fridge.FridgeUtils.DUMMY_BADGE_LIST;
-import static com.gus.hackaton.fridge.FridgeUtils.DUMMY_QUEST_LIST;
+import static com.gus.hackaton.utils.Utils.COLUMNS_COUNT;
+import static com.gus.hackaton.utils.Utils.DUMMY_BADGE_LIST;
+import static com.gus.hackaton.utils.Utils.DUMMY_QUEST_LIST;
 
 /**
  * https://stackoverflow.com/questions/24618829/how-to-add-dividers-and-spaces-between-items-in-recyclerview
@@ -262,7 +262,9 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
+    @OnClick(R.id.rankingButton)
     public void launchRanking(View view) {
-	    startActivity(new Intent(this, RankingActivity.class));
+        Log.d(TAG, "launchRanking: ");
+        startActivity(new Intent(MainActivity.this, RankingActivity.class));
     }
 }

@@ -1,5 +1,6 @@
 package com.gus.hackaton.net;
 
+import com.google.gson.JsonObject;
 import com.gus.hackaton.model.Points;
 import com.gus.hackaton.model.ProductInfo;
 import com.gus.hackaton.model.Quiz;
@@ -23,4 +24,6 @@ public interface ApiService
 
     @GET("/api/quiz/")
     Call<Quiz> getQuiz();
+    @GET("/api/user/ranking")
+    Call<JsonObject> getRanking();
 }

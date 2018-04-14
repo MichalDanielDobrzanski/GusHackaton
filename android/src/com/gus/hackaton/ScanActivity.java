@@ -4,11 +4,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.cameraview.CameraView;
 import com.gus.hackaton.model.ProductInfo;
 import com.gus.hackaton.net.Api;
 import com.gus.hackaton.net.ApiService;
+import com.gus.hackaton.ranking.RankingActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -114,6 +116,7 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
             @Override
             public void onFailure(Call<ProductInfo> call, Throwable t)
             {
+                Toast.makeText(ScanActivity.this, "Problem z siecią!", Toast.LENGTH_SHORT).show();
                 t.printStackTrace();
             }
         });
