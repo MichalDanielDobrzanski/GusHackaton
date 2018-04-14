@@ -2,6 +2,7 @@ package com.gus.hackaton;
 
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -13,17 +14,24 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.badlogic.gdx.backends.android.AndroidFragmentApplication;
+import com.google.android.flexbox.FlexWrap;
+import com.google.android.flexbox.FlexboxLayoutManager;
 import com.gus.hackaton.fridge.FridgeAdapter;
+import com.gus.hackaton.utils.ZoomAnimator;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.gus.hackaton.fridge.FridgeUtils.COLUMNS_COUNT;
-import static com.gus.hackaton.fridge.FridgeUtils.DUMMY_LIST;
+import static com.gus.hackaton.fridge.FridgeUtils.DUMMY_BADGE_LIST;
+import static com.gus.hackaton.fridge.FridgeUtils.DUMMY_QUEST_LIST;
 
 /**
  * https://stackoverflow.com/questions/24618829/how-to-add-dividers-and-spaces-between-items-in-recyclerview
@@ -32,15 +40,25 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
 
     public static final int CAMERA_PERMISSION = 101;
 
-    @BindView(R.id.fridgeRecyclerView)
-    RecyclerView recyclerView;
+    @BindView(R.id.badgesRecyclerView)
+    RecyclerView badgesRecyclerView;
+
+    @BindView(R.id.questsRecyclerView)
+    RecyclerView questsRecyclerView;
 
 	@BindView(R.id.scan_barcode)
 	Button scanBarcode;
     @BindView(R.id.show_ar)
     Button showAr;
 
-    private FridgeAdapter fridgeAdapter;
+	@BindView(R.id.expanded_fridge_item)
+    View expandedFridgeItem;
+
+	@BindView(R.id.mainContainer)
+    View mainContainer;
+
+    private FridgeAdapter badgesAdapter;
+    private FridgeAdapter questsAdapter;
 
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,19 +86,48 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
 				.replace(R.id.heroContainer, new HeroFragment())
 				.commit();
 
-		setupRecyclerView();
+		setupRecyclerViews();
 	}
 
-    private void setupRecyclerView() {
+    private void setupRecyclerViews() {
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, COLUMNS_COUNT, LinearLayoutManager.HORIZONTAL, false));
-        fridgeAdapter = new FridgeAdapter(DUMMY_LIST,
-                fridgeItem -> Toast.makeText(this, "fridgeItem " + fridgeItem, Toast.LENGTH_SHORT).show());
+        badgesRecyclerView.setHasFixedSize(true);
 
-        recyclerView.setAdapter(fridgeAdapter);
+        FlexboxLayoutManager layoutManager = new FlexboxLayoutManager();
+        layoutManager.setFlexWrap(FlexWrap.WRAP);
 
+        badgesRecyclerView.setLayoutManager(layoutManager);
+
+
+
+        FridgeAdapter.OnFridgeItemClicked onFridgeItemClicked = createFridgeItemHandler();
+
+
+        badgesAdapter = new FridgeAdapter(DUMMY_BADGE_LIST, onFridgeItemClicked);
+
+        badgesRecyclerView.setAdapter(badgesAdapter);
+
+
+        questsRecyclerView.setHasFixedSize(true);
+        questsRecyclerView.setLayoutManager(new GridLayoutManager(this, COLUMNS_COUNT, LinearLayoutManager.VERTICAL, false));
+        questsAdapter = new FridgeAdapter(DUMMY_QUEST_LIST, onFridgeItemClicked);
+
+        questsRecyclerView.setAdapter(questsAdapter);
+
+    }
+
+    private FridgeAdapter.OnFridgeItemClicked createFridgeItemHandler() {
+        return (fridgeItem, view) -> {
+
+            TextView tvType = expandedFridgeItem.findViewById(R.id.typeFridgeItem);
+            tvType.setText(fridgeItem.getFridgeType().name());
+
+            TextView tvDescr = expandedFridgeItem.findViewById(R.id.typeFridgeDescr);
+            tvDescr.setText(fridgeItem.getDescription());
+
+            ZoomAnimator.zoomImageFromThumb(view, expandedFridgeItem, mainContainer);
+        };
     }
 
     @Override
@@ -101,4 +148,10 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
             }
         }
     }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
 }
