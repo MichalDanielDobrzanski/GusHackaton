@@ -1,15 +1,11 @@
-package com.gus.hackaton;
+package com.gus.hackaton.ar;
 
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.view.View;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.google.ar.core.Anchor;
@@ -29,26 +25,25 @@ import com.google.ar.core.exceptions.UnavailableArcoreNotInstalledException;
 import com.google.ar.core.exceptions.UnavailableDeviceNotCompatibleException;
 import com.google.ar.core.exceptions.UnavailableSdkTooOldException;
 import com.google.ar.core.exceptions.UnavailableUserDeclinedInstallationException;
-import com.gus.hackaton.helpers.CameraPermissionHelper;
-import com.gus.hackaton.helpers.DisplayRotationHelper;
-import com.gus.hackaton.helpers.FullScreenHelper;
-import com.gus.hackaton.helpers.SnackbarHelper;
-import com.gus.hackaton.helpers.TapHelper;
-import com.gus.hackaton.rendering.BackgroundRenderer;
-import com.gus.hackaton.rendering.ObjectRenderer;
-import com.gus.hackaton.rendering.PlaneRenderer;
-import com.gus.hackaton.rendering.PointCloudRenderer;
+import com.gus.hackaton.R;
+import com.gus.hackaton.ar.helpers.CameraPermissionHelper;
+import com.gus.hackaton.ar.helpers.DisplayRotationHelper;
+import com.gus.hackaton.ar.helpers.FullScreenHelper;
+import com.gus.hackaton.ar.helpers.SnackbarHelper;
+import com.gus.hackaton.ar.helpers.TapHelper;
+import com.gus.hackaton.ar.rendering.BackgroundRenderer;
+import com.gus.hackaton.ar.rendering.ObjectRenderer;
+import com.gus.hackaton.ar.rendering.PlaneRenderer;
+import com.gus.hackaton.ar.rendering.PointCloudRenderer;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.concurrent.ArrayBlockingQueue;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-public class AR_Activity extends AppCompatActivity implements GLSurfaceView.Renderer {
-    private static final String TAG = AR_Activity.class.getSimpleName();
+public class ARActivity extends AppCompatActivity implements GLSurfaceView.Renderer {
+    private static final String TAG = ARActivity.class.getSimpleName();
 
     // Rendering. The Renderers are created here, and initialized when the GL surface is created.
     private GLSurfaceView surfaceView;
@@ -75,7 +70,7 @@ public class AR_Activity extends AppCompatActivity implements GLSurfaceView.Rend
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ar_);
+        setContentView(R.layout.ar_activity);
         surfaceView = findViewById(R.id.surfaceview);
         displayRotationHelper = new DisplayRotationHelper(/*context=*/ this);
 

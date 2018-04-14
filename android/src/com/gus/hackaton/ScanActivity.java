@@ -83,7 +83,7 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
         //mScannerView.resumeCameraPreview(this);
         mScannerView.stopCamera();
         scanned = true;
-        setContentView(R.layout.activity_scan);
+        setContentView(R.layout.scan_activity);
         ButterKnife.bind(this);
         mCameraView.start();
         sendRequest(rawResult.getContents());
