@@ -2,6 +2,7 @@ package com.gus.hackaton;
 
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.badlogic.gdx.backends.android.AndroidFragmentApplication;
@@ -25,6 +27,7 @@ import com.gus.hackaton.utils.ZoomAnimator;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.gus.hackaton.fridge.FridgeUtils.COLUMNS_COUNT;
 import static com.gus.hackaton.fridge.FridgeUtils.DUMMY_BADGE_LIST;
@@ -90,8 +93,8 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
         badgesRecyclerView.setLayoutManager(layoutManager);
 
 
-        FridgeAdapter.OnFridgeItemClicked onFridgeItemClicked = (fridgeItem, view) ->
-                ZoomAnimator.zoomImageFromThumb(view, expandedFridgeItem, mainContainer);
+
+        FridgeAdapter.OnFridgeItemClicked onFridgeItemClicked = createFridgeItemHandler();
 
 
         badgesAdapter = new FridgeAdapter(DUMMY_BADGE_LIST, onFridgeItemClicked);
@@ -105,6 +108,19 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
 
         questsRecyclerView.setAdapter(questsAdapter);
 
+    }
+
+    private FridgeAdapter.OnFridgeItemClicked createFridgeItemHandler() {
+        return (fridgeItem, view) -> {
+
+            TextView tvType = expandedFridgeItem.findViewById(R.id.typeFridgeItem);
+            tvType.setText(fridgeItem.getFridgeType().name());
+
+            TextView tvDescr = expandedFridgeItem.findViewById(R.id.typeFridgeDescr);
+            tvDescr.setText(fridgeItem.getDescription());
+
+            ZoomAnimator.zoomImageFromThumb(view, expandedFridgeItem, mainContainer);
+        };
     }
 
     @Override
@@ -125,4 +141,10 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
             }
         }
     }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
 }
