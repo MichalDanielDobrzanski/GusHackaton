@@ -13,7 +13,7 @@ public class MainApplication extends Application {
 
 
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                .setDefaultFontPath("Campaign-Normal.ttf")
+                .setDefaultFontPath("default.ttf")
                 .setFontAttrId(R.attr.fontPath)
                 .build()
         );
