@@ -9,7 +9,7 @@
         android:theme="@style/GdxTheme" >
         <activity
             android:name="com.gus.hackaton.MainActivity"
-            android:theme="@style/Theme.AppCompat"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
             android:label="@string/app_name" 
             android:screenOrientation="landscape"
             android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize">
