@@ -17,12 +17,103 @@
         app:facing="back"
         app:flash="auto"/>
 
-    <TextView
-        android:id="@+id/textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:background="#07000000"
-        android:text="test"/>
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/name_l"
+            style="@style/TransparentTextView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="Name:"/>
+
+        <TextView
+            android:id="@+id/name"
+            style="@style/TransparentTextView"
+            app:layout_constraintStart_toEndOf="@id/name_l"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:id="@+id/health_indicator_l"
+            style="@style/TransparentTextView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/name_l"
+            android:text="Healthy:"/>
+
+        <TextView
+            android:id="@+id/health_indicator"
+            style="@style/TransparentTextView"
+            app:layout_constraintStart_toEndOf="@id/health_indicator_l"
+            app:layout_constraintTop_toBottomOf="@id/name"/>
+
+        <TextView
+            android:id="@+id/calories_l"
+            style="@style/TransparentTextView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/health_indicator_l"
+            android:text="Calories:"/>
+
+        <TextView
+            android:id="@+id/calories"
+            style="@style/TransparentTextView"
+            app:layout_constraintStart_toEndOf="@id/calories_l"
+            app:layout_constraintTop_toBottomOf="@id/health_indicator"/>
+
+        <TextView
+            android:id="@+id/fat_l"
+            style="@style/TransparentTextView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/calories_l"
+            android:text="Fat:"/>
+
+        <TextView
+            android:id="@+id/fat"
+            style="@style/TransparentTextView"
+            app:layout_constraintStart_toEndOf="@id/fat_l"
+            app:layout_constraintTop_toBottomOf="@id/calories"/>
+
+        <TextView
+            android:id="@+id/carbohydrate_l"
+            style="@style/TransparentTextView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fat_l"
+            android:text="Carbohydrate:"/>
+
+        <TextView
+            android:id="@+id/carbohydrate"
+            style="@style/TransparentTextView"
+            app:layout_constraintStart_toEndOf="@id/carbohydrate_l"
+            app:layout_constraintTop_toBottomOf="@id/fat"/>
+
+        <TextView
+            android:id="@+id/protein_l"
+            style="@style/TransparentTextView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/carbohydrate_l"
+            android:text="Protein:"/>
+
+        <TextView
+            android:id="@+id/protein"
+            style="@style/TransparentTextView"
+            app:layout_constraintStart_toEndOf="@id/protein_l"
+            app:layout_constraintTop_toBottomOf="@id/carbohydrate"/>
+
+        <TextView
+            android:id="@+id/sugar_l"
+            style="@style/TransparentTextView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/protein_l"
+            android:text="Sugar:"/>
+
+        <TextView
+            android:id="@+id/sugar"
+            style="@style/TransparentTextView"
+            app:layout_constraintStart_toEndOf="@id/sugar_l"
+            app:layout_constraintTop_toBottomOf="@id/protein"/>
+
+
+    </android.support.constraint.ConstraintLayout>
+
 
 </FrameLayout>
