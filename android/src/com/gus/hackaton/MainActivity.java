@@ -11,17 +11,23 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.badlogic.gdx.backends.android.AndroidFragmentApplication;
+import com.gus.hackaton.fridge.FridgeAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.gus.hackaton.FridgeAdapter.COLUMNS_COUNT;
+import static com.gus.hackaton.fridge.FridgeUtils.COLUMNS_COUNT;
+import static com.gus.hackaton.fridge.FridgeUtils.DUMMY_LIST;
 
+/**
+ * https://stackoverflow.com/questions/24618829/how-to-add-dividers-and-spaces-between-items-in-recyclerview
+ */
 public class MainActivity extends AppCompatActivity implements AndroidFragmentApplication.Callbacks {
 
     public static final int CAMERA_PERMISSION = 101;
@@ -62,10 +68,12 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, COLUMNS_COUNT));
+        recyclerView.setLayoutManager(new GridLayoutManager(this, COLUMNS_COUNT, LinearLayoutManager.HORIZONTAL, false));
+        fridgeAdapter = new FridgeAdapter(DUMMY_LIST,
+                fridgeItem -> Toast.makeText(this, "fridgeItem " + fridgeItem, Toast.LENGTH_SHORT).show());
 
-        fridgeAdapter = new FridgeAdapter();
         recyclerView.setAdapter(fridgeAdapter);
+
     }
 
     @Override
