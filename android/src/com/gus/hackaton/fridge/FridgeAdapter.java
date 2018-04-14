@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.google.android.flexbox.FlexboxLayoutManager;
 import com.gus.hackaton.R;
 
 import java.util.List;
@@ -17,6 +18,9 @@ import butterknife.ButterKnife;
 
 /**
  * https://stackoverflow.com/questions/24471109/recyclerview-onclick
+ *
+ * https://blog.devcenter.co/unboxing-the-flexboxlayout-a7cfd125f023
+ * 
  */
 public class FridgeAdapter extends RecyclerView.Adapter<FridgeAdapter.ViewHolder>  {
 
@@ -42,6 +46,14 @@ public class FridgeAdapter extends RecyclerView.Adapter<FridgeAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+
+        ViewGroup.LayoutParams lp = holder.fridgeItemContainer.getLayoutParams();
+        if (lp instanceof FlexboxLayoutManager.LayoutParams) {
+            FlexboxLayoutManager.LayoutParams params = (FlexboxLayoutManager.LayoutParams)
+                    holder.fridgeItemContainer.getLayoutParams();
+            params.setFlexGrow(1.0f);
+        }
+
         holder.bind(position, onItemClicked, fridgeItemList.get(position));
     }
 
@@ -60,6 +72,8 @@ public class FridgeAdapter extends RecyclerView.Adapter<FridgeAdapter.ViewHolder
         @BindView(R.id.fridgeItemImage)
         ImageView imageView;
 
+        @BindView(R.id.fridgeItemContainer)
+        View fridgeItemContainer;
 
         ViewHolder(View itemView) {
             super(itemView);
