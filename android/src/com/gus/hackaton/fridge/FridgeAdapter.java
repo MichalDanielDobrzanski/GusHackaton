@@ -6,10 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.gus.hackaton.R;
 
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -22,11 +22,14 @@ public class FridgeAdapter extends RecyclerView.Adapter<FridgeAdapter.ViewHolder
 
     private List<FridgeItem> fridgeItemList;
 
-    private final View.OnClickListener onClickListener;
+    private final OnItemClicked onItemClicked;
 
-    public FridgeAdapter(View.OnClickListener onClickListener) {
-        this.onClickListener = onClickListener;
-        fridgeItemList = Collections.emptyList();
+    public FridgeAdapter(List<FridgeItem> fridgeItemList, OnFridgeItemClicked onFridgeItemClicked) {
+        this.fridgeItemList = fridgeItemList;
+
+        this.onItemClicked = position -> onFridgeItemClicked.onClick(fridgeItemList.get(position));
+
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -34,13 +37,12 @@ public class FridgeAdapter extends RecyclerView.Adapter<FridgeAdapter.ViewHolder
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fridge_item, parent, false);
-        view.setOnClickListener(onClickListener);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
+        holder.bind(position, onItemClicked, fridgeItemList.get(position));
     }
 
     @Override
@@ -48,10 +50,6 @@ public class FridgeAdapter extends RecyclerView.Adapter<FridgeAdapter.ViewHolder
         return fridgeItemList.size();
     }
 
-    public void invalidateData(List<FridgeItem> fridgeItemList) {
-        this.fridgeItemList = fridgeItemList;
-        notifyDataSetChanged();
-    }
 
     public List<FridgeItem> getData() {
         return fridgeItemList;
@@ -70,6 +68,33 @@ public class FridgeAdapter extends RecyclerView.Adapter<FridgeAdapter.ViewHolder
 
         }
 
+        void bind(int position, OnItemClicked onItemClicked, FridgeItem fridgeItem) {
+
+            imageView.setPadding(20, 20, 20, 20);
+            imageView.setImageResource(fridgeItem.getDrawableRes());
+
+            imageView.setOnClickListener(v -> onItemClicked.onClick(position));
+
+
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams)imageView.getLayoutParams();
+
+            if (position % 6 == 2) {
+                params.setMargins(0, 20, 0, 0);
+
+            } else if (position > 11 && position < 18) {
+                params.setMargins(70, 0, 0, 0);
+
+            }
+        }
+    }
+
+    private interface OnItemClicked {
+
+        void onClick(int position);
+    }
+
+    public interface OnFridgeItemClicked {
+        void onClick(FridgeItem fridgeItem);
     }
 
 

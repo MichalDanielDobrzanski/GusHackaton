@@ -7,9 +7,13 @@
 
     <ImageView
         android:id="@+id/fridgeItemImage"
-        android:src="@drawable/sticky_note"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:scaleType="centerInside"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:padding="10dp"
+        android:adjustViewBounds="true"
+        android:clickable="true"
+        android:focusable="true"
         tools:ignore="ContentDescription" />
 
 </LinearLayout>
