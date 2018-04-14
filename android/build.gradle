@@ -139,8 +139,7 @@ eclipse {
         sourceCompatibility = 1.6
         targetCompatibility = 1.6
     }
-
-    classpath {plusConfigurations += [ project.configurations.compile]
+        classpath {plusConfigurations +=[ project.configurations.compile]
         containers 'com.android.ide.eclipse.adt.ANDROID_FRAMEWORK', 'com.android.ide.eclipse.adt.LIBRARIES'
     }
 

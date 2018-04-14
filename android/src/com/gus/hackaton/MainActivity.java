@@ -37,6 +37,8 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
 
 	@BindView(R.id.scan_barcode)
 	Button scanBarcode;
+    @BindView(R.id.show_ar)
+    Button showAr;
 
     private FridgeAdapter fridgeAdapter;
 
@@ -53,6 +55,11 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
 
 		scanBarcode.setOnClickListener(v -> {
             Intent myIntent = new Intent(MainActivity.this, ScanActivity.class);
+            startActivity(myIntent);
+        });
+
+        showAr.setOnClickListener(v -> {
+            Intent myIntent = new Intent(MainActivity.this, AR_Activity.class);
             startActivity(myIntent);
         });
 
