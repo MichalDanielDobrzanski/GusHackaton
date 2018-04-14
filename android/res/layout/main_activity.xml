@@ -50,4 +50,11 @@
 
     </FrameLayout>
 
+    <Button
+        android:id="@+id/scan_barcode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="scan barcode"
+        app:layout_constraintEnd_toEndOf="@id/fridgeRecyclerView"/>
+
 </android.support.constraint.ConstraintLayout>
