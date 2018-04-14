@@ -49,6 +49,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/scanBarcodeButton" />
 
+
+        <Button
+            android:id="@+id/quiz_button"
+            style="@style/ButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginStart="16dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:text="Pokaż pytanie"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/showAr" />
+
         <Button
             android:id="@+id/showAr"
             style="@style/ButtonStyle"
