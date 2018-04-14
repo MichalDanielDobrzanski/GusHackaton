@@ -3,6 +3,7 @@
     android:orientation="vertical"
     android:layout_height="wrap_content"
     android:layout_width="wrap_content"
+    android:id="@+id/fridgeItemContainer"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <ImageView

@@ -7,7 +7,7 @@
 
     <group
         android:name="left"
-        android:translateX="-110"
+        android:translateX="-115"
         android:translateY="20"
         >
 
@@ -77,7 +77,7 @@
 
     <group
         android:name="right"
-        android:translateX="145"
+        android:translateX="140"
         android:translateY="20"
         >
 

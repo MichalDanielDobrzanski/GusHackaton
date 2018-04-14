@@ -18,6 +18,8 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.badlogic.gdx.backends.android.AndroidFragmentApplication;
+import com.google.android.flexbox.FlexWrap;
+import com.google.android.flexbox.FlexboxLayoutManager;
 import com.gus.hackaton.fridge.FridgeAdapter;
 import com.gus.hackaton.utils.ZoomAnimator;
 
@@ -81,7 +83,12 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         badgesRecyclerView.setHasFixedSize(true);
-        badgesRecyclerView.setLayoutManager(new GridLayoutManager(this, COLUMNS_COUNT, LinearLayoutManager.VERTICAL, false));
+
+        FlexboxLayoutManager layoutManager = new FlexboxLayoutManager();
+        layoutManager.setFlexWrap(FlexWrap.WRAP);
+
+        badgesRecyclerView.setLayoutManager(layoutManager);
+
 
         FridgeAdapter.OnFridgeItemClicked onFridgeItemClicked = (fridgeItem, view) ->
                 ZoomAnimator.zoomImageFromThumb(view, expandedFridgeItem, mainContainer);
