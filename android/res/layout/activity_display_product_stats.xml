@@ -5,11 +5,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ScanActivity">
+    tools:context=".DisplayProductStatsActivity">
 
-    <SurfaceView
-        android:id="@+id/scan_surface"
+    <com.google.android.cameraview.CameraView
+        android:id="@+id/display_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:keepScreenOn="true"
+        android:adjustViewBounds="true"
+        app:autoFocus="true"
+        app:facing="back"
+        app:flash="auto"/>
 
 </FrameLayout>
