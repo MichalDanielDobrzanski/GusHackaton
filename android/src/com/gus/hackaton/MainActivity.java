@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -29,11 +30,12 @@ import com.gus.hackaton.utils.ZoomAnimator;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-import static com.gus.hackaton.fridge.FridgeUtils.COLUMNS_COUNT;
-import static com.gus.hackaton.fridge.FridgeUtils.DUMMY_BADGE_LIST;
-import static com.gus.hackaton.fridge.FridgeUtils.DUMMY_QUEST_LIST;
+import static com.gus.hackaton.utils.Utils.COLUMNS_COUNT;
+import static com.gus.hackaton.utils.Utils.DUMMY_BADGE_LIST;
+import static com.gus.hackaton.utils.Utils.DUMMY_QUEST_LIST;
 
 /**
  * https://stackoverflow.com/questions/24618829/how-to-add-dividers-and-spaces-between-items-in-recyclerview
@@ -158,7 +160,9 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
+    @OnClick(R.id.rankingButton)
     public void launchRanking(View view) {
-	    startActivity(new Intent(this, RankingActivity.class));
+        Log.d(TAG, "launchRanking: ");
+        startActivity(new Intent(MainActivity.this, RankingActivity.class));
     }
 }
