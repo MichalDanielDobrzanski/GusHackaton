@@ -62,6 +62,31 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
+        <TextView
+            android:id="@+id/points_l"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Points:"
+            app:layout_constraintStart_toEndOf="@id/showAr"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="16dp"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#FFFF00"
+            android:layout_marginLeft="10dp"/>
+
+        <TextView
+            android:id="@+id/points"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/points_l"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="16dp"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#FFFF00"
+            android:layout_marginLeft="10dp"/>
+
 
         <FrameLayout
             android:id="@+id/heroContainer"

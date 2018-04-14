@@ -8,7 +8,7 @@ public class Points
 {
     @SerializedName("points")
     @Expose
-    public long points;
+    public int points;
 
     public Points(int p){
         points = p;

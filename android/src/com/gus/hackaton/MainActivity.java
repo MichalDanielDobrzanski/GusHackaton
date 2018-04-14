@@ -24,11 +24,17 @@ import com.google.android.flexbox.FlexWrap;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.gus.hackaton.ar.ARActivity;
 import com.gus.hackaton.fridge.FridgeAdapter;
+import com.gus.hackaton.model.Points;
+import com.gus.hackaton.net.Api;
+import com.gus.hackaton.net.ApiService;
 import com.gus.hackaton.ranking.RankingActivity;
 import com.gus.hackaton.utils.ZoomAnimator;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.gus.hackaton.fridge.FridgeUtils.COLUMNS_COUNT;
@@ -61,6 +67,9 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
 	@BindView(R.id.mainContainer)
     View mainContainer;
 
+	@BindView(R.id.points)
+    TextView points;
+
     private FridgeAdapter badgesAdapter;
     private FridgeAdapter questsAdapter;
 
@@ -74,6 +83,22 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
 
 		setContentView(R.layout.main_activity);
         ButterKnife.bind(this);
+
+        ApiService api = Api.getApi();
+        api.getPoints().enqueue(new Callback<Points>()
+        {
+            @Override
+            public void onResponse(Call<Points> call, Response<Points> response)
+            {
+                points.setText(String.valueOf(response.body().points));
+            }
+
+            @Override
+            public void onFailure(Call<Points> call, Throwable t)
+            {
+
+            }
+        });
 
 		scanBarcode.setOnClickListener(v -> {
             Intent myIntent = new Intent(MainActivity.this, ScanActivity.class);
