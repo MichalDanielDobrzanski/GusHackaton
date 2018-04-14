@@ -42,6 +42,8 @@ allprojects {
             url 'https://maven.google.com/'
             name 'Google'
         }
+        jcenter()
+        google()
     }
 }
 
