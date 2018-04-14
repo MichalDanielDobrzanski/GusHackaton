@@ -20,7 +20,7 @@ android {
     defaultConfig {
         applicationId "com.gus.hackaton"
         minSdkVersion 21
-        targetSdkVersion 27
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
     }
@@ -34,12 +34,6 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
-    }
-}
-
-repositories {
-    flatDir {
-        dirs './libs'
     }
 }
 
@@ -80,8 +74,10 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.2'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
     //implementation 'com.google.ar:core:1.1.0'
-    compile (name: 'arcore_client', ext: 'aar')
-    compile (name: 'obj-0.2.1', ext: 'jar')
+    implementation 'com.google.ar:core:1.1.0'
+    // Obj - a simple Wavefront OBJ file loader
+    // https://github.com/javagl/Obj
+    implementation 'de.javagl:obj:0.2.1'
 
 }
 
