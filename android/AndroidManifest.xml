@@ -34,6 +34,7 @@
         <activity
             android:name=".ranking.RankingActivity"
             android:parentActivityName=".MainActivity"
+            android:screenOrientation="landscape"
             android:theme="@style/Theme.AppCompat.NoActionBar">
         </activity>
 
