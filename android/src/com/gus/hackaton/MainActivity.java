@@ -18,6 +18,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,7 +35,6 @@ import com.gus.hackaton.net.ApiService;
 import com.gus.hackaton.ranking.RankingActivity;
 import com.gus.hackaton.utils.ZoomAnimator;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -46,8 +46,7 @@ import butterknife.OnClick;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.gus.hackaton.utils.Utils.COLUMNS_COUNT;
-import static com.gus.hackaton.utils.Utils.DUMMY_BADGE_LIST;
-import static com.gus.hackaton.utils.Utils.DUMMY_QUEST_LIST;
+import static com.gus.hackaton.utils.Utils.QUESTS_LIST;
 
 /**
  * https://stackoverflow.com/questions/24618829/how-to-add-dividers-and-spaces-between-items-in-recyclerview
@@ -211,14 +210,15 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
         FridgeAdapter.OnFridgeItemClicked onFridgeItemClicked = createFridgeItemHandler();
 
 
-        badgesAdapter = new FridgeAdapter(DUMMY_BADGE_LIST, onFridgeItemClicked);
+        badgesAdapter = new FridgeAdapter(onFridgeItemClicked);
 
         badgesRecyclerView.setAdapter(badgesAdapter);
 
 
         questsRecyclerView.setHasFixedSize(true);
         questsRecyclerView.setLayoutManager(new GridLayoutManager(this, COLUMNS_COUNT, LinearLayoutManager.VERTICAL, false));
-        questsAdapter = new FridgeAdapter(DUMMY_QUEST_LIST, onFridgeItemClicked);
+        questsAdapter = new FridgeAdapter(onFridgeItemClicked);
+        questsAdapter.invalidateData(QUESTS_LIST);
 
         questsRecyclerView.setAdapter(questsAdapter);
 
@@ -228,10 +228,23 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
         return (fridgeItem, view) -> {
 
             TextView tvType = expandedFridgeItem.findViewById(R.id.typeFridgeItem);
-            tvType.setText(fridgeItem.getFridgeType().name());
+
+            String res = "";
+            switch(fridgeItem.getFridgeType()) {
+                case Badge:
+                    res = "Odznaka";
+                    break;
+                case Quest:
+                    res = "ZADANIE: \n Zeskanuj ten obiekt";
+            }
+
+            tvType.setText(res);
 
             TextView tvDescr = expandedFridgeItem.findViewById(R.id.typeFridgeDescr);
             tvDescr.setText(fridgeItem.getDescription());
+
+            ImageView imageView = expandedFridgeItem.findViewById(R.id.typeFridgeImage);
+            imageView.setImageResource(fridgeItem.getDrawableRes());
 
             ZoomAnimator.zoomImageFromThumb(view, expandedFridgeItem, mainContainer);
         };

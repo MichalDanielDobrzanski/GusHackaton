@@ -18,16 +18,18 @@ public class Utils {
             new FridgeItem("orange",FridgeType.Badge, R.drawable.orange),
             new FridgeItem("pomato",FridgeType.Badge, R.drawable.pomato),
             new FridgeItem("milk",FridgeType.Badge, R.drawable.milk),
-            new FridgeItem("yogurt",FridgeType.Badge, R.drawable.yoghurt),
-            new FridgeItem("cheese",FridgeType.Badge, R.drawable.cheese));
+            new FridgeItem("yogurt",FridgeType.Badge, R.drawable.yoghurt)
+    );
 
-    public static List<FridgeItem> DUMMY_QUEST_LIST = Arrays.asList(
-            new FridgeItem("Bread",FridgeType.Quest, R.drawable.bread),
-            new FridgeItem("Egg",FridgeType.Quest, R.drawable.egg),
-            new FridgeItem("CornFlakes",FridgeType.Quest, R.drawable.cornflakes),
-            new FridgeItem("Fish",FridgeType.Quest, R.drawable.fish),
-            new FridgeItem("Rice",FridgeType.Quest, R.drawable.rice),
-            new FridgeItem("Olive",FridgeType.Quest, R.drawable.olive));
+    public static List<FridgeItem> QUESTS_LIST = Arrays.asList(
+            new FridgeItem("Chleb",FridgeType.Quest, R.drawable.bread),
+            new FridgeItem("Jajko",FridgeType.Quest, R.drawable.egg),
+            new FridgeItem("Platki sniadaniowe",FridgeType.Quest, R.drawable.cornflakes),
+            new FridgeItem("Losos",FridgeType.Quest, R.drawable.fish),
+            new FridgeItem("Ryz",FridgeType.Quest, R.drawable.rice),
+            new FridgeItem("Oliwa",FridgeType.Quest, R.drawable.olive),
+            new FridgeItem("Ser",FridgeType.Quest, R.drawable.cheese)
+    );
 
 
     public static List<RankingItem> DUMMY_RANKING_LIST = Arrays.asList(
@@ -39,8 +41,6 @@ public class Utils {
             new RankingItem("Michal DD", 150),
             new RankingItem("Michal DDD", 140),
             new RankingItem("Michal DDDD", 120)
-
-
     );
 
 }
