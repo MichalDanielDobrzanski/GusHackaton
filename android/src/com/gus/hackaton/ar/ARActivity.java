@@ -205,7 +205,7 @@ public class ARActivity extends AppCompatActivity implements GLSurfaceView.Rende
             if(HeroGame.score < 30)
                 virtualObject.createOnGlThread(/*context=*/ this, "marchew_better_textured.obj", "marchew_better_textured.png");
             else
-                virtualObject.createOnGlThread(/*context=*/ this, "marchewLV2.obj", "marchew_better_textured.png");
+                virtualObject.createOnGlThread(/*context=*/ this, "marchew2.obj", "marchew_better_textured.png");
             //virtualObject.setMaterialProperties(0.0f, 2.0f, 0.5f, 6.0f);
 
             virtualObjectShadow.createOnGlThread(
