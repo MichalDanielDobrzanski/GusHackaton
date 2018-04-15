@@ -62,8 +62,10 @@ public class FridgeAdapter extends RecyclerView.Adapter<FridgeAdapter.ViewHolder
     }
 
     public void invalidateData(List<FridgeItem> fridgeItems) {
-        this.fridgeItemList = fridgeItems;
-        notifyDataSetChanged();
+        if (fridgeItems != null) {
+            this.fridgeItemList = fridgeItems;
+            notifyDataSetChanged();
+        }
     }
 
     public List<FridgeItem> getData() {

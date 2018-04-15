@@ -170,7 +170,7 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
                     protein.setText(String.valueOf(productInfo.nutricalInfo.protein));
 
                     // global update
-                    FlowManager.getInstance().markScanned(productInfo.name);
+                    FlowManager.getInstance().markScanned(ScanActivity.this, productInfo.name);
 
                     api.addPoints(new Points(productInfo.points));
 

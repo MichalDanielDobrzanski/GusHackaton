@@ -5,8 +5,10 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -26,7 +28,10 @@ import com.badlogic.gdx.backends.android.AndroidFragmentApplication;
 import com.google.android.flexbox.FlexWrap;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.gus.hackaton.ar.ARActivity;
+import com.gus.hackaton.db.Storage;
+import com.gus.hackaton.db.StorageImpl;
 import com.gus.hackaton.fridge.FridgeAdapter;
+import com.gus.hackaton.fridge.FridgeItem;
 import com.gus.hackaton.model.Option;
 import com.gus.hackaton.model.Points;
 import com.gus.hackaton.model.Quiz;
@@ -83,7 +88,11 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
     private FridgeAdapter badgesAdapter;
     private FridgeAdapter questsAdapter;
 
-	@Override
+    private Storage storage;
+
+    private SharedPreferences prefs;
+
+    @Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
@@ -113,17 +122,32 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
 				.commit();
 
 		setupRecyclerViews();
+
+		storage = new StorageImpl(this);
+
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
 	}
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        badgesAdapter.invalidateData(FlowManager.getInstance().getBadgesList());
-        questsAdapter.invalidateData(FlowManager.getInstance().getQuestsList());
+        if (prefs.getBoolean("firstrun", true)) {
+            // Do first run stuff here then set 'firstrun' as false
+            // using the following line to edit/commit prefs
+            prefs.edit().putBoolean("firstrun", false).apply();
+
+            storage.putQuestList(FlowManager.QUESTS_LIST);
+            storage.putBadgeList(null);
+        }
+
+        List<FridgeItem> quests = storage.getQuestList();
+        List<FridgeItem> badges = storage.getBadgeList();
+
+            badgesAdapter.invalidateData(badges);
+        questsAdapter.invalidateData(quests);
 
         refreshPoints();
-
     }
 
     private void refreshPoints()
@@ -134,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
             @Override
             public void onResponse(Call<Points> call, Response<Points> response)
             {
-                Log.d(TAG, "onResponse: " + response.body().toString());
+                Log.d(TAG, "refreshPoints() onResponse: " + response.body().toString());
 
                 int points = response.body().points;
                 String text = "Punkty : " + String.valueOf(points);
