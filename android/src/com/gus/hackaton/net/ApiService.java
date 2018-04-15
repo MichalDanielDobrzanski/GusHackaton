@@ -24,6 +24,7 @@ public interface ApiService
 
     @GET("/api/quiz/")
     Call<Quiz> getQuiz();
+
     @GET("/api/user/ranking")
     Call<JsonObject> getRanking();
 }

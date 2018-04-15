@@ -4,8 +4,8 @@ package com.gus.hackaton.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class ProductInfo
-{
+public class ProductInfo {
+
     @SerializedName("id")
     @Expose
     public String id;
@@ -22,4 +22,23 @@ public class ProductInfo
     @SerializedName("nutritional")
     @Expose
     public NutricalInfo nutricalInfo;
+
+    @SerializedName("points")
+    @Expose
+    public int points;
+
+    @Override
+    public String toString() {
+        return "ProductInfo{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", health_indicator=" + health_indicator +
+                ", nutricalInfo=" + nutricalInfo +
+                ", points=" + points +
+                '}';
+    }
 }
+
+
+
+

@@ -23,6 +23,7 @@
 
         <TextView
             android:id="@+id/name_l"
+            app:autoSizeTextType="uniform"
             style="@style/TransparentTextView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -30,22 +31,27 @@
 
         <TextView
             android:id="@+id/name"
-            style="@style/TransparentTextView"
+            style="@style/TransparentTextView.Bold"
+            tools:text="50022"
+            android:layout_width="wrap_content"
             app:layout_constraintStart_toEndOf="@id/name_l"
             app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
             android:id="@+id/health_indicator_l"
+            app:autoSizeTextType="uniform"
             style="@style/TransparentTextView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/name_l"
-            android:text="Zdowotność:"/>
+            android:text="Zdrowotność:"/>
 
         <TextView
             android:id="@+id/health_indicator"
-            style="@style/TransparentTextView"
+            style="@style/TransparentTextView.Bold"
+            tools:text="50022"
+            android:layout_width="wrap_content"
             app:layout_constraintStart_toEndOf="@id/health_indicator_l"
-            app:layout_constraintTop_toBottomOf="@id/name"/>
+            app:layout_constraintTop_toBottomOf="@id/name" />
 
         <TextView
             android:id="@+id/calories_l"
@@ -56,9 +62,11 @@
 
         <TextView
             android:id="@+id/calories"
-            style="@style/TransparentTextView"
+            style="@style/TransparentTextView.Bold"
+            tools:text="50022"
+            android:layout_width="wrap_content"
             app:layout_constraintStart_toEndOf="@id/calories_l"
-            app:layout_constraintTop_toBottomOf="@id/health_indicator"/>
+            app:layout_constraintTop_toBottomOf="@id/health_indicator" />
 
         <TextView
             android:id="@+id/fat_l"
@@ -69,7 +77,9 @@
 
         <TextView
             android:id="@+id/fat"
-            style="@style/TransparentTextView"
+            style="@style/TransparentTextView.Bold"
+            tools:text="50022"
+            android:layout_width="wrap_content"
             app:layout_constraintStart_toEndOf="@id/fat_l"
             app:layout_constraintTop_toBottomOf="@id/calories"/>
 
@@ -82,20 +92,25 @@
 
         <TextView
             android:id="@+id/carbohydrate"
-            style="@style/TransparentTextView"
+            style="@style/TransparentTextView.Bold"
+            tools:text="50022"
+            android:layout_width="wrap_content"
             app:layout_constraintStart_toEndOf="@id/carbohydrate_l"
             app:layout_constraintTop_toBottomOf="@id/fat"/>
 
         <TextView
             android:id="@+id/protein_l"
             style="@style/TransparentTextView"
+
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/carbohydrate_l"
             android:text="Białko:"/>
 
         <TextView
             android:id="@+id/protein"
-            style="@style/TransparentTextView"
+            style="@style/TransparentTextView.Bold"
+            tools:text="50022"
+            android:layout_width="wrap_content"
             app:layout_constraintStart_toEndOf="@id/protein_l"
             app:layout_constraintTop_toBottomOf="@id/carbohydrate"/>
 
@@ -108,7 +123,9 @@
 
         <TextView
             android:id="@+id/sugar"
-            style="@style/TransparentTextView"
+            style="@style/TransparentTextView.Bold"
+            tools:text="50022"
+            android:layout_width="wrap_content"
             app:layout_constraintStart_toEndOf="@id/sugar_l"
             app:layout_constraintTop_toBottomOf="@id/protein"/>
 

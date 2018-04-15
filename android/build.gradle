@@ -80,7 +80,9 @@ dependencies {
     // https://github.com/javagl/Obj
     implementation 'de.javagl:obj:0.2.1'
 
-    compile 'uk.co.chrisjenx:calligraphy:2.3.0'
+    implementation 'com.annimon:stream:1.2.0'
+
+    implementation 'uk.co.chrisjenx:calligraphy:2.3.0'
 
 }
 

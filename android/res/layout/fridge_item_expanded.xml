@@ -26,12 +26,12 @@
         <TextView
             android:id="@+id/typeFridgeItem"
             style="@style/TextViewStyle"
-            android:layout_width="126dp"
-            android:layout_height="83dp"
-            android:layout_marginBottom="32dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:gravity="center"
             android:textColor="@android:color/black"
             app:layout_constraintBottom_toTopOf="@+id/typeFridgeDescr"
             app:layout_constraintEnd_toEndOf="parent"
@@ -44,13 +44,14 @@
         <TextView
             android:id="@+id/typeFridgeDescr"
             style="@style/TextViewStyle"
+            android:gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/typeFridgeImage"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -60,7 +61,13 @@
         <ImageView
             android:id="@+id/typeFridgeImage"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/typeFridgeDescr"
+            tools:background="@drawable/bread" />
 
     </android.support.constraint.ConstraintLayout>
 
