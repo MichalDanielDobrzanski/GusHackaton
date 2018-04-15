@@ -2,6 +2,7 @@ package com.gus.hackaton.ar;
 
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
+import android.opengl.Matrix;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -68,6 +69,7 @@ public class ARActivity extends AppCompatActivity implements GLSurfaceView.Rende
 
     // Anchors created from taps used for object placing.
     private final ArrayList<Anchor> anchors = new ArrayList<>();
+    private float sf = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -202,10 +204,10 @@ public class ARActivity extends AppCompatActivity implements GLSurfaceView.Rende
             planeRenderer.createOnGlThread(/*context=*/ this, "models/trigrid.png");
             pointCloudRenderer.createOnGlThread(/*context=*/ this);
 
-            if(HeroGame.score < 30)
-                virtualObject.createOnGlThread(/*context=*/ this, "marchew_better_textured.obj", "marchew_better_textured.png");
-            else
-                virtualObject.createOnGlThread(/*context=*/ this, "marchewLV2.obj", "marchew_better_textured.png");
+            virtualObject.createOnGlThread(/*context=*/ this, "marchew_better_textured.obj", "marchew_better_textured.png");
+            //if(HeroGame.score > 30)
+            //    sf = 2;
+                //virtualObject.createOnGlThread(/*context=*/ this, "marchewLV2.obj", "marchew_better_textured.png");
             //virtualObject.setMaterialProperties(0.0f, 2.0f, 0.5f, 6.0f);
 
             virtualObjectShadow.createOnGlThread(
@@ -329,6 +331,12 @@ public class ARActivity extends AppCompatActivity implements GLSurfaceView.Rende
                 // Get the current pose of an Anchor in world space. The Anchor pose is updated
                 // during calls to session.update() as ARCore refines its estimate of the world.
                 anchor.getPose().toMatrix(anchorMatrix, 0);
+
+/*                float[] scaleMatrix = new float[16];
+                Matrix.setIdentityM(scaleMatrix, 0);
+                scaleMatrix[0] *= sf;
+                scaleMatrix[5] *= sf;
+                scaleMatrix[10] *= sf;*/
 
                 // Update and draw the model and its shadow.
                 virtualObject.updateModelMatrix(anchorMatrix, scaleFactor);

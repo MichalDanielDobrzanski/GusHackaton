@@ -36,11 +36,10 @@ public class HeroGame extends ApplicationAdapter {
     private AssetManager assetManager;
     private boolean loading;
     private ModelInstance carrotModelInstance;
-    private ModelInstance carrotModelInstance2;
     private float acc;
 
     @Override
-	public void create() {
+    public void create() {
         acc = 0;
 
         // LIGHTING, DIRECTIONAL LIGHT https://i.stack.imgur.com/3udUJ.gif
@@ -49,8 +48,8 @@ public class HeroGame extends ApplicationAdapter {
         environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
 
         // CAMERA:
-		perspectiveCamera = new PerspectiveCamera(80, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		perspectiveCamera.position.set((float) 1.23333, 0, 0);
+        perspectiveCamera = new PerspectiveCamera(80, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        perspectiveCamera.position.set((float) 1.23333, 0, 0);
         perspectiveCamera.lookAt(0,0,0);
         perspectiveCamera.near = 0.01f;
         perspectiveCamera.far = 300f;
@@ -69,13 +68,12 @@ public class HeroGame extends ApplicationAdapter {
         // CARROT:
         assetManager = new AssetManager();
         assetManager.load("marchew.obj", Model.class);
-        assetManager.load("marchewLV2.obj", Model.class);
         loading = true;
 
-	}
+    }
 
-	@Override
-	public void render() {
+    @Override
+    public void render() {
         if (loading && assetManager.update()) {
             doneLoading();
         }
@@ -83,57 +81,42 @@ public class HeroGame extends ApplicationAdapter {
             float delta = Gdx.graphics.getDeltaTime();
             acc += delta*10;
             carrotModelInstance.transform.translate(0, (float) (0.01*sin(acc)),0);
-            carrotModelInstance2.transform.translate(0, (float) (0.01*sin(acc)),0);
         }
 
         Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		//Gdx.gl.glClearColor(0, 0, 0, 0);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+        //Gdx.gl.glClearColor(0, 0, 0, 0);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
         cameraInputController.update();
 
         modelBatch.begin(perspectiveCamera);
-        Array<ModelInstance> modelIns = new Array<ModelInstance>();
         if(!loading)
-        {
-            if (score < 30)
-            {
-                modelIns.add(carrotModelInstance);
-            } else
-            {
-                modelIns.add(carrotModelInstance2);
-            }
-        }
-        modelBatch.render(modelIns, environment);
+            modelBatch.render(carrotModelInstance, environment);
         modelBatch.end();
-	}
+    }
 
     private void doneLoading() {
         Model carrotModel = assetManager.get("marchew.obj", Model.class);
         carrotModelInstance = new ModelInstance(carrotModel);
-        Model carrotLvl2Model = assetManager.get("marchewLV2.obj", Model.class);
-        carrotModelInstance2 = new ModelInstance(carrotLvl2Model);
         loading = false;
     }
 
     @Override
-	public void dispose() {
+    public void dispose() {
         modelBatch.dispose();
-
         modelInstances.clear();
-
         assetManager.dispose();
-	}
+    }
 
-	@Override
-	public void pause() {
-		// android callback
-		super.pause();
-	}
+    @Override
+    public void pause() {
+        // android callback
+        super.pause();
+    }
 
-	@Override
-	public void resume() {
-		// android callback
-		super.resume();
-	}
+    @Override
+    public void resume() {
+        // android callback
+        super.resume();
+    }
 }
