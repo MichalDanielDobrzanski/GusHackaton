@@ -1,2 +1,3 @@
 # GusHackaton
-AR fake project
+
+- app for stimulating heath awareness for users
