@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.badlogic.gdx.backends.android.AndroidFragmentApplication;
 import com.google.android.flexbox.FlexWrap;
 import com.google.android.flexbox.FlexboxLayoutManager;
+import com.google.ar.core.Session;
 import com.gus.hackaton.ar.ARActivity;
 import com.gus.hackaton.fridge.FridgeAdapter;
 import com.gus.hackaton.model.Option;
@@ -95,8 +96,6 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
 		setContentView(R.layout.main_activity);
         ButterKnife.bind(this);
 
-        refreshPoints();
-
         quizButton.setOnClickListener(v -> {
             prepareQuiz();
         });
@@ -117,6 +116,12 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
 				.commit();
 
 		setupRecyclerViews();
+
+		try {
+            Session session = new Session(/* context= */ this);
+        } catch (Exception e){
+		    showAr.setVisibility(View.INVISIBLE);
+        }
 	}
 
     private void refreshPoints()
@@ -128,6 +133,7 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
             public void onResponse(Call<Points> call, Response<Points> response)
             {
                 points.setText(String.valueOf(response.body().points));
+                HeroGame.score = Integer.valueOf(response.body().points);
             }
 
             @Override
@@ -162,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
                 builder.setItems(optionsChars, (dialog, which) -> {
                     if(corectness[which]) {
                         addPoints(10);
-                        refreshPoints();
+                        //refreshPoints();
                         Toast.makeText(MainActivity.this, "Poprawna odpowiedź!", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -177,20 +183,21 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
         });
     }
 
-    private void addPoints(int points)
+    private void addPoints(int pnts)
     {
         ApiService api = Api.getApi();
-        Points p = new Points(points);
-        api.addPoints(p).enqueue(new Callback<Void>()
+        Points p = new Points(pnts);
+        api.addPoints(p).enqueue(new Callback<Points>()
         {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response)
+            public void onResponse(Call<Points> call, Response<Points> response)
             {
-
+                points.setText(String.valueOf(response.body().points));
+                HeroGame.score = Integer.valueOf(response.body().points);
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t)
+            public void onFailure(Call<Points> call, Throwable t)
             {
 
             }
@@ -266,5 +273,12 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
     public void launchRanking(View view) {
         Log.d(TAG, "launchRanking: ");
         startActivity(new Intent(MainActivity.this, RankingActivity.class));
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        refreshPoints();
     }
 }

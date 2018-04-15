@@ -25,6 +25,8 @@ import com.google.ar.core.exceptions.UnavailableArcoreNotInstalledException;
 import com.google.ar.core.exceptions.UnavailableDeviceNotCompatibleException;
 import com.google.ar.core.exceptions.UnavailableSdkTooOldException;
 import com.google.ar.core.exceptions.UnavailableUserDeclinedInstallationException;
+import com.gus.hackaton.HeroFragment;
+import com.gus.hackaton.HeroGame;
 import com.gus.hackaton.R;
 import com.gus.hackaton.ar.helpers.CameraPermissionHelper;
 import com.gus.hackaton.ar.helpers.DisplayRotationHelper;
@@ -200,7 +202,10 @@ public class ARActivity extends AppCompatActivity implements GLSurfaceView.Rende
             planeRenderer.createOnGlThread(/*context=*/ this, "models/trigrid.png");
             pointCloudRenderer.createOnGlThread(/*context=*/ this);
 
-            virtualObject.createOnGlThread(/*context=*/ this, "marchew_better_textured.obj", "marchew_better_textured.png");
+            if(HeroGame.score < 30)
+                virtualObject.createOnGlThread(/*context=*/ this, "marchew_better_textured.obj", "marchew_better_textured.png");
+            else
+                virtualObject.createOnGlThread(/*context=*/ this, "marchewLV2.obj", "marchew_better_textured.png");
             //virtualObject.setMaterialProperties(0.0f, 2.0f, 0.5f, 6.0f);
 
             virtualObjectShadow.createOnGlThread(
