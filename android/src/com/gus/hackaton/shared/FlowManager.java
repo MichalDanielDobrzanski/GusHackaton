@@ -45,26 +45,30 @@ public class FlowManager {
 
         Storage storage = new StorageImpl(context);
 
-        FridgeItem fridgeItem = null;
+        FridgeItem questItem = null;
 
         // https://stackoverflow.com/questions/2965747/why-do-i-get-an-unsupportedoperationexception-when-trying-to-remove-an-element-f
         List<FridgeItem> list = new LinkedList<>(storage.getQuestList());
         for (int i = 0; i < list.size(); i++) {
             if (Objects.equals(list.get(i).getDescription(), description)) {
-                fridgeItem = list.remove(i);
+                questItem = list.remove(i);
                 break;
             }
         }
         storage.putQuestList(list);
 
         // badges:
-        List<FridgeItem> badgesList = storage.getBadgeList();
-        if (badgesList != null && fridgeItem != null) {
-            badgesList.add(fridgeItem);
-            storage.putBadgeList(badgesList);
+        if (questItem != null) { // null if already scanned
+            FridgeItem badgeItem = questItem.copy(FridgeType.Badge);
 
-        } else if (badgesList == null)
-            storage.putBadgeList(Collections.singletonList(fridgeItem));
+            List<FridgeItem> badgesList = storage.getBadgeList();
+            if (badgesList != null) {
+                badgesList.add(badgeItem);
+                storage.putBadgeList(badgesList);
+
+            } else
+                storage.putBadgeList(Collections.singletonList(badgeItem));
+        }
 
     }
 

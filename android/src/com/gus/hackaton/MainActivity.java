@@ -126,7 +126,8 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
 
 		try {
             Session session = new Session(/* context= */ this);
-        } catch (Exception e){
+        } catch (Exception e) {
+		    e.printStackTrace();
 		    showAr.setVisibility(View.INVISIBLE);
         }
 		storage = new StorageImpl(this);
@@ -150,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
         List<FridgeItem> quests = storage.getQuestList();
         List<FridgeItem> badges = storage.getBadgeList();
 
-            badgesAdapter.invalidateData(badges);
+        badgesAdapter.invalidateData(badges);
         questsAdapter.invalidateData(quests);
 
         refreshPoints();
