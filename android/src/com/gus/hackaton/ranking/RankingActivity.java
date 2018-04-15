@@ -16,15 +16,20 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.gus.hackaton.HeroGame;
 import com.gus.hackaton.R;
 import com.gus.hackaton.net.Api;
 import com.gus.hackaton.net.ApiService;
 
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -42,6 +47,8 @@ public class RankingActivity extends AppCompatActivity {
     ProgressBar progressBar;
 
     private RankingAdapter rankingAdapter;
+
+    private Disposable disposable;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,30 +77,41 @@ public class RankingActivity extends AppCompatActivity {
         recyclerView.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
 
-        api.getRanking().enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+        disposable = Observable.interval(0, 5, TimeUnit.SECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(aLong -> api.getRanking().enqueue(new Callback<JsonObject>() {
+                    @Override
+                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
 
-                progressBar.setVisibility(View.GONE);
-                recyclerView.setVisibility(View.VISIBLE);
+                        Log.d(TAG, "onResponse: " + response.body().toString());
 
-                JsonObject jsonObject = response.body();
+                        progressBar.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.VISIBLE);
 
-                JsonElement yourJson = jsonObject.get("list");
+                        JsonObject jsonObject = response.body();
 
-                Type listType = new TypeToken<List<RankingItem>>() {}.getType();
+                        JsonElement yourJson = jsonObject.get("list");
 
-                List<RankingItem> yourList = new Gson().fromJson(yourJson, listType);
+                        Type listType = new TypeToken<List<RankingItem>>() {}.getType();
 
-                rankingAdapter.setData(yourList);
-            }
+                        List<RankingItem> yourList = new Gson().fromJson(yourJson, listType);
 
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
-                t.printStackTrace();
-                Toast.makeText(RankingActivity.this, "Problem z siecią!", Toast.LENGTH_SHORT).show();
-            }
-        });
+                        rankingAdapter.setData(yourList);
+                    }
 
+                    @Override
+                    public void onFailure(Call<JsonObject> call, Throwable t) {
+                        t.printStackTrace();
+                        Toast.makeText(RankingActivity.this, "Problem z siecią!", Toast.LENGTH_SHORT).show();
+                    }
+                }));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (disposable != null)
+            disposable.dispose();
     }
 }

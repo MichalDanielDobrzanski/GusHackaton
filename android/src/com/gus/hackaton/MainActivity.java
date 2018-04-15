@@ -167,9 +167,7 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
                 HeroGame.score = Integer.valueOf(response.body().points);
                 Log.d(TAG, "refreshPoints() onResponse: " + response.body().toString());
 
-                int points = response.body().points;
-                String text = "Punkty : " + String.valueOf(points);
-                pointsTextView.setText(text);
+                updatePointsTextView(response);
             }
 
             @Override
@@ -178,6 +176,12 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
                 Toast.makeText(MainActivity.this, "Problem z siecią", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void updatePointsTextView(Response<Points> response) {
+        int points = response.body().points;
+        String text = "Punkty : " + String.valueOf(points);
+        pointsTextView.setText(text);
     }
 
     private void prepareQuiz()
@@ -204,8 +208,9 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
                 builder.setItems(optionsChars, (dialog, which) -> {
 
                     if (corectness[which]) {
+
                         addPoints(10);
-                        refreshPoints();
+
                         Toast.makeText(MainActivity.this, "Poprawna odpowiedź!", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -229,8 +234,9 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
             @Override
             public void onResponse(Call<Points> call, Response<Points> response)
             {
-                pointsTextView.setText(String.valueOf(response.body().points));
-                HeroGame.score = Integer.valueOf(response.body().points);
+                updatePointsTextView(response);
+
+                HeroGame.score = response.body().points;
             }
 
             @Override
