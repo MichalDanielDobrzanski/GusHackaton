@@ -33,6 +33,7 @@ import com.gus.hackaton.model.Quiz;
 import com.gus.hackaton.net.Api;
 import com.gus.hackaton.net.ApiService;
 import com.gus.hackaton.ranking.RankingActivity;
+import com.gus.hackaton.shared.FlowManager;
 import com.gus.hackaton.utils.ZoomAnimator;
 
 import java.util.List;
@@ -46,7 +47,6 @@ import butterknife.OnClick;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.gus.hackaton.utils.Utils.COLUMNS_COUNT;
-import static com.gus.hackaton.utils.Utils.QUESTS_LIST;
 
 /**
  * https://stackoverflow.com/questions/24618829/how-to-add-dividers-and-spaces-between-items-in-recyclerview
@@ -92,13 +92,10 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
         }
 
 		setContentView(R.layout.main_activity);
+
         ButterKnife.bind(this);
 
-        refreshPoints();
-
-        quizButton.setOnClickListener(v -> {
-            prepareQuiz();
-        });
+        quizButton.setOnClickListener(v -> prepareQuiz());
 
 		scanBarcode.setOnClickListener(v -> {
             Intent myIntent = new Intent(MainActivity.this, ScanActivity.class);
@@ -118,6 +115,17 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
 		setupRecyclerViews();
 	}
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        badgesAdapter.invalidateData(FlowManager.getInstance().getBadgesList());
+        questsAdapter.invalidateData(FlowManager.getInstance().getQuestsList());
+
+        refreshPoints();
+
+    }
+
     private void refreshPoints()
     {
         ApiService api = Api.getApi();
@@ -126,6 +134,8 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
             @Override
             public void onResponse(Call<Points> call, Response<Points> response)
             {
+                Log.d(TAG, "onResponse: " + response.body().toString());
+
                 int points = response.body().points;
                 String text = "Punkty : " + String.valueOf(points);
                 pointsTextView.setText(text);
@@ -134,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
             @Override
             public void onFailure(Call<Points> call, Throwable t)
             {
-
+                Toast.makeText(MainActivity.this, "Problem z siecią", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -161,9 +171,12 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setTitle(quiz.question);
                 builder.setItems(optionsChars, (dialog, which) -> {
-                    if(corectness[which]) {
-                        addPoints(10);
+                    if (corectness[which]) {
+
+                        sendPoints(10);
+
                         refreshPoints();
+
                         Toast.makeText(MainActivity.this, "Poprawna odpowiedź!", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -178,7 +191,7 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
         });
     }
 
-    private void addPoints(int points)
+    private void sendPoints(int points)
     {
         ApiService api = Api.getApi();
         Points p = new Points(points);
@@ -220,7 +233,6 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
         questsRecyclerView.setHasFixedSize(true);
         questsRecyclerView.setLayoutManager(new GridLayoutManager(this, COLUMNS_COUNT, LinearLayoutManager.VERTICAL, false));
         questsAdapter = new FridgeAdapter(onFridgeItemClicked);
-        questsAdapter.invalidateData(QUESTS_LIST);
 
         questsRecyclerView.setAdapter(questsAdapter);
 
