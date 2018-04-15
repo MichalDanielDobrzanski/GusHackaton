@@ -1,6 +1,7 @@
 package com.gus.hackaton;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,9 +11,20 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.annimon.stream.Stream;
 import com.github.mikephil.charting.charts.RadarChart;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.RadarData;
+import com.github.mikephil.charting.data.RadarDataSet;
+import com.github.mikephil.charting.data.RadarEntry;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.google.android.cameraview.CameraView;
 import com.google.gson.JsonArray;
+import com.gus.hackaton.model.EurostatData;
 import com.gus.hackaton.model.Points;
 import com.gus.hackaton.model.ProductInfo;
 import com.gus.hackaton.net.Api;
@@ -21,6 +33,9 @@ import com.gus.hackaton.ranking.RankingActivity;
 import com.gus.hackaton.shared.FlowManager;
 
 import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -181,7 +196,7 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
                     sugar.setText(String.valueOf(productInfo.nutricalInfo.sugar));
                     protein.setText(String.valueOf(productInfo.nutricalInfo.protein));
 
-                    invalidateChart(productInfo);
+                    invalidateChart(productInfo.eurostatDataList);
 
                     // global update
                     FlowManager.getInstance().markScanned(ScanActivity.this, productInfo.name);
@@ -203,8 +218,43 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
         });
     }
 
-    private void invalidateChart(ProductInfo productInfo) {
+    private void invalidateChart(List<EurostatData> eurostatDatas) {
 
+        radarChart.setBackgroundColor(Color.argb(77, 60, 65, 82));
+
+        List<RadarEntry> entries = new ArrayList<>();
+        Stream.of(eurostatDatas)
+                .forEach(eurostatData -> entries.add(new RadarEntry((float)eurostatData.price)));
+
+        XAxis xAxis = radarChart.getXAxis();
+        xAxis.setTextSize(11f);
+        xAxis.setYOffset(0f);
+        xAxis.setXOffset(0f);
+        List<String> labels = new ArrayList<>();
+        Stream.of(eurostatDatas)
+                .forEach(eurostatData -> labels.add(EurostatData.Country.values()[eurostatData.country].name()));
+
+        xAxis.setValueFormatter((value, axis) -> labels.get((int) value));
+        xAxis.setTextColor(Color.WHITE);
+
+        YAxis yAxis = radarChart.getYAxis();
+        yAxis.setLabelCount(labels.size(), false);
+        yAxis.setTextSize(11f);
+        yAxis.setDrawLabels(false);
+        yAxis.setTextColor(Color.WHITE);
+
+        RadarDataSet radarDataSet = new RadarDataSet(entries, "średnia cena produktu w EUR");
+        radarDataSet.setColor(Color.CYAN);
+
+        radarDataSet.setValueTextColor(Color.WHITE);
+        radarDataSet.setDrawFilled(true);
+
+        RadarData radarData = new RadarData(radarDataSet);
+
+        radarChart.getLegend().setTextColor(Color.WHITE);
+        radarChart.setDescription(null);
+        radarChart.setData(radarData);
+        radarChart.invalidate();
     }
 
     @OnClick(R.id.scanTryButton)
