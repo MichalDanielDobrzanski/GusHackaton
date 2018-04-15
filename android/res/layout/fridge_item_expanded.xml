@@ -44,30 +44,55 @@
         <TextView
             android:id="@+id/typeFridgeDescr"
             style="@style/TextViewStyle"
-            android:gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/typeFridgeImage"
+            android:gravity="center"
+            app:layout_constraintBottom_toTopOf="@+id/frameLayout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/typeFridgeItem"
             tools:text="dummy tetxtdsjf dhgo" />
 
-        <ImageView
-            android:id="@+id/typeFridgeImage"
+        <FrameLayout
+            android:id="@+id/frameLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/typeFridgeDescr"
-            tools:background="@drawable/bread" />
+            app:layout_constraintTop_toBottomOf="@+id/typeFridgeDescr">
+
+            <ImageView
+                android:id="@+id/typeFridgeImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/typeFridgeDescr"
+                tools:background="@drawable/bread" />
+
+
+            <com.github.mikephil.charting.charts.RadarChart
+                android:id="@+id/typeFridgeChart"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:padding="4dp"
+                android:visibility="invisible">
+
+            </com.github.mikephil.charting.charts.RadarChart>
+
+        </FrameLayout>
+
 
     </android.support.constraint.ConstraintLayout>
 

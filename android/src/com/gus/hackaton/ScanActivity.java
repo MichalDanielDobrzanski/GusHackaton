@@ -31,6 +31,7 @@ import com.gus.hackaton.net.Api;
 import com.gus.hackaton.net.ApiService;
 import com.gus.hackaton.ranking.RankingActivity;
 import com.gus.hackaton.shared.FlowManager;
+import com.gus.hackaton.utils.Utils;
 
 import org.w3c.dom.Text;
 
@@ -196,10 +197,10 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
                     sugar.setText(String.valueOf(productInfo.nutricalInfo.sugar));
                     protein.setText(String.valueOf(productInfo.nutricalInfo.protein));
 
-                    invalidateChart(productInfo.eurostatDataList);
+                    Utils.invalidateChart(productInfo.eurostatDataList, radarChart);
 
                     // global update
-                    FlowManager.getInstance().markScanned(ScanActivity.this, productInfo.name);
+                    FlowManager.getInstance().markScanned(ScanActivity.this, productInfo.name, productInfo.eurostatDataList);
 
                     api.addPoints(new Points(productInfo.points));
 
@@ -218,44 +219,7 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
         });
     }
 
-    private void invalidateChart(List<EurostatData> eurostatDatas) {
 
-        radarChart.setBackgroundColor(Color.argb(77, 60, 65, 82));
-
-        List<RadarEntry> entries = new ArrayList<>();
-        Stream.of(eurostatDatas)
-                .forEach(eurostatData -> entries.add(new RadarEntry((float)eurostatData.price)));
-
-        XAxis xAxis = radarChart.getXAxis();
-        xAxis.setTextSize(11f);
-        xAxis.setYOffset(0f);
-        xAxis.setXOffset(0f);
-        List<String> labels = new ArrayList<>();
-        Stream.of(eurostatDatas)
-                .forEach(eurostatData -> labels.add(EurostatData.Country.values()[eurostatData.country].name()));
-
-        xAxis.setValueFormatter((value, axis) -> labels.get((int) value));
-        xAxis.setTextColor(Color.WHITE);
-
-        YAxis yAxis = radarChart.getYAxis();
-        yAxis.setLabelCount(labels.size(), false);
-        yAxis.setTextSize(11f);
-        yAxis.setDrawLabels(false);
-        yAxis.setTextColor(Color.WHITE);
-
-        RadarDataSet radarDataSet = new RadarDataSet(entries, "średnia cena produktu w EUR");
-        radarDataSet.setColor(Color.CYAN);
-
-        radarDataSet.setValueTextColor(Color.WHITE);
-        radarDataSet.setDrawFilled(true);
-
-        RadarData radarData = new RadarData(radarDataSet);
-
-        radarChart.getLegend().setTextColor(Color.WHITE);
-        radarChart.setDescription(null);
-        radarChart.setData(radarData);
-        radarChart.invalidate();
-    }
 
     @OnClick(R.id.scanTryButton)
     public void tryAgainButton() {
