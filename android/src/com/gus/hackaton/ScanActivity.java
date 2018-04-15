@@ -215,6 +215,8 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
             {
                 Toast.makeText(ScanActivity.this, "Problem z siecią!", Toast.LENGTH_SHORT).show();
                 t.printStackTrace();
+
+                scanChartProgressBar.setVisibility(View.GONE);
             }
         });
     }
