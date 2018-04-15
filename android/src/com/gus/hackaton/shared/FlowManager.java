@@ -1,18 +1,14 @@
 package com.gus.hackaton.shared;
 
 import android.content.Context;
-import android.util.Log;
-import android.widget.Toast;
 
-import com.annimon.stream.Collectors;
-import com.annimon.stream.Stream;
 import com.gus.hackaton.R;
 import com.gus.hackaton.db.Storage;
 import com.gus.hackaton.db.StorageImpl;
 import com.gus.hackaton.fridge.FridgeItem;
 import com.gus.hackaton.fridge.FridgeType;
+import com.gus.hackaton.model.EurostatData;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -41,7 +37,7 @@ public class FlowManager {
     }
 
 
-    public void markScanned(Context context, String description) {
+    public void markScanned(Context context, String description, List<EurostatData> eurostatDataList) {
 
         Storage storage = new StorageImpl(context);
 
@@ -60,6 +56,7 @@ public class FlowManager {
         // badges:
         if (questItem != null) { // null if already scanned
             FridgeItem badgeItem = questItem.copy(FridgeType.Badge);
+            badgeItem.eurostatData = eurostatDataList;
 
             List<FridgeItem> badgesList = storage.getBadgeList();
             if (badgesList != null) {
