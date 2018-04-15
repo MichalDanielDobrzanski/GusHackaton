@@ -53,7 +53,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import butterknife.OnClick;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+import uk.co.chrisjenx.calligraphy.CalligraphyUtils;
 
+import static android.graphics.Typeface.BOLD;
 import static com.gus.hackaton.utils.Utils.COLUMNS_COUNT;
 
 /**
@@ -208,6 +210,11 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setTitle(quiz.question);
+                TextView textView = new TextView(MainActivity.this);
+                textView.setText(quiz.question);
+                textView.setPadding(32,32,32,32);
+                textView.setTypeface(null, BOLD);
+                builder.setCustomTitle(textView);
                 builder.setItems(optionsChars, (dialog, which) -> {
 
                     if (corectness[which]) {
