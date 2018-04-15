@@ -36,7 +36,6 @@ public class HeroGame extends ApplicationAdapter {
     private AssetManager assetManager;
     private boolean loading;
     private ModelInstance carrotModelInstance;
-    private ModelInstance carrotModelInstance2;
     private float acc;
 
     @Override
@@ -69,7 +68,6 @@ public class HeroGame extends ApplicationAdapter {
         // CARROT:
         assetManager = new AssetManager();
         assetManager.load("marchew.obj", Model.class);
-        assetManager.load("marchewLV2.obj", Model.class);
         loading = true;
 
     }
@@ -83,7 +81,6 @@ public class HeroGame extends ApplicationAdapter {
             float delta = Gdx.graphics.getDeltaTime();
             acc += delta*10;
             carrotModelInstance.transform.translate(0, (float) (0.01*sin(acc)),0);
-            carrotModelInstance2.transform.translate(0, (float) (0.01*sin(acc)),0);
         }
 
         Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -93,35 +90,21 @@ public class HeroGame extends ApplicationAdapter {
         cameraInputController.update();
 
         modelBatch.begin(perspectiveCamera);
-        Array<ModelInstance> modelIns = new Array<ModelInstance>();
         if(!loading)
-        {
-            if (score < 30)
-            {
-                modelIns.add(carrotModelInstance);
-            } else
-            {
-                modelIns.add(carrotModelInstance2);
-            }
-        }
-        modelBatch.render(modelIns, environment);
+            modelBatch.render(carrotModelInstance, environment);
         modelBatch.end();
     }
 
     private void doneLoading() {
         Model carrotModel = assetManager.get("marchew.obj", Model.class);
         carrotModelInstance = new ModelInstance(carrotModel);
-        Model carrotLvl2Model = assetManager.get("marchewLV2.obj", Model.class);
-        carrotModelInstance2 = new ModelInstance(carrotLvl2Model);
         loading = false;
     }
 
     @Override
     public void dispose() {
         modelBatch.dispose();
-
         modelInstances.clear();
-
         assetManager.dispose();
     }
 
