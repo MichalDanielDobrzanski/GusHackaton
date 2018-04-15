@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.badlogic.gdx.backends.android.AndroidFragmentApplication;
+import com.github.mikephil.charting.charts.RadarChart;
 import com.google.android.flexbox.FlexWrap;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.ar.core.Session;
@@ -40,6 +41,7 @@ import com.gus.hackaton.net.Api;
 import com.gus.hackaton.net.ApiService;
 import com.gus.hackaton.ranking.RankingActivity;
 import com.gus.hackaton.shared.FlowManager;
+import com.gus.hackaton.utils.Utils;
 import com.gus.hackaton.utils.ZoomAnimator;
 
 import java.util.List;
@@ -280,12 +282,26 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
 
             TextView tvType = expandedFridgeItem.findViewById(R.id.typeFridgeItem);
 
+            RadarChart radarChart = expandedFridgeItem.findViewById(R.id.typeFridgeChart);
+
+            ImageView imageView = expandedFridgeItem.findViewById(R.id.typeFridgeImage);
+            imageView.setImageResource(fridgeItem.getDrawableRes());
+
+            ZoomAnimator.zoomImageFromThumb(view, expandedFridgeItem, mainContainer);
+
             String res = "";
-            switch(fridgeItem.getFridgeType()) {
+            switch (fridgeItem.getFridgeType()) {
                 case Badge:
                     res = "Odznaka";
+                    radarChart.setVisibility(View.VISIBLE);
+                    imageView.setVisibility(View.INVISIBLE);
+                    if (fridgeItem.eurostatData != null) {
+                        Utils.invalidateChart(fridgeItem.eurostatData, radarChart);
+                    }
                     break;
                 case Quest:
+                    radarChart.setVisibility(View.INVISIBLE);
+                    imageView.setVisibility(View.VISIBLE);
                     res = "ZADANIE: \n Zeskanuj ten obiekt";
             }
 
@@ -294,10 +310,7 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
             TextView tvDescr = expandedFridgeItem.findViewById(R.id.typeFridgeDescr);
             tvDescr.setText(fridgeItem.getDescription());
 
-            ImageView imageView = expandedFridgeItem.findViewById(R.id.typeFridgeImage);
-            imageView.setImageResource(fridgeItem.getDrawableRes());
 
-            ZoomAnimator.zoomImageFromThumb(view, expandedFridgeItem, mainContainer);
         };
     }
 

@@ -3,12 +3,18 @@ package com.gus.hackaton.fridge;
 
 import android.support.annotation.DrawableRes;
 
+import com.gus.hackaton.model.EurostatData;
+
+import java.util.List;
+
 public final class FridgeItem {
 
     private String description;
     private FridgeType fridgeType;
 
     private final int drawableRes;
+
+    public List<EurostatData> eurostatData;
 
     public FridgeItem(String description, FridgeType fridgeType, @DrawableRes int drawableRes) {
         this.description = description;
