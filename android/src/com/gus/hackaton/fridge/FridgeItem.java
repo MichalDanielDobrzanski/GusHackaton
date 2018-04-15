@@ -14,7 +14,7 @@ public final class FridgeItem {
 
     private final int drawableRes;
 
-    public List<EurostatData> productInfoList;
+    public List<EurostatData> eurostatData;
 
     public FridgeItem(String description, FridgeType fridgeType, @DrawableRes int drawableRes) {
         this.description = description;
