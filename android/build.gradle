@@ -83,6 +83,7 @@ dependencies {
     implementation 'com.annimon:stream:1.2.0'
 
     implementation 'uk.co.chrisjenx:calligraphy:2.3.0'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
 
 }
 
