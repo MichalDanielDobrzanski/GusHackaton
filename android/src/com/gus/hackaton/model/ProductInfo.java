@@ -1,8 +1,11 @@
 package com.gus.hackaton.model;
 
 
+import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
 
 public class ProductInfo {
 
@@ -27,6 +30,10 @@ public class ProductInfo {
     @Expose
     public int points;
 
+    @SerializedName("value")
+    @Expose
+    public List<EurostatData> eurostatDataList;
+
     @Override
     public String toString() {
         return "ProductInfo{" +
@@ -35,6 +42,7 @@ public class ProductInfo {
                 ", health_indicator=" + health_indicator +
                 ", nutricalInfo=" + nutricalInfo +
                 ", points=" + points +
+                ", value=" + eurostatDataList +
                 '}';
     }
 }
