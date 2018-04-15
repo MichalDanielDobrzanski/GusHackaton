@@ -1,8 +1,5 @@
 package com.gus.hackaton.utils;
 
-import com.gus.hackaton.R;
-import com.gus.hackaton.fridge.FridgeItem;
-import com.gus.hackaton.fridge.FridgeType;
 import com.gus.hackaton.ranking.RankingItem;
 
 import java.util.Arrays;
@@ -11,24 +8,6 @@ import java.util.List;
 public class Utils {
 
     public static final int COLUMNS_COUNT = 2;
-
-    public static List<FridgeItem> DUMMY_BADGE_LIST = Arrays.asList(
-            new FridgeItem("apple",FridgeType.Badge, R.drawable.apple),
-            new FridgeItem("banana",FridgeType.Badge, R.drawable.banana),
-            new FridgeItem("orange",FridgeType.Badge, R.drawable.orange),
-            new FridgeItem("pomato",FridgeType.Badge, R.drawable.pomato),
-            new FridgeItem("milk",FridgeType.Badge, R.drawable.milk),
-            new FridgeItem("yogurt",FridgeType.Badge, R.drawable.yoghurt),
-            new FridgeItem("cheese",FridgeType.Badge, R.drawable.cheese));
-
-    public static List<FridgeItem> DUMMY_QUEST_LIST = Arrays.asList(
-            new FridgeItem("Bread",FridgeType.Quest, R.drawable.bread),
-            new FridgeItem("Egg",FridgeType.Quest, R.drawable.egg),
-            new FridgeItem("CornFlakes",FridgeType.Quest, R.drawable.cornflakes),
-            new FridgeItem("Fish",FridgeType.Quest, R.drawable.fish),
-            new FridgeItem("Rice",FridgeType.Quest, R.drawable.rice),
-            new FridgeItem("Olive",FridgeType.Quest, R.drawable.olive));
-
 
     public static List<RankingItem> DUMMY_RANKING_LIST = Arrays.asList(
             new RankingItem("Ryan gossling", 1000),
@@ -39,8 +18,6 @@ public class Utils {
             new RankingItem("Michal DD", 150),
             new RankingItem("Michal DDD", 140),
             new RankingItem("Michal DDDD", 120)
-
-
     );
 
 }

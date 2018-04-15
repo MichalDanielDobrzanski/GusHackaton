@@ -5,8 +5,10 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -18,6 +20,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,16 +29,19 @@ import com.google.android.flexbox.FlexWrap;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.ar.core.Session;
 import com.gus.hackaton.ar.ARActivity;
+import com.gus.hackaton.db.Storage;
+import com.gus.hackaton.db.StorageImpl;
 import com.gus.hackaton.fridge.FridgeAdapter;
+import com.gus.hackaton.fridge.FridgeItem;
 import com.gus.hackaton.model.Option;
 import com.gus.hackaton.model.Points;
 import com.gus.hackaton.model.Quiz;
 import com.gus.hackaton.net.Api;
 import com.gus.hackaton.net.ApiService;
 import com.gus.hackaton.ranking.RankingActivity;
+import com.gus.hackaton.shared.FlowManager;
 import com.gus.hackaton.utils.ZoomAnimator;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -47,8 +53,6 @@ import butterknife.OnClick;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.gus.hackaton.utils.Utils.COLUMNS_COUNT;
-import static com.gus.hackaton.utils.Utils.DUMMY_BADGE_LIST;
-import static com.gus.hackaton.utils.Utils.DUMMY_QUEST_LIST;
 
 /**
  * https://stackoverflow.com/questions/24618829/how-to-add-dividers-and-spaces-between-items-in-recyclerview
@@ -77,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
     View mainContainer;
 
 	@BindView(R.id.points)
-    TextView points;
+    TextView pointsTextView;
 
 	@BindView(R.id.quiz_button)
     Button quizButton;
@@ -85,7 +89,11 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
     private FridgeAdapter badgesAdapter;
     private FridgeAdapter questsAdapter;
 
-	@Override
+    private Storage storage;
+
+    private SharedPreferences prefs;
+
+    @Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
@@ -94,11 +102,10 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
         }
 
 		setContentView(R.layout.main_activity);
+
         ButterKnife.bind(this);
 
-        quizButton.setOnClickListener(v -> {
-            prepareQuiz();
-        });
+        quizButton.setOnClickListener(v -> prepareQuiz());
 
 		scanBarcode.setOnClickListener(v -> {
             Intent myIntent = new Intent(MainActivity.this, ScanActivity.class);
@@ -122,7 +129,32 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
         } catch (Exception e){
 		    showAr.setVisibility(View.INVISIBLE);
         }
+		storage = new StorageImpl(this);
+
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
 	}
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (prefs.getBoolean("firstrun", true)) {
+            // Do first run stuff here then set 'firstrun' as false
+            // using the following line to edit/commit prefs
+            prefs.edit().putBoolean("firstrun", false).apply();
+
+            storage.putQuestList(FlowManager.QUESTS_LIST);
+            storage.putBadgeList(null);
+        }
+
+        List<FridgeItem> quests = storage.getQuestList();
+        List<FridgeItem> badges = storage.getBadgeList();
+
+            badgesAdapter.invalidateData(badges);
+        questsAdapter.invalidateData(quests);
+
+        refreshPoints();
+    }
 
     private void refreshPoints()
     {
@@ -132,14 +164,18 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
             @Override
             public void onResponse(Call<Points> call, Response<Points> response)
             {
-                points.setText(String.valueOf(response.body().points));
                 HeroGame.score = Integer.valueOf(response.body().points);
+                Log.d(TAG, "refreshPoints() onResponse: " + response.body().toString());
+
+                int points = response.body().points;
+                String text = "Punkty : " + String.valueOf(points);
+                pointsTextView.setText(text);
             }
 
             @Override
             public void onFailure(Call<Points> call, Throwable t)
             {
-
+                Toast.makeText(MainActivity.this, "Problem z siecią", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -166,9 +202,10 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setTitle(quiz.question);
                 builder.setItems(optionsChars, (dialog, which) -> {
-                    if(corectness[which]) {
+
+                    if (corectness[which]) {
                         addPoints(10);
-                        //refreshPoints();
+                        refreshPoints();
                         Toast.makeText(MainActivity.this, "Poprawna odpowiedź!", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -192,7 +229,7 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
             @Override
             public void onResponse(Call<Points> call, Response<Points> response)
             {
-                points.setText(String.valueOf(response.body().points));
+                pointsTextView.setText(String.valueOf(response.body().points));
                 HeroGame.score = Integer.valueOf(response.body().points);
             }
 
@@ -218,14 +255,14 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
         FridgeAdapter.OnFridgeItemClicked onFridgeItemClicked = createFridgeItemHandler();
 
 
-        badgesAdapter = new FridgeAdapter(DUMMY_BADGE_LIST, onFridgeItemClicked);
+        badgesAdapter = new FridgeAdapter(onFridgeItemClicked);
 
         badgesRecyclerView.setAdapter(badgesAdapter);
 
 
         questsRecyclerView.setHasFixedSize(true);
         questsRecyclerView.setLayoutManager(new GridLayoutManager(this, COLUMNS_COUNT, LinearLayoutManager.VERTICAL, false));
-        questsAdapter = new FridgeAdapter(DUMMY_QUEST_LIST, onFridgeItemClicked);
+        questsAdapter = new FridgeAdapter(onFridgeItemClicked);
 
         questsRecyclerView.setAdapter(questsAdapter);
 
@@ -235,10 +272,23 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
         return (fridgeItem, view) -> {
 
             TextView tvType = expandedFridgeItem.findViewById(R.id.typeFridgeItem);
-            tvType.setText(fridgeItem.getFridgeType().name());
+
+            String res = "";
+            switch(fridgeItem.getFridgeType()) {
+                case Badge:
+                    res = "Odznaka";
+                    break;
+                case Quest:
+                    res = "ZADANIE: \n Zeskanuj ten obiekt";
+            }
+
+            tvType.setText(res);
 
             TextView tvDescr = expandedFridgeItem.findViewById(R.id.typeFridgeDescr);
             tvDescr.setText(fridgeItem.getDescription());
+
+            ImageView imageView = expandedFridgeItem.findViewById(R.id.typeFridgeImage);
+            imageView.setImageResource(fridgeItem.getDrawableRes());
 
             ZoomAnimator.zoomImageFromThumb(view, expandedFridgeItem, mainContainer);
         };
@@ -273,12 +323,5 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
     public void launchRanking(View view) {
         Log.d(TAG, "launchRanking: ");
         startActivity(new Intent(MainActivity.this, RankingActivity.class));
-    }
-
-    @Override
-    protected void onResume()
-    {
-        super.onResume();
-        refreshPoints();
     }
 }

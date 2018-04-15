@@ -10,10 +10,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.cameraview.CameraView;
+import com.gus.hackaton.model.Points;
 import com.gus.hackaton.model.ProductInfo;
 import com.gus.hackaton.net.Api;
 import com.gus.hackaton.net.ApiService;
 import com.gus.hackaton.ranking.RankingActivity;
+import com.gus.hackaton.shared.FlowManager;
 
 import org.w3c.dom.Text;
 
@@ -143,14 +145,18 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
     private void sendRequest(String id)
     {
         ApiService api = Api.getApi();
+
         Log.d(TAG, "sendRequest: " + id);
         api.getProductInfo(id).enqueue(new Callback<ProductInfo>()
         {
             @Override
             public void onResponse(@NonNull Call<ProductInfo> call, @NonNull Response<ProductInfo> response)
             {
+                Log.d(TAG, "onResponse: " + response.body().toString());
+
+
                 ProductInfo productInfo = response.body();
-                if (productInfo != null) {
+                if (productInfo != null && productInfo.nutricalInfo != null) {
 
                     toggleVisibility(true);
 
@@ -162,12 +168,16 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
                     carbohydrate.setText(String.valueOf(productInfo.nutricalInfo.carbohydrate));
                     sugar.setText(String.valueOf(productInfo.nutricalInfo.sugar));
                     protein.setText(String.valueOf(productInfo.nutricalInfo.protein));
+
+                    // global update
+                    FlowManager.getInstance().markScanned(ScanActivity.this, productInfo.name);
+
+                    api.addPoints(new Points(productInfo.points));
+
                 } else {
                     Log.d(TAG, "onResponse: productInfo is NULL");
-
+                    Toast.makeText(ScanActivity.this, "Nie znaleziono produktu!", Toast.LENGTH_SHORT).show();
                 }
-
-
             }
 
             @Override
@@ -181,6 +191,9 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
 
     @OnClick(R.id.scanTryButton)
     public void tryAgainButton() {
-        startActivity(new Intent(this, ScanActivity.class));
+        // https://stackoverflow.com/questions/1898886/removing-an-activity-from-the-history-stack
+        Intent intent = new Intent(this, ScanActivity.class);
+        intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+        startActivity(intent);
     }
 }
