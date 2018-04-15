@@ -27,7 +27,7 @@ public class Utils {
             new FridgeItem("Platki sniadaniowe",FridgeType.Quest, R.drawable.cornflakes),
             new FridgeItem("Losos",FridgeType.Quest, R.drawable.fish),
             new FridgeItem("Ryz",FridgeType.Quest, R.drawable.rice),
-            new FridgeItem("Oliwa",FridgeType.Quest, R.drawable.olive),
+            new FridgeItem("Oliwki",FridgeType.Quest, R.drawable.olive),
             new FridgeItem("Ser",FridgeType.Quest, R.drawable.cheese)
     );
 

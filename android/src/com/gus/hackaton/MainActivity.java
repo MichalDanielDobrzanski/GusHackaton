@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
     View mainContainer;
 
 	@BindView(R.id.points)
-    TextView points;
+    TextView pointsTextView;
 
 	@BindView(R.id.quiz_button)
     Button quizButton;
@@ -126,7 +126,9 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
             @Override
             public void onResponse(Call<Points> call, Response<Points> response)
             {
-                points.setText(String.valueOf(response.body().points));
+                int points = response.body().points;
+                String text = "Punkty : " + String.valueOf(points);
+                pointsTextView.setText(text);
             }
 
             @Override
