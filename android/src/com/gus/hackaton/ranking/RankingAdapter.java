@@ -65,10 +65,8 @@ public class RankingAdapter extends RecyclerView.Adapter<RankingAdapter.ViewHold
         }
 
         public void bind(RankingItem rankingItem, int position) {
-            tvPosition.setText(String.valueOf(position));
-
+            tvPosition.setText(String.valueOf(position + 1));
             tvPoints.setText(String.valueOf(rankingItem.getPoints()));
-
             tvUserName.setText(rankingItem.getUserName());
         }
     }
