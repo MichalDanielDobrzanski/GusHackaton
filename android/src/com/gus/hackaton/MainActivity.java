@@ -171,7 +171,7 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
             {
                 HeroGame.score = response.body().points;
 
-                Log.d(TAG, "refreshPoints() onResponse: " + response.body().toString());
+                if (BuildConfig.DEBUG) Log.d(TAG, "refreshPoints() onResponse: " + response.body().toString());
 
                 updatePointsTextView(response);
             }
@@ -198,12 +198,12 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
             public void onResponse(Call<Quiz> call, Response<Quiz> response)
             {
                 Quiz quiz = response.body();
-                Log.d(TAG, "onResponse: " + quiz.question);
+                if (BuildConfig.DEBUG) Log.d(TAG, "onResponse: " + quiz.question);
                 CharSequence [] optionsChars = new CharSequence[4];
                 boolean [] corectness = new boolean[4];
                 List<Option> options = quiz.options;
                 for(int i = 0; i < options.size(); ++i) {
-                    Log.d(TAG, "onResponse: " + options.get(i).value);
+                    if (BuildConfig.DEBUG) Log.d(TAG, "onResponse: " + options.get(i).value);
                     optionsChars[i] = options.get(i).value;
                     corectness[i] = options.get(i).isCorrect;
                 }
@@ -347,7 +347,7 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
 
     @OnClick(R.id.rankingButton)
     public void launchRanking(View view) {
-        Log.d(TAG, "launchRanking()");
+        if (BuildConfig.DEBUG) Log.d(TAG, "launchRanking()");
 
         startActivity(new Intent(MainActivity.this, RankingActivity.class));
     }

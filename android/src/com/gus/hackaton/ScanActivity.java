@@ -135,7 +135,7 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
     @Override
     public void handleResult(Result rawResult) {
         // Do something with the result here
-        Log.d(TAG, rawResult.getContents()); // Prints scan results
+        if (BuildConfig.DEBUG) Log.d(TAG, rawResult.getContents()); // Prints scan results
 
         // If you would like to resume scanning, call this method below:
         //mScannerView.resumeCameraPreview(this);
@@ -155,13 +155,13 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
     {
         ApiService api = Api.getApi();
 
-        Log.d(TAG, "sendRequest: " + id);
+        if (BuildConfig.DEBUG) Log.d(TAG, "sendRequest: " + id);
         api.getProductInfo(id).enqueue(new Callback<ProductInfo>()
         {
             @Override
             public void onResponse(@NonNull Call<ProductInfo> call, @NonNull Response<ProductInfo> response)
             {
-                Log.d(TAG, "onResponse: " + response.body().toString());
+                if (BuildConfig.DEBUG) Log.d(TAG, "onResponse: " + response.body().toString());
 
 
                 ProductInfo productInfo = response.body();
@@ -169,7 +169,7 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
 
                     toggleVisibility(true);
 
-                    Log.d(TAG, "onResponse: " + productInfo.name);
+                    if (BuildConfig.DEBUG) Log.d(TAG, "onResponse: " + productInfo.name);
                     name.setText(productInfo.name);
                     health_indicator.setText(String.valueOf(productInfo.health_indicator));
                     calories.setText(String.valueOf(productInfo.nutricalInfo.calories));
@@ -186,7 +186,7 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
                     api.addPoints(new Points(productInfo.points));
 
                 } else {
-                    Log.d(TAG, "onResponse: productInfo is NULL");
+                    if (BuildConfig.DEBUG) Log.d(TAG, "onResponse: productInfo is NULL");
                     Toast.makeText(ScanActivity.this, getString(R.string.errorNoScanResult), Toast.LENGTH_SHORT).show();
                 }
             }

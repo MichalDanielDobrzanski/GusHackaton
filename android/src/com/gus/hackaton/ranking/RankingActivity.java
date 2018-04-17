@@ -13,6 +13,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.gus.hackaton.BuildConfig;
 import com.gus.hackaton.R;
 import com.gus.hackaton.net.Api;
 import com.gus.hackaton.net.ApiService;
@@ -49,7 +50,7 @@ public class RankingActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Log.d(TAG, "onCreate: ");
+        if (BuildConfig.DEBUG) Log.d(TAG, "onCreate: ");
 
         setContentView(R.layout.ranking_activity);
 
@@ -78,7 +79,7 @@ public class RankingActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
 
-                        Log.d(TAG, "onResponse: " + response.body().toString());
+                        if (BuildConfig.DEBUG) Log.d(TAG, "onResponse: " + response.body().toString());
 
                         progressBar.setVisibility(View.GONE);
                         recyclerView.setVisibility(View.VISIBLE);
