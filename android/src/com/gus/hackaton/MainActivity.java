@@ -51,7 +51,10 @@ import com.gus.hackaton.utils.Utils;
 import com.gus.hackaton.utils.ZoomAnimator;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -186,9 +189,42 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
                             JsonObject root = json.getAsJsonObject("value");
 
                             List<EurostatData> res = new ArrayList<>();
-                            Stream.of(root.entrySet()).forEach(e -> res.add(new EurostatData(
-                                    Integer.parseInt(e.getKey()),
-                                    e.getValue().getAsDouble())));
+
+                            // fill id-value map
+                            Map<Integer, Double> idValue = new HashMap<>();
+                            Stream.of(root.entrySet()).forEach(e ->
+                                    idValue.put(
+                                            Integer.parseInt(e.getKey()),
+                                            e.getValue().getAsDouble())
+                            );
+
+                            JsonObject cat = json.getAsJsonObject("dimension").getAsJsonObject("geo").getAsJsonObject("category");
+
+                            // fill id-country map
+                            Map<Integer, String> idCountry = new HashMap<>();
+                            Stream.of(cat.getAsJsonObject("index").entrySet()).forEach(e -> {
+                                String countryCode = e.getKey();
+                                int countryId = Integer.parseInt(e.getValue().getAsString());
+
+                                Stream.of(cat.getAsJsonObject("label").entrySet()).forEach(e2 -> {
+                                    String countryCode2 = e2.getKey();
+                                    String countryName = e2.getValue().getAsString();
+
+                                    if (countryCode.equals(countryCode2))
+                                        idCountry.put(countryId, countryName);
+                                });
+                            });
+
+
+                            // match two maps by keys and create eurostat objects
+                            Stream.of(idValue).forEach(e -> {
+                                Stream.of(idCountry).forEach(e2 -> {
+                                    if (Objects.equals(e.getKey(), e2.getKey())) {
+                                        res.add(new EurostatData(e2.getValue(), e.getValue()));
+                                    }
+                                });
+                            });
+
 
                             product.eurostatDataList = res;
                         })

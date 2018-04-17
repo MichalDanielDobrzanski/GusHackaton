@@ -57,8 +57,8 @@ public class Utils {
         xAxis.setYOffset(0f);
         xAxis.setXOffset(0f);
         List<String> labels = new ArrayList<>();
-        Stream.of(eurostatDatas)
-                .forEach(eurostatData -> labels.add(EurostatData.Country.values()[eurostatData.countryKey].name()));
+//        Stream.of(eurostatDatas)
+//                .forEach(eurostatData -> labels.add(EurostatData.Country.values()[eurostatData.countryKey].name()));
 
         xAxis.setValueFormatter((value, axis) -> labels.get(((int) value) % labels.size()));
         xAxis.setTextColor(Color.WHITE);

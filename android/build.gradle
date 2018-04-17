@@ -59,6 +59,7 @@ dependencies {
     implementation 'com.facebook.stetho:stetho:1.5.0'
     implementation 'com.facebook.stetho:stetho-okhttp3:1.5.0'
 
+
     implementation 'com.google.auto.value:auto-value:1.6'
     annotationProcessor 'com.google.auto.value:auto-value:1.6'
 
@@ -84,6 +85,7 @@ dependencies {
 
     implementation 'uk.co.chrisjenx:calligraphy:2.3.0'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
+
 
 }
 

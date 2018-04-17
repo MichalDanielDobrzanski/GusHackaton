@@ -1,33 +1,22 @@
 package com.gus.hackaton.model;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+public final class EurostatData {
 
-public class EurostatData {
+    private String country;
 
-    public enum Country {
-        ES,
-        HR,
-        IT,
-        PL,
-        FIN
-    }
-
-    @SerializedName("key")
-    @Expose
-    public int countryKey;
-
-
-    @SerializedName("value")
-    @Expose
     public double price;
 
-    public EurostatData(int countryKey, double price) {
-        this.countryKey = countryKey;
+    public EurostatData(String country, double price) {
+        this.country = country;
         this.price = price;
     }
 
-    public Country getCountryKey() {
-        return Country.values()[countryKey];
+
+    public String getCountry() {
+        return country;
+    }
+
+    public double getPrice() {
+        return price;
     }
 }
