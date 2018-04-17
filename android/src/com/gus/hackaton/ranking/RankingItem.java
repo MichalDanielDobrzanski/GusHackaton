@@ -19,7 +19,7 @@ public class RankingItem {
         this.points = points;
     }
 
-    public String getUserName() {
+    String getUserName() {
         return userName;
     }
 

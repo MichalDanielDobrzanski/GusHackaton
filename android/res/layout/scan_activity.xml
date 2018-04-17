@@ -27,7 +27,7 @@
             style="@style/TransparentTextView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:text="Nazwa:"/>
+            android:text="@string/scanName"/>
 
         <TextView
             android:id="@+id/name"
@@ -43,7 +43,7 @@
             style="@style/TransparentTextView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/name_l"
-            android:text="Zdrowotność:"/>
+            android:text="@string/scanHealth" />
 
         <TextView
             android:id="@+id/health_indicator"
@@ -58,7 +58,7 @@
             style="@style/TransparentTextView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/health_indicator_l"
-            android:text="Kalorie:"/>
+            android:text="@string/scanCalories"/>
 
         <TextView
             android:id="@+id/calories"
@@ -73,7 +73,7 @@
             style="@style/TransparentTextView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/calories_l"
-            android:text="Tłuszcz:"/>
+            android:text="@string/scanFat"/>
 
         <TextView
             android:id="@+id/fat"
@@ -88,7 +88,7 @@
             style="@style/TransparentTextView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/fat_l"
-            android:text="Cukier:"/>
+            android:text="@string/scanCarbohydrates"/>
 
         <TextView
             android:id="@+id/carbohydrate"
@@ -104,7 +104,7 @@
 
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/carbohydrate_l"
-            android:text="Białko:"/>
+            android:text="@string/scanProtein"/>
 
         <TextView
             android:id="@+id/protein"
@@ -119,7 +119,7 @@
             style="@style/TransparentTextView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/protein_l"
-            android:text="Cukier:"/>
+            android:text="@string/scanSugar"/>
 
         <TextView
             android:id="@+id/sugar"
@@ -131,7 +131,7 @@
 
         <Button
             android:id="@+id/scanTryButton"
-            android:text="Skaner"
+            android:text="@string/scanScanner"
             style="@style/ButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -144,7 +144,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginBottom="8dp"
-            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginTop="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="h,1:1"

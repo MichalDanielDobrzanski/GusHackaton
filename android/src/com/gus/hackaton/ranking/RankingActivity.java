@@ -1,7 +1,6 @@
 package com.gus.hackaton.ranking;
 
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,17 +8,15 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import com.gus.hackaton.HeroGame;
 import com.gus.hackaton.R;
 import com.gus.hackaton.net.Api;
 import com.gus.hackaton.net.ApiService;
+import com.gus.hackaton.utils.Utils;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -33,8 +30,6 @@ import io.reactivex.disposables.Disposable;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static com.gus.hackaton.utils.Utils.DUMMY_RANKING_LIST;
 
 public class RankingActivity extends AppCompatActivity {
 
@@ -101,8 +96,7 @@ public class RankingActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<JsonObject> call, Throwable t) {
-                        t.printStackTrace();
-                        Toast.makeText(RankingActivity.this, "Problem z siecią!", Toast.LENGTH_SHORT).show();
+                        Utils.showError(RankingActivity.this, t);
                     }
                 }));
     }

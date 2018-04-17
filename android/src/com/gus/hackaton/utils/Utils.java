@@ -1,6 +1,8 @@
 package com.gus.hackaton.utils;
 
+import android.content.Context;
 import android.graphics.Color;
+import android.widget.Toast;
 
 import com.annimon.stream.Stream;
 import com.github.mikephil.charting.charts.RadarChart;
@@ -9,6 +11,8 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.RadarData;
 import com.github.mikephil.charting.data.RadarDataSet;
 import com.github.mikephil.charting.data.RadarEntry;
+import com.gus.hackaton.R;
+import com.gus.hackaton.ScanActivity;
 import com.gus.hackaton.model.EurostatData;
 import com.gus.hackaton.ranking.RankingItem;
 
@@ -69,6 +73,12 @@ public class Utils {
         radarChart.setDescription(null);
         radarChart.setData(radarData);
         radarChart.invalidate();
+    }
+
+    public static void showError(Context context, Throwable t) {
+        Toast.makeText(context, R.string.errorNetwork, Toast.LENGTH_SHORT).show();
+        t.printStackTrace();
+
     }
 
 }

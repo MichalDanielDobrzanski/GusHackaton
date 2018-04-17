@@ -17,18 +17,17 @@ import java.util.Objects;
 
 public class FlowManager {
 
-    private static final String TAG = FlowManager.class.getSimpleName();
-
-    public static List<FridgeItem> QUESTS_LIST = Arrays.asList(
-            new FridgeItem("Chleb",FridgeType.Quest, R.drawable.bread),
-            new FridgeItem("Jajko",FridgeType.Quest, R.drawable.egg),
-            new FridgeItem("Platki sniadaniowe",FridgeType.Quest, R.drawable.cornflakes),
-            new FridgeItem("Losos",FridgeType.Quest, R.drawable.fish),
-            new FridgeItem("Ryz",FridgeType.Quest, R.drawable.rice),
-            new FridgeItem("Oliwki",FridgeType.Quest, R.drawable.olive),
-            new FridgeItem("Ser",FridgeType.Quest, R.drawable.cheese)
-    );
-
+    public static List<FridgeItem> createInitialQuestList(Context context) {
+        return Arrays.asList(
+                new FridgeItem(context.getString(R.string.itemBread),FridgeType.Quest, R.drawable.bread),
+                new FridgeItem(context.getString(R.string.itemEggs),FridgeType.Quest, R.drawable.egg),
+                new FridgeItem(context.getString(R.string.itemCereals),FridgeType.Quest, R.drawable.cornflakes),
+                new FridgeItem(context.getString(R.string.itemSalmon),FridgeType.Quest, R.drawable.fish),
+                new FridgeItem(context.getString(R.string.itemRice),FridgeType.Quest, R.drawable.rice),
+                new FridgeItem(context.getString(R.string.itemOlives),FridgeType.Quest, R.drawable.olive),
+                new FridgeItem(context.getString(R.string.itemCheese),FridgeType.Quest, R.drawable.cheese)
+        );
+    }
 
     private static FlowManager instance = new FlowManager();
 

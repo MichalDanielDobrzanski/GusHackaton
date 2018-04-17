@@ -53,7 +53,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import butterknife.OnClick;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
-import uk.co.chrisjenx.calligraphy.CalligraphyUtils;
 
 import static android.graphics.Typeface.BOLD;
 import static com.gus.hackaton.utils.Utils.COLUMNS_COUNT;
@@ -148,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
             // using the following line to edit/commit prefs
             prefs.edit().putBoolean("firstrun", false).apply();
 
-            storage.putQuestList(FlowManager.QUESTS_LIST);
+            storage.putQuestList(FlowManager.createInitialQuestList(this));
             storage.putBadgeList(null);
         }
 
@@ -167,25 +166,25 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
         api.getPoints().enqueue(new Callback<Points>()
         {
             @Override
-            public void onResponse(Call<Points> call, Response<Points> response)
+            public void onResponse(@NonNull Call<Points> call, @NonNull Response<Points> response)
             {
-                HeroGame.score = Integer.valueOf(response.body().points);
+                HeroGame.score = response.body().points;
+
                 Log.d(TAG, "refreshPoints() onResponse: " + response.body().toString());
 
                 updatePointsTextView(response);
             }
 
             @Override
-            public void onFailure(Call<Points> call, Throwable t)
-            {
-                Toast.makeText(MainActivity.this, "Problem z siecią", Toast.LENGTH_SHORT).show();
+            public void onFailure(Call<Points> call, Throwable t) {
+                Utils.showError(MainActivity.this, t);
             }
         });
     }
 
     private void updatePointsTextView(Response<Points> response) {
         int points = response.body().points;
-        String text = "Punkty : " + String.valueOf(points);
+        String text = String.format(getString(R.string.points), points);
         pointsTextView.setText(text);
     }
 
@@ -221,7 +220,7 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
 
                         addPoints(10);
 
-                        Toast.makeText(MainActivity.this, "Poprawna odpowiedź!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, R.string.rightAnswer, Toast.LENGTH_SHORT).show();
                     }
                 });
                 builder.show();
@@ -299,7 +298,7 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
             String res = "";
             switch (fridgeItem.getFridgeType()) {
                 case Badge:
-                    res = "Odznaka";
+                    res = getString(R.string.badge);
                     radarChart.setVisibility(View.VISIBLE);
                     imageView.setVisibility(View.INVISIBLE);
                     if (fridgeItem.eurostatData != null) {
@@ -309,7 +308,7 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
                 case Quest:
                     radarChart.setVisibility(View.INVISIBLE);
                     imageView.setVisibility(View.VISIBLE);
-                    res = "ZADANIE: \n Zeskanuj ten obiekt";
+                    res = getString(R.string.quest);
             }
 
             tvType.setText(res);
@@ -332,9 +331,9 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
 
         if (requestCode == CAMERA_PERMISSION) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, getString(R.string.success_permission), Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.successCameraPermission), Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(this, getString(R.string.error_no_permission), Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.errorNoCameraPermission), Toast.LENGTH_LONG).show();
                 finish();
             }
         }
@@ -348,7 +347,8 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
 
     @OnClick(R.id.rankingButton)
     public void launchRanking(View view) {
-        Log.d(TAG, "launchRanking: ");
+        Log.d(TAG, "launchRanking()");
+
         startActivity(new Intent(MainActivity.this, RankingActivity.class));
     }
 }

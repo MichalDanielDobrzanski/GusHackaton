@@ -64,7 +64,7 @@ public class RankingAdapter extends RecyclerView.Adapter<RankingAdapter.ViewHold
             ButterKnife.bind(this, itemView);
         }
 
-        public void bind(RankingItem rankingItem, int position) {
+        void bind(RankingItem rankingItem, int position) {
             tvPosition.setText(String.valueOf(position + 1));
             tvPoints.setText(String.valueOf(rankingItem.getPoints()));
             tvUserName.setText(rankingItem.getUserName());

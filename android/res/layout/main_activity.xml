@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:text="Skaner"
+            android:text="@string/mainScanner"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:text="Ranking"
+            android:text="@string/mainRanking"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/scanBarcodeButton" />
 
@@ -54,11 +54,11 @@
             style="@style/ButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
-            android:text="Quiz"
+            android:text="@string/mainQuiz"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/rankingButton" />
 
@@ -71,7 +71,7 @@
             android:layout_marginStart="16dp"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
-            android:text="Zobacz mnie"
+            android:text="@string/mainAr"
             app:layout_constraintBottom_toTopOf="@+id/points"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -114,7 +114,7 @@
             android:background="@drawable/button_shape_border"
             android:gravity="center"
             android:padding="14dp"
-            android:text="Punkty: "
+            android:text="@string/mainPoints"
             android:textColor="#FFFF00"
             android:textSize="18sp"
             android:textStyle="bold"

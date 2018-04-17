@@ -1,42 +1,23 @@
 package com.gus.hackaton;
 
 import android.content.Intent;
-import android.graphics.Color;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.annimon.stream.Stream;
 import com.github.mikephil.charting.charts.RadarChart;
-import com.github.mikephil.charting.components.AxisBase;
-import com.github.mikephil.charting.components.Description;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.RadarData;
-import com.github.mikephil.charting.data.RadarDataSet;
-import com.github.mikephil.charting.data.RadarEntry;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.google.android.cameraview.CameraView;
-import com.google.gson.JsonArray;
-import com.gus.hackaton.model.EurostatData;
 import com.gus.hackaton.model.Points;
 import com.gus.hackaton.model.ProductInfo;
 import com.gus.hackaton.net.Api;
 import com.gus.hackaton.net.ApiService;
-import com.gus.hackaton.ranking.RankingActivity;
 import com.gus.hackaton.shared.FlowManager;
 import com.gus.hackaton.utils.Utils;
-
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -206,15 +187,13 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
 
                 } else {
                     Log.d(TAG, "onResponse: productInfo is NULL");
-                    Toast.makeText(ScanActivity.this, "Nie znaleziono produktu, spróbuj ponownie!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ScanActivity.this, getString(R.string.errorNoScanResult), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<ProductInfo> call, Throwable t)
-            {
-                Toast.makeText(ScanActivity.this, "Problem z siecią!", Toast.LENGTH_SHORT).show();
-                t.printStackTrace();
+            public void onFailure(Call<ProductInfo> call, Throwable t) {
+                Utils.showError(ScanActivity.this, t);
 
                 scanChartProgressBar.setVisibility(View.GONE);
             }
