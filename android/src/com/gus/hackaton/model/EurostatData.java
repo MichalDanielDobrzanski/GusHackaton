@@ -15,14 +15,19 @@ public class EurostatData {
 
     @SerializedName("key")
     @Expose
-    public int country;
+    public int countryKey;
 
 
     @SerializedName("value")
     @Expose
     public double price;
 
-    public Country getCountry() {
-        return Country.values()[country];
+    public EurostatData(int countryKey, double price) {
+        this.countryKey = countryKey;
+        this.price = price;
+    }
+
+    public Country getCountryKey() {
+        return Country.values()[countryKey];
     }
 }

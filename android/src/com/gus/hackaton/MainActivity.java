@@ -30,6 +30,7 @@ import com.github.mikephil.charting.charts.RadarChart;
 import com.google.android.flexbox.FlexWrap;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.ar.core.Session;
+import com.google.gson.JsonObject;
 import com.gus.hackaton.ar.ARActivity;
 import com.gus.hackaton.db.Storage;
 import com.gus.hackaton.db.StorageImpl;
@@ -180,9 +181,16 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
 
         Stream.of(FlowManager.getInstance().currentProductList).forEach(product ->
                 Api.getEurostatApi().getEurostatData(product.getEurostatCode()).enqueue(
-                        new CallbackImpl<>(this, eurostatData -> {
+                        new CallbackImpl<>(this, json -> {
 
-                            Log.d(TAG, "refreshEurostatData: " + eurostatData.toString());
+                            JsonObject root = json.getAsJsonObject("value");
+
+                            List<EurostatData> res = new ArrayList<>();
+                            Stream.of(root.entrySet()).forEach(e -> res.add(new EurostatData(
+                                    Integer.parseInt(e.getKey()),
+                                    e.getValue().getAsDouble())));
+
+                            product.eurostatDataList = res;
                         })
                 )
         );
