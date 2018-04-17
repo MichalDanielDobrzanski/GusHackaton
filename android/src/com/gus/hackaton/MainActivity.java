@@ -32,8 +32,8 @@ import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.ar.core.Session;
 import com.google.gson.JsonObject;
 import com.gus.hackaton.ar.ARActivity;
-import com.gus.hackaton.db.Storage;
-import com.gus.hackaton.db.StorageImpl;
+import com.gus.hackaton.repository.db.Storage;
+import com.gus.hackaton.repository.db.StorageImpl;
 import com.gus.hackaton.fridge.FridgeAdapter;
 import com.gus.hackaton.model.FridgeItem;
 import com.gus.hackaton.fridge.FridgeType;
@@ -168,6 +168,7 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
             }
 
             repository.putProductList(Utils.INITIAL_PRODUCTS_LIST);
+            repository.putNutritionList(Utils.INITIAL_NUTRITION_LIST);
             repository.putQuestList(fridgeItems);
             repository.putBadgeList(null);
         }

@@ -1,4 +1,4 @@
-package com.gus.hackaton.db;
+package com.gus.hackaton.repository.db;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.gus.hackaton.model.FridgeItem;
+import com.gus.hackaton.model.NutritionInfo;
 import com.gus.hackaton.model.Product;
 
 import java.lang.reflect.Type;
@@ -14,6 +15,7 @@ import java.util.List;
 
 public class StorageImpl implements Storage {
 
+    private static final String NUTRITION_LIST = "PRODUCT_LIST";
     private static final String PRODUCT_LIST = "PRODUCT_LIST";
     private static final String QUESTS_LIST = "QUESTS_LIST";
     private static final String BADGES_LIST = "BADGES_LIST";
@@ -40,6 +42,11 @@ public class StorageImpl implements Storage {
     @Override
     public void putProductList(List<Product> productList) {
         setList(PRODUCT_LIST, productList);
+    }
+
+    @Override
+    public void putNutritionList(List<NutritionInfo> nutritionInfoList) {
+        setList(NUTRITION_LIST, nutritionInfoList);
     }
 
     @Override
@@ -77,6 +84,19 @@ public class StorageImpl implements Storage {
 
         return res;
     }
+
+    @Override
+    public List<NutritionInfo> getNutritionInfotList() {
+        List<NutritionInfo> res;
+
+        Type type = new TypeToken<List<NutritionInfo>>() {}.getType();
+        Gson gson = new Gson();
+        String jsonPreferences = sharedPreferences.getString(NUTRITION_LIST, "");
+        res = gson.fromJson(jsonPreferences, type);
+
+        return res;
+    }
+
 
     private <T> void setList(String key, List<T> list) {
         Gson gson = new Gson();

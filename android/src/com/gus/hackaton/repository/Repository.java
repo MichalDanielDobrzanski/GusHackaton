@@ -1,11 +1,11 @@
 package com.gus.hackaton.repository;
 
-import com.annimon.stream.Stream;
-import com.gus.hackaton.db.Storage;
 import com.gus.hackaton.fridge.FridgeType;
 import com.gus.hackaton.model.EurostatData;
 import com.gus.hackaton.model.FridgeItem;
+import com.gus.hackaton.model.NutritionInfo;
 import com.gus.hackaton.model.Product;
+import com.gus.hackaton.repository.db.Storage;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -61,6 +61,14 @@ public class Repository {
 
     public void putBadgeList(List<FridgeItem> fridgeItems) {
         storage.putBadgeList(fridgeItems);
+    }
+
+    public void putNutritionList(List<NutritionInfo> nutritionInfoList) {
+        storage.putNutritionList(nutritionInfoList);
+    }
+
+    public List<NutritionInfo> getNutritionInfoList() {
+        return storage.getNutritionInfotList();
     }
 
 

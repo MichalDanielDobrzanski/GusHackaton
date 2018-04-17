@@ -1,23 +1,23 @@
 package com.gus.hackaton;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.annimon.stream.Optional;
+import com.annimon.stream.Stream;
 import com.github.mikephil.charting.charts.RadarChart;
 import com.google.android.cameraview.CameraView;
-import com.gus.hackaton.model.Points;
+import com.gus.hackaton.model.NutritionInfo;
 import com.gus.hackaton.model.Product;
-import com.gus.hackaton.net.Api;
-import com.gus.hackaton.net.ApiService;
 import com.gus.hackaton.repository.Repository;
-import com.gus.hackaton.utils.Utils;
+
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -26,9 +26,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.dm7.barcodescanner.zbar.Result;
 import me.dm7.barcodescanner.zbar.ZBarScannerView;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 
 public class ScanActivity extends AppCompatActivity implements ZBarScannerView.ResultHandler
@@ -157,62 +154,89 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
         toggleVisibility(false);
 
         mCameraView.start();
-        sendRequest(rawResult.getContents());
+        tryToFindNutritionInformation(rawResult.getContents());
     }
 
-    private void sendRequest(String id)
-    {
-        ApiService api = Api.getEurostatApi();
-
-        Log.d(TAG, "sendRequest: " + id);
-
-        api.getProductInfo(id).enqueue(new Callback<Product>()
-        {
-            @Override
-            public void onResponse(@NonNull Call<Product> call, @NonNull Response<Product> response)
-            {
-                Log.d(TAG, "onResponse: " + response.body().toString());
+    private void tryToFindNutritionInformation(String id) {
+        Log.d(TAG, "tryToFindNutritionInformation: id = " + id);
 
 
-                Product product = response.body();
-                if (product != null && product.nutricalInfo != null) {
+        Optional<NutritionInfo> optional = Stream.of(repository.getNutritionInfoList())
+                .filter(nInfo -> Objects.equals(nInfo.getId(), id)).findFirst();
 
-                    toggleVisibility(true);
+        if (optional.isPresent()) {
 
-                    Log.d(TAG, "onResponse: " + product.name);
-                    name.setText(product.name);
-                    health_indicator.setText(String.valueOf(product.health_indicator));
-                    calories.setText(String.valueOf(product.nutricalInfo.calories));
-                    fat.setText(String.valueOf(product.nutricalInfo.fat));
-                    carbohydrate.setText(String.valueOf(product.nutricalInfo.carbohydrate));
-                    sugar.setText(String.valueOf(product.nutricalInfo.sugar));
-                    protein.setText(String.valueOf(product.nutricalInfo.protein));
+            Optional<Product> optionalProduct = Stream.of(repository.getCurrentProductList())
+                    .filter(p -> p.id.equals(optional.get().getId()))
+                    .findFirst();
 
-                    Utils.invalidateChart(product.eurostatDataList, radarChart);
+            if (optionalProduct.isPresent()) {
 
-                    // global update
-                    repository.markScanned(product.name, product.eurostatDataList);
+                toggleVisibility(true);
 
-                    api.addPoints(new Points(product.points));
+                NutritionInfo nutritionInfo = optional.get();
+                Product product = optionalProduct.get();
 
-                } else {
-                    Log.d(TAG, "onResponse: product is NULL");
-                    Toast.makeText(ScanActivity.this, "Nie znaleziono produktu, spróbuj ponownie!", Toast.LENGTH_SHORT).show();
-                }
+                name.setText(product.name);
+                calories.setText(String.valueOf(nutritionInfo.calories));
+                fat.setText(String.valueOf(nutritionInfo.fat));
+                carbohydrate.setText(String.valueOf(nutritionInfo.carbohydrate));
+                sugar.setText(String.valueOf(nutritionInfo.sugar));
+                protein.setText(String.valueOf(nutritionInfo.protein));
             }
 
-            @Override
-            public void onFailure(Call<Product> call, Throwable t)
-            {
-                Toast.makeText(ScanActivity.this, "Problem z siecią!", Toast.LENGTH_SHORT).show();
-                t.printStackTrace();
 
-                scanChartProgressBar.setVisibility(View.GONE);
-            }
-        });
+        } else {
+            toggleVisibility(false);
+            Toast.makeText(ScanActivity.this, "Nie znaleziono produktu, spróbuj ponownie!", Toast.LENGTH_SHORT).show();
+        }
+
+//        ApiService api = Api.getEurostatApi();
+//        api.getProductInfo(id).enqueue(new Callback<Product>()
+//        {
+//            @Override
+//            public void onResponse(@NonNull Call<Product> call, @NonNull Response<Product> response)
+//            {
+//                Log.d(TAG, "onResponse: " + response.body().toString());
+//
+//
+//                Product product = response.body();
+//                if (product != null && product.nutritionInfo != null) {
+//
+//                    toggleVisibility(true);
+//
+//                    Log.d(TAG, "onResponse: " + product.name);
+//                    name.setText(product.name);
+//                    health_indicator.setText(String.valueOf(product.health_indicator));
+//                    calories.setText(String.valueOf(product.nutritionInfo.calories));
+//                    fat.setText(String.valueOf(product.nutritionInfo.fat));
+//                    carbohydrate.setText(String.valueOf(product.nutritionInfo.carbohydrate));
+//                    sugar.setText(String.valueOf(product.nutritionInfo.sugar));
+//                    protein.setText(String.valueOf(product.nutritionInfo.protein));
+//
+//                    Utils.invalidateChart(product.eurostatDataList, radarChart);
+//
+//                    // global update
+//                    repository.markScanned(product.name, product.eurostatDataList);
+//
+//                    api.addPoints(new Points(product.points));
+//
+//                } else {
+//                    Log.d(TAG, "onResponse: product is NULL");
+//                    Toast.makeText(ScanActivity.this, "Nie znaleziono produktu, spróbuj ponownie!", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<Product> call, Throwable t)
+//            {
+//                Toast.makeText(ScanActivity.this, "Problem z siecią!", Toast.LENGTH_SHORT).show();
+//                t.printStackTrace();
+//
+//                scanChartProgressBar.setVisibility(View.GONE);
+//            }
+//        });
     }
-
-
 
     @OnClick(R.id.scanTryButton)
     public void tryAgainButton() {

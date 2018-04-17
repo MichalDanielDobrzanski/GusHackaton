@@ -11,6 +11,7 @@ import com.github.mikephil.charting.data.RadarDataSet;
 import com.github.mikephil.charting.data.RadarEntry;
 import com.gus.hackaton.R;
 import com.gus.hackaton.model.EurostatData;
+import com.gus.hackaton.model.NutritionInfo;
 import com.gus.hackaton.model.Product;
 import com.gus.hackaton.ranking.RankingItem;
 
@@ -42,6 +43,16 @@ public class Utils {
             new Product("000000000055", "Ryz", 5, 4, "CP01111A", R.drawable.rice),
             new Product("000000000062", "Oliwki", 15, 8, "CP01153A", R.drawable.olive),
             new Product("000000000079", "Ser", 8, 4, "CP01145A", R.drawable.cheese)
+    );
+
+    public static List<NutritionInfo> INITIAL_NUTRITION_LIST = Arrays.asList(
+            new NutritionInfo("000000000017", 264, 49, 3.2, 9, 5),
+            new NutritionInfo("000000000024", 155, 1.1, 11, 13, 1.1),
+            new NutritionInfo("000000000031", 357, 84, 0.4, 8, 10),
+            new NutritionInfo("000000000048", 208, 0, 13, 20, 0),
+            new NutritionInfo("000000000055", 130, 28, 0.3, 2.7, 0.1),
+            new NutritionInfo("000000000062", 115, 6, 11, 0.8, 0),
+            new NutritionInfo("000000000079", 402, 1.3, 33, 25, 0.5)
     );
 
 

@@ -25,7 +25,7 @@ public class Product {
 
     @SerializedName("nutritional")
     @Expose
-    public NutricalInfo nutricalInfo;
+    public NutritionInfo nutritionInfo;
 
     @SerializedName("points")
     @Expose
@@ -64,7 +64,7 @@ public class Product {
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", health_indicator=" + health_indicator +
-                ", nutricalInfo=" + nutricalInfo +
+                ", nutricalInfo=" + nutritionInfo +
                 ", points=" + points +
                 ", eurostatDataList=" + eurostatDataList +
                 ", eurostatCode='" + eurostatCode + '\'' +

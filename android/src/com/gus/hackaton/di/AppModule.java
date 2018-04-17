@@ -4,8 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.gus.hackaton.db.Storage;
-import com.gus.hackaton.db.StorageImpl;
+import com.gus.hackaton.repository.db.Storage;
+import com.gus.hackaton.repository.db.StorageImpl;
 import com.gus.hackaton.repository.Repository;
 
 import javax.inject.Singleton;
