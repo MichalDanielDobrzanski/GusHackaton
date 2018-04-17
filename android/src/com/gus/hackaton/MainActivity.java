@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.annimon.stream.Stream;
 import com.badlogic.gdx.backends.android.AndroidFragmentApplication;
 import com.github.mikephil.charting.charts.RadarChart;
 import com.google.android.flexbox.FlexWrap;
@@ -34,16 +35,21 @@ import com.gus.hackaton.db.Storage;
 import com.gus.hackaton.db.StorageImpl;
 import com.gus.hackaton.fridge.FridgeAdapter;
 import com.gus.hackaton.fridge.FridgeItem;
+import com.gus.hackaton.fridge.FridgeType;
+import com.gus.hackaton.model.EurostatData;
 import com.gus.hackaton.model.Option;
 import com.gus.hackaton.model.Points;
+import com.gus.hackaton.model.Product;
 import com.gus.hackaton.model.Quiz;
 import com.gus.hackaton.net.Api;
 import com.gus.hackaton.net.ApiService;
+import com.gus.hackaton.net.CallbackImpl;
 import com.gus.hackaton.ranking.RankingActivity;
 import com.gus.hackaton.shared.FlowManager;
 import com.gus.hackaton.utils.Utils;
 import com.gus.hackaton.utils.ZoomAnimator;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -53,7 +59,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import butterknife.OnClick;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
-import uk.co.chrisjenx.calligraphy.CalligraphyUtils;
 
 import static android.graphics.Typeface.BOLD;
 import static com.gus.hackaton.utils.Utils.COLUMNS_COUNT;
@@ -148,7 +153,13 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
             // using the following line to edit/commit prefs
             prefs.edit().putBoolean("firstrun", false).apply();
 
-            storage.putQuestList(FlowManager.QUESTS_LIST);
+            List<FridgeItem> fridgeItems = new ArrayList<>();
+            for (Product product : Utils.INITIAL_PRODUCTS_LIST) {
+                fridgeItems.add(new FridgeItem(product.name, FridgeType.Quest, product.getDrawable()));
+            }
+
+            storage.putProductList(Utils.INITIAL_PRODUCTS_LIST);
+            storage.putQuestList(fridgeItems);
             storage.putBadgeList(null);
         }
 
@@ -158,7 +169,29 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
         badgesAdapter.invalidateData(badges);
         questsAdapter.invalidateData(quests);
 
-        refreshPoints();
+        FlowManager.getInstance().currentProductList = storage.getProductList();
+
+        //refreshPoints();
+
+        refreshEurostatData();
+    }
+
+    private void refreshEurostatData() {
+
+        Stream.of(FlowManager.getInstance().currentProductList).forEach(product ->
+                Api.getEurostatApi().getEurostatData(product.getEurostatCode()).enqueue(
+                        new CallbackImpl<>(this, eurostatData -> {
+
+                            Log.d(TAG, "refreshEurostatData: " + eurostatData.toString());
+                        })
+                )
+        );
+
+    }
+
+    private void showError(Throwable t) {
+        t.printStackTrace();
+        Toast.makeText(MainActivity.this, getString(R.string.networkError), Toast.LENGTH_SHORT).show();
     }
 
     private void refreshPoints()
@@ -176,9 +209,8 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
             }
 
             @Override
-            public void onFailure(Call<Points> call, Throwable t)
-            {
-                Toast.makeText(MainActivity.this, "Problem z siecią", Toast.LENGTH_SHORT).show();
+            public void onFailure(Call<Points> call, Throwable t) {
+                showError(t);
             }
         });
     }
@@ -228,9 +260,8 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
             }
 
             @Override
-            public void onFailure(Call<Quiz> call, Throwable t)
-            {
-                t.printStackTrace();
+            public void onFailure(Call<Quiz> call, Throwable t) {
+                showError(t);
             }
         });
     }
@@ -250,9 +281,8 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
             }
 
             @Override
-            public void onFailure(Call<Points> call, Throwable t)
-            {
-
+            public void onFailure(Call<Points> call, Throwable t) {
+                showError(t);
             }
         });
     }

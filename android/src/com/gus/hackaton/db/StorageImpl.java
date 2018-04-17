@@ -7,12 +7,14 @@ import android.preference.PreferenceManager;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.gus.hackaton.fridge.FridgeItem;
+import com.gus.hackaton.model.Product;
 
 import java.lang.reflect.Type;
 import java.util.List;
 
 public class StorageImpl implements Storage {
 
+    private static final String PRODUCT_LIST = "PRODUCT_LIST";
     private static final String QUESTS_LIST = "QUESTS_LIST";
     private static final String BADGES_LIST = "BADGES_LIST";
 
@@ -36,27 +38,44 @@ public class StorageImpl implements Storage {
     }
 
     @Override
+    public void putProductList(List<Product> productList) {
+        setList(PRODUCT_LIST, productList);
+    }
+
+    @Override
     public List<FridgeItem> getQuestList() {
-        List<FridgeItem> productFromShared;
+        List<FridgeItem> res;
 
         Type type = new TypeToken<List<FridgeItem>>() {}.getType();
         Gson gson = new Gson();
         String jsonPreferences = sharedPreferences.getString(QUESTS_LIST, "");
-        productFromShared = gson.fromJson(jsonPreferences, type);
+        res = gson.fromJson(jsonPreferences, type);
 
-        return productFromShared;
+        return res;
     }
 
     @Override
     public List<FridgeItem> getBadgeList() {
-        List<FridgeItem> productFromShared;
+        List<FridgeItem> res;
 
         Type type = new TypeToken<List<FridgeItem>>() {}.getType();
         Gson gson = new Gson();
         String jsonPreferences = sharedPreferences.getString(BADGES_LIST, "");
-        productFromShared = gson.fromJson(jsonPreferences, type);
+        res = gson.fromJson(jsonPreferences, type);
 
-        return productFromShared;
+        return res;
+    }
+
+    @Override
+    public List<Product> getProductList() {
+        List<Product> res;
+
+        Type type = new TypeToken<List<Product>>() {}.getType();
+        Gson gson = new Gson();
+        String jsonPreferences = sharedPreferences.getString(PRODUCT_LIST, "");
+        res = gson.fromJson(jsonPreferences, type);
+
+        return res;
     }
 
     private <T> void setList(String key, List<T> list) {

@@ -9,7 +9,9 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.RadarData;
 import com.github.mikephil.charting.data.RadarDataSet;
 import com.github.mikephil.charting.data.RadarEntry;
+import com.gus.hackaton.R;
 import com.gus.hackaton.model.EurostatData;
+import com.gus.hackaton.model.Product;
 import com.gus.hackaton.ranking.RankingItem;
 
 import java.util.ArrayList;
@@ -29,6 +31,17 @@ public class Utils {
             new RankingItem("Michal DD", 150),
             new RankingItem("Michal DDD", 140),
             new RankingItem("Michal DDDD", 120)
+    );
+
+
+    public static List<Product> INITIAL_PRODUCTS_LIST = Arrays.asList(
+            new Product("000000000017", "Chleb", 3, 8, "CP01113A", R.drawable.bread),
+            new Product("000000000024", "Jajko", 5, 7, "CP01147A", R.drawable.egg),
+            new Product("000000000031", "Platki sniadaniowe", 15, 9, "CP01112B", R.drawable.cornflakes),
+            new Product("000000000048", "Losos", 25, 7, "CP01131A", R.drawable.fish),
+            new Product("000000000055", "Ryz", 5, 4, "CP01111A", R.drawable.rice),
+            new Product("000000000062", "Oliwki", 15, 8, "CP01153A", R.drawable.olive),
+            new Product("000000000079", "Ser", 8, 4, "CP01145A", R.drawable.cheese)
     );
 
     public static void invalidateChart(List<EurostatData> eurostatDatas, RadarChart radarChart) {

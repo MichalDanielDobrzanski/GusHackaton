@@ -1,7 +1,6 @@
 package com.gus.hackaton;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,32 +10,15 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.annimon.stream.Stream;
 import com.github.mikephil.charting.charts.RadarChart;
-import com.github.mikephil.charting.components.AxisBase;
-import com.github.mikephil.charting.components.Description;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.RadarData;
-import com.github.mikephil.charting.data.RadarDataSet;
-import com.github.mikephil.charting.data.RadarEntry;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.google.android.cameraview.CameraView;
-import com.google.gson.JsonArray;
 import com.gus.hackaton.model.EurostatData;
 import com.gus.hackaton.model.Points;
-import com.gus.hackaton.model.ProductInfo;
+import com.gus.hackaton.model.Product;
 import com.gus.hackaton.net.Api;
 import com.gus.hackaton.net.ApiService;
-import com.gus.hackaton.ranking.RankingActivity;
 import com.gus.hackaton.shared.FlowManager;
 import com.gus.hackaton.utils.Utils;
-
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -172,46 +154,48 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
 
     private void sendRequest(String id)
     {
-        ApiService api = Api.getApi();
+        ApiService api = Api.getEurostatApi();
 
         Log.d(TAG, "sendRequest: " + id);
-        api.getProductInfo(id).enqueue(new Callback<ProductInfo>()
+
+
+        api.getProductInfo(id).enqueue(new Callback<Product>()
         {
             @Override
-            public void onResponse(@NonNull Call<ProductInfo> call, @NonNull Response<ProductInfo> response)
+            public void onResponse(@NonNull Call<Product> call, @NonNull Response<Product> response)
             {
                 Log.d(TAG, "onResponse: " + response.body().toString());
 
 
-                ProductInfo productInfo = response.body();
-                if (productInfo != null && productInfo.nutricalInfo != null) {
+                Product product = response.body();
+                if (product != null && product.nutricalInfo != null) {
 
                     toggleVisibility(true);
 
-                    Log.d(TAG, "onResponse: " + productInfo.name);
-                    name.setText(productInfo.name);
-                    health_indicator.setText(String.valueOf(productInfo.health_indicator));
-                    calories.setText(String.valueOf(productInfo.nutricalInfo.calories));
-                    fat.setText(String.valueOf(productInfo.nutricalInfo.fat));
-                    carbohydrate.setText(String.valueOf(productInfo.nutricalInfo.carbohydrate));
-                    sugar.setText(String.valueOf(productInfo.nutricalInfo.sugar));
-                    protein.setText(String.valueOf(productInfo.nutricalInfo.protein));
+                    Log.d(TAG, "onResponse: " + product.name);
+                    name.setText(product.name);
+                    health_indicator.setText(String.valueOf(product.health_indicator));
+                    calories.setText(String.valueOf(product.nutricalInfo.calories));
+                    fat.setText(String.valueOf(product.nutricalInfo.fat));
+                    carbohydrate.setText(String.valueOf(product.nutricalInfo.carbohydrate));
+                    sugar.setText(String.valueOf(product.nutricalInfo.sugar));
+                    protein.setText(String.valueOf(product.nutricalInfo.protein));
 
-                    Utils.invalidateChart(productInfo.eurostatDataList, radarChart);
+                    Utils.invalidateChart(product.eurostatDataList, radarChart);
 
                     // global update
-                    FlowManager.getInstance().markScanned(ScanActivity.this, productInfo.name, productInfo.eurostatDataList);
+                    FlowManager.getInstance().markScanned(ScanActivity.this, product.name, product.eurostatDataList);
 
-                    api.addPoints(new Points(productInfo.points));
+                    api.addPoints(new Points(product.points));
 
                 } else {
-                    Log.d(TAG, "onResponse: productInfo is NULL");
+                    Log.d(TAG, "onResponse: product is NULL");
                     Toast.makeText(ScanActivity.this, "Nie znaleziono produktu, spróbuj ponownie!", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<ProductInfo> call, Throwable t)
+            public void onFailure(Call<Product> call, Throwable t)
             {
                 Toast.makeText(ScanActivity.this, "Problem z siecią!", Toast.LENGTH_SHORT).show();
                 t.printStackTrace();
