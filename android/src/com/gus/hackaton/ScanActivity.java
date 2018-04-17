@@ -12,13 +12,14 @@ import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.RadarChart;
 import com.google.android.cameraview.CameraView;
-import com.gus.hackaton.model.EurostatData;
 import com.gus.hackaton.model.Points;
 import com.gus.hackaton.model.Product;
 import com.gus.hackaton.net.Api;
 import com.gus.hackaton.net.ApiService;
-import com.gus.hackaton.shared.FlowManager;
+import com.gus.hackaton.repository.Repository;
 import com.gus.hackaton.utils.Utils;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -76,12 +77,19 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
 
     private boolean scanned = false;
 
+    @Inject
+    Repository repository;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ((MainApplication) getApplication()).getAppComponent().inject(this);
+
         mScannerView = new ZBarScannerView(this);    // Programmatically initialize the scanner view
         setContentView(mScannerView);                // Set the scanner view as the content view
+
+
     }
 
 
@@ -158,7 +166,6 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
 
         Log.d(TAG, "sendRequest: " + id);
 
-
         api.getProductInfo(id).enqueue(new Callback<Product>()
         {
             @Override
@@ -184,7 +191,7 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
                     Utils.invalidateChart(product.eurostatDataList, radarChart);
 
                     // global update
-                    FlowManager.getInstance().markScanned(ScanActivity.this, product.name, product.eurostatDataList);
+                    repository.markScanned(product.name, product.eurostatDataList);
 
                     api.addPoints(new Points(product.points));
 

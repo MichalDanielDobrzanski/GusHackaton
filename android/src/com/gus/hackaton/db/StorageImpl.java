@@ -6,7 +6,7 @@ import android.preference.PreferenceManager;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.gus.hackaton.fridge.FridgeItem;
+import com.gus.hackaton.model.FridgeItem;
 import com.gus.hackaton.model.Product;
 
 import java.lang.reflect.Type;

@@ -1,9 +1,9 @@
-package com.gus.hackaton.fridge;
+package com.gus.hackaton.model;
 
 
 import android.support.annotation.DrawableRes;
 
-import com.gus.hackaton.model.EurostatData;
+import com.gus.hackaton.fridge.FridgeType;
 
 import java.util.List;
 

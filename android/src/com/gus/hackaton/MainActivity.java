@@ -35,7 +35,7 @@ import com.gus.hackaton.ar.ARActivity;
 import com.gus.hackaton.db.Storage;
 import com.gus.hackaton.db.StorageImpl;
 import com.gus.hackaton.fridge.FridgeAdapter;
-import com.gus.hackaton.fridge.FridgeItem;
+import com.gus.hackaton.model.FridgeItem;
 import com.gus.hackaton.fridge.FridgeType;
 import com.gus.hackaton.model.EurostatData;
 import com.gus.hackaton.model.Option;
@@ -46,7 +46,7 @@ import com.gus.hackaton.net.Api;
 import com.gus.hackaton.net.ApiService;
 import com.gus.hackaton.net.CallbackImpl;
 import com.gus.hackaton.ranking.RankingActivity;
-import com.gus.hackaton.shared.FlowManager;
+import com.gus.hackaton.repository.Repository;
 import com.gus.hackaton.utils.Utils;
 import com.gus.hackaton.utils.ZoomAnimator;
 
@@ -55,6 +55,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -102,9 +104,11 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
     private FridgeAdapter badgesAdapter;
     private FridgeAdapter questsAdapter;
 
-    private Storage storage;
+    @Inject
+    SharedPreferences prefs;
 
-    private SharedPreferences prefs;
+    @Inject
+    Repository repository;
 
     @Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -117,6 +121,8 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
 		setContentView(R.layout.main_activity);
 
         ButterKnife.bind(this);
+
+        ((MainApplication)getApplication()).getAppComponent().inject(this);
 
         quizButton.setOnClickListener(v -> prepareQuiz());
 
@@ -143,7 +149,6 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
 		    e.printStackTrace();
 		    showAr.setVisibility(View.INVISIBLE);
         }
-		storage = new StorageImpl(this);
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
 	}
@@ -162,18 +167,16 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
                 fridgeItems.add(new FridgeItem(product.name, FridgeType.Quest, product.getDrawable()));
             }
 
-            storage.putProductList(Utils.INITIAL_PRODUCTS_LIST);
-            storage.putQuestList(fridgeItems);
-            storage.putBadgeList(null);
+            repository.putProductList(Utils.INITIAL_PRODUCTS_LIST);
+            repository.putQuestList(fridgeItems);
+            repository.putBadgeList(null);
         }
 
-        List<FridgeItem> quests = storage.getQuestList();
-        List<FridgeItem> badges = storage.getBadgeList();
+        List<FridgeItem> quests = repository.getQuestList();
+        List<FridgeItem> badges = repository.getBadgeList();
 
         badgesAdapter.invalidateData(badges);
         questsAdapter.invalidateData(quests);
-
-        FlowManager.getInstance().currentProductList = storage.getProductList();
 
         //refreshPoints();
 
@@ -182,7 +185,7 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
 
     private void refreshEurostatData() {
 
-        Stream.of(FlowManager.getInstance().currentProductList).forEach(product ->
+        Stream.of(repository.getCurrentProductList()).forEach(product ->
                 Api.getEurostatApi().getEurostatData(product.getEurostatCode()).enqueue(
                         new CallbackImpl<>(this, json -> {
 
@@ -225,8 +228,9 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
                                 });
                             });
 
-
                             product.eurostatDataList = res;
+
+                            repository.saveProduct(product);
                         })
                 )
         );

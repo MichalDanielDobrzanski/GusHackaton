@@ -1,15 +1,16 @@
 package com.gus.hackaton;
 
 import android.app.Application;
-import android.content.SharedPreferences;
 
-import com.gus.hackaton.db.Storage;
-import com.gus.hackaton.db.StorageImpl;
+import com.gus.hackaton.di.AppComponent;
+import com.gus.hackaton.di.AppModule;
+import com.gus.hackaton.di.DaggerAppComponent;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 public class MainApplication extends Application {
 
+    private AppComponent appComponent;
 
     @Override
     public void onCreate() {
@@ -22,6 +23,14 @@ public class MainApplication extends Application {
                 .build()
         );
 
+        appComponent = DaggerAppComponent.builder()
+                .appModule(new AppModule(this))
+                .build();
+
+    }
+
+    public AppComponent getAppComponent() {
+        return appComponent;
     }
 
 }

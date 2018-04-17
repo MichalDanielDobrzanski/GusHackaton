@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.gus.hackaton.R;
+import com.gus.hackaton.model.FridgeItem;
 
 import java.util.Collections;
 import java.util.List;

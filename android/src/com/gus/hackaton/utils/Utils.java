@@ -44,6 +44,7 @@ public class Utils {
             new Product("000000000079", "Ser", 8, 4, "CP01145A", R.drawable.cheese)
     );
 
+
     public static void invalidateChart(List<EurostatData> eurostatDatas, RadarChart radarChart) {
 
         radarChart.setBackgroundColor(Color.argb(77, 60, 65, 82));

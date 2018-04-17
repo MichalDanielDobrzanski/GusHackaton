@@ -1,6 +1,6 @@
 package com.gus.hackaton.db;
 
-import com.gus.hackaton.fridge.FridgeItem;
+import com.gus.hackaton.model.FridgeItem;
 import com.gus.hackaton.model.Product;
 
 import java.util.List;
