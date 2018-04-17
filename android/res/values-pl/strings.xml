@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">HealthPet</string>
+    <string name="errorNoCameraPermission">Do działania tej aplikacji potrzebne jest pozwolenie na kamerę</string>
+    <string name="scanScanner">Skaner</string>
+    <string name="scanSugar">Cukier</string>
+    <string name="scanProtein" translatable="false">Białko</string>
+    <string name="scanCarbohydrates">Węglowodany</string>
+    <string name="scanFat">Tłuszcz</string>
+    <string name="successCameraPermission">Pozwolenie na uzycie kamery przydzielone</string>
+    <string name="mainQuiz">Quiz</string>
+    <string name="scanCalories">Kalorie</string>
+    <string name="scanHealth">Zdrowotność</string>
+    <string name="scanName">Nazwa</string>
+    <string name="mainPoints">Punkty</string>
+    <string name="mainAr">Zobacz mnie</string>
+    <string name="mainRanking">Wyniki</string>
+    <string name="mainScanner">Skaner</string>
+    <string name="itemCheese">Ser</string>
+    <string name="itemRice">Ryż</string>
+    <string name="itemSalmon">Łosoś</string>
+    <string name="itemOlives">Oliwki</string>
+    <string name="itemBread">Chleb</string>
+    <string name="itemCereals">Płatki śniadaniowe</string>
+    <string name="itemEggs">Jajka</string>
+    <string name="rightAnswer">Poprawna odpowiedź!</string>
+    <string name="quest">Zadanie: \\n Zeskanuj ten produkt</string>
+    <string name="badge">Odznaka</string>
+    <string name="points">Punkty : %1$d</string>
+    <string name="errorNetwork">Problem z siecią!</string>
+    <string name="errorNoScanResult">Nie znaleziono produktu, spróbuj ponownie!</string>
+</resources>

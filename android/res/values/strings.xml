@@ -1,40 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">HealthPet</string>
-    <string name="errorNoCameraPermission">Do działania tej aplikacji potrzebne jest pozwolenie na kamerę</string>
-    <string name="successCameraPermission">Pozwolenie na uzycie kamery przydzielone</string>
-    <string name="errorNoScanResult">Nie znaleziono produktu, spróbuj ponownie!</string>
-    <string name="errorNetwork">Problem z siecią!</string>
-    <string name="points">Punkty : %1$d</string>
-    <string name="badge">Odznaka</string>
-    <string name="quest">ZADANIE: \n Zeskanuj ten obiekt</string>
-    <string name="rightAnswer">Poprawna odpowiedź!</string>
+    <string name="app_name" translatable="false">HealthPet</string>
+    <string name="errorNoScanResult">Could not find the product. Try again!</string>
+    <string name="errorNetwork">Network problem!</string>
+    <string name="points">Points : %1$d</string>
+    <string name="badge">Badge</string>
 
 
-    <string name="itemBread">Chleb</string>
-    <string name="itemEggs">Jajko</string>
-    <string name="itemCereals">Platki sniadaniowe</string>
-    <string name="itemSalmon">Losos</string>
-    <string name="itemRice">Ryz</string>
-    <string name="itemOlives">Oliwki</string>
-    <string name="itemCheese">Ser</string>
+    <string name="itemBread">Bread</string>
+    <string name="itemEggs">Eggs</string>
+    <string name="itemCereals">Cereals</string>
+    <string name="itemSalmon">Salmon</string>
+    <string name="itemRice">Rice</string>
+    <string name="itemOlives">Olives</string>
+    <string name="itemCheese">Cheese</string>
 
 
-    <string name="mainScanner">Skaner</string>
+    <string name="mainScanner">Scanner</string>
     <string name="mainRanking">Ranking</string>
-    <string name="mainAr">Zobacz mnie</string>
-    <string name="mainPoints">Punkty:</string>
+    <string name="mainAr">See me</string>
+    <string name="mainPoints">Points</string>
     <string name="mainQuiz">Quiz</string>
 
 
-    <string name="scanName">Nazwa:</string>
-    <string name="scanHealth">Zdrowotność:</string>
-    <string name="scanCalories">Kalorie:</string>
-    <string name="scanFat">Tłuszcz:</string>
-    <string name="scanCarbohydrates">Cukier:</string>
-    <string name="scanProtein">Białko:</string>
-    <string name="scanSugar">Cukier:</string>
-    <string name="scanScanner">Skaner</string>
+    <string name="scanName">Name</string>
+    <string name="scanCalories">Calories</string>
+    <string name="scanCarbohydrates">Carbohydra</string>
+    <string name="scanProtein">Protein</string>
+    <string name="errorNoCameraPermission">In order to make this application work, you need a camera permission</string>
+    <string name="scanScanner">Scanner</string>
+    <string name="scanSugar">Sugar</string>
+    <string name="scanSugar">Sugar</string>
+    <string name="scanFat">Fat</string>
+    <string name="successCameraPermission">Permission for camera has been granted</string>
+    <string name="scanHealth">Health</string>
+    <string name="rightAnswer">Correct Answer!</string>
+    <string name="quest">QUEST: \\n Scan this product</string>
 
 </resources>
