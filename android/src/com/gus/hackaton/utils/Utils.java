@@ -12,7 +12,6 @@ import com.github.mikephil.charting.data.RadarData;
 import com.github.mikephil.charting.data.RadarDataSet;
 import com.github.mikephil.charting.data.RadarEntry;
 import com.gus.hackaton.R;
-import com.gus.hackaton.ScanActivity;
 import com.gus.hackaton.model.EurostatData;
 import com.gus.hackaton.ranking.RankingItem;
 

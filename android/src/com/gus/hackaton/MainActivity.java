@@ -63,6 +63,7 @@ import static com.gus.hackaton.utils.Utils.COLUMNS_COUNT;
 public class MainActivity extends AppCompatActivity implements AndroidFragmentApplication.Callbacks {
 
     public static final int CAMERA_PERMISSION = 101;
+
     private static final String TAG = MainActivity.class.getSimpleName();
 
     @BindView(R.id.badgesRecyclerView)
@@ -249,9 +250,8 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
             }
 
             @Override
-            public void onFailure(Call<Points> call, Throwable t)
-            {
-
+            public void onFailure(Call<Points> call, Throwable t) {
+                Utils.showError(MainActivity.this, t);
             }
         });
     }

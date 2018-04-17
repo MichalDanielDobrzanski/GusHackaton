@@ -31,11 +31,10 @@
     <string name="errorNoCameraPermission">In order to make this application work, you need a camera permission</string>
     <string name="scanScanner">Scanner</string>
     <string name="scanSugar">Sugar</string>
-    <string name="scanSugar">Sugar</string>
     <string name="scanFat">Fat</string>
     <string name="successCameraPermission">Permission for camera has been granted</string>
     <string name="scanHealth">Health</string>
     <string name="rightAnswer">Correct Answer!</string>
-    <string name="quest">QUEST: \\n Scan this product</string>
+    <string name="quest">QUEST: \n Scan this product</string>
 
 </resources>
