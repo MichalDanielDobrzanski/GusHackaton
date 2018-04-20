@@ -9,14 +9,16 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 
+import com.gus.hackaton.db.dao.ProductDao;
 import com.gus.hackaton.db.dao.QuestionDao;
 import com.gus.hackaton.db.dao.RankingDao;
+import com.gus.hackaton.db.entity.Product;
 import com.gus.hackaton.db.entity.Question;
 import com.gus.hackaton.db.entity.Ranking;
 
 import java.util.List;
 
-@Database(entities = {Ranking.class, Question.class}, version = 1)
+@Database(entities = {Ranking.class, Question.class, Product.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase
 {
     private static AppDatabase sInstance;
@@ -25,6 +27,7 @@ public abstract class AppDatabase extends RoomDatabase
 
     public abstract RankingDao rankingDao();
     public abstract QuestionDao questionDao();
+    public abstract ProductDao productDao();
 
     public static AppDatabase getsInstance(final Context context){
         if (sInstance == null) {
@@ -61,6 +64,24 @@ public abstract class AppDatabase extends RoomDatabase
                     contentValues.put("correct_answer", q.getCorrectAnswer());
                     db.insert("question", SQLiteDatabase.CONFLICT_IGNORE, contentValues);
                 }
+
+                List<Product> products = DataGenerator.generateProducts();
+                for (Product p : products) {
+                    ContentValues contentValues = new ContentValues();
+                    contentValues.put("id", p.getId());
+                    contentValues.put("name", p.getName());
+                    contentValues.put("health_indicator", p.getHealth_indicator());
+                    contentValues.put("points", p.getPoints());
+                    contentValues.put("scanned", p.isScanned());
+                    contentValues.put("calories", p.getCalories());
+                    contentValues.put("fat", p.getFat());
+                    contentValues.put("carbohydrate", p.getCarbohydrate());
+                    contentValues.put("sugar", p.getSugar());
+                    contentValues.put("protein", p.getProtein());
+                    contentValues.put("drawable_id", p.getDrawableId());
+                    db.insert("product", SQLiteDatabase.CONFLICT_IGNORE, contentValues);
+                }
+
             }
         }).build();
     }

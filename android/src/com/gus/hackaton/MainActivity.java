@@ -32,30 +32,22 @@ import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.ar.core.Session;
 import com.gus.hackaton.ar.ARActivity;
 import com.gus.hackaton.db.AppDatabase;
+import com.gus.hackaton.db.entity.Product;
 import com.gus.hackaton.db.entity.Question;
-import com.gus.hackaton.db.entity.Ranking;
 import com.gus.hackaton.db.preferences.Storage;
 import com.gus.hackaton.db.preferences.StorageImpl;
 import com.gus.hackaton.fridge.FridgeAdapter;
-import com.gus.hackaton.fridge.FridgeItem;
-import com.gus.hackaton.model.Option;
-import com.gus.hackaton.model.Points;
-import com.gus.hackaton.model.Quiz;
-import com.gus.hackaton.net.Api;
-import com.gus.hackaton.net.ApiService;
 import com.gus.hackaton.ranking.RankingActivity;
-import com.gus.hackaton.shared.FlowManager;
 import com.gus.hackaton.utils.Utils;
 import com.gus.hackaton.utils.ZoomAnimator;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import butterknife.OnClick;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -148,22 +140,7 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
     @Override
     protected void onResume() {
         super.onResume();
-
-        if (prefs.getBoolean("firstrun", true)) {
-            // Do first run stuff here then set 'firstrun' as false
-            // using the following line to edit/commit prefs
-            prefs.edit().putBoolean("firstrun", false).apply();
-
-            storage.putQuestList(FlowManager.createInitialQuestList(this));
-            storage.putBadgeList(null);
-        }
-
-        List<FridgeItem> quests = storage.getQuestList();
-        List<FridgeItem> badges = storage.getBadgeList();
-
-        badgesAdapter.invalidateData(badges);
-        questsAdapter.invalidateData(quests);
-
+        new FridgePrepare(this).execute();
         updatePointsTextView();
     }
 
@@ -173,49 +150,11 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
         pointsTextView.setText(text);
     }
 
-    private void prepareQuiz()
-    {
-        new AsyncTask<Void, Void, List<Question>>() {
-
-            @Override
-            protected List<Question> doInBackground(Void... voids)
-            {
-                return AppDatabase.getsInstance(MainActivity.this).questionDao().getAll();
-            }
-
-            @Override
-            protected void onPostExecute(List<Question> questions)
-            {
-                CharSequence [] optionsChars = new CharSequence[4];
-                boolean [] corectness = new boolean[4];
-                int randomIndex = ThreadLocalRandom.current().nextInt(0, questions.size());
-                Question q = questions.get(randomIndex);
-                for (int i = 0; i < 4; i++)
-                {
-                    optionsChars[i] = q.getAnswers()[i];
-                    corectness[i] = (i == q.getCorrectAnswer());
-                }
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setTitle(q.getQuestion());
-                TextView textView = new TextView(MainActivity.this);
-                textView.setText(q.getQuestion());
-                textView.setPadding(32,32,32,32);
-                textView.setTypeface(null, BOLD);
-                builder.setCustomTitle(textView);
-                builder.setItems(optionsChars, (dialog, which) -> {
-
-                    if (corectness[which]) {
-                        addPoints(10);
-                        Toast.makeText(MainActivity.this, R.string.rightAnswer, Toast.LENGTH_SHORT).show();
-                    }
-                });
-                builder.show();
-            }
-        }.execute();
+    private void prepareQuiz() {
+        new QuizPrepare(this).execute();
     }
 
-    private void addPoints(int pnts)
+    public void addPoints(int pnts)
     {
         int oldPoints = prefs.getInt(POINTS_KEY, 0);
         prefs.edit().putInt(POINTS_KEY, oldPoints + pnts).apply();
@@ -244,36 +183,32 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
 
     private FridgeAdapter.OnFridgeItemClicked createFridgeItemHandler() {
         return (fridgeItem, view) -> {
-
             TextView tvType = expandedFridgeItem.findViewById(R.id.typeFridgeItem);
 
             RadarChart radarChart = expandedFridgeItem.findViewById(R.id.typeFridgeChart);
 
             ImageView imageView = expandedFridgeItem.findViewById(R.id.typeFridgeImage);
-            imageView.setImageResource(fridgeItem.getDrawableRes());
+            imageView.setImageResource(fridgeItem.getDrawableId());
 
             ZoomAnimator.zoomImageFromThumb(view, expandedFridgeItem, mainContainer);
-
             String res = "";
-            switch (fridgeItem.getFridgeType()) {
-                case Badge:
-                    res = getString(R.string.badge);
-                    radarChart.setVisibility(View.VISIBLE);
-                    imageView.setVisibility(View.INVISIBLE);
-                    if (fridgeItem.eurostatData != null) {
-                        Utils.invalidateChart(fridgeItem.eurostatData, radarChart);
-                    }
-                    break;
-                case Quest:
-                    radarChart.setVisibility(View.INVISIBLE);
-                    imageView.setVisibility(View.VISIBLE);
-                    res = getString(R.string.quest);
+
+            if (fridgeItem.isScanned()) {
+                res = getString(R.string.badge);
+                radarChart.setVisibility(View.VISIBLE);
+                imageView.setVisibility(View.INVISIBLE);
+                if (fridgeItem.getEurostatData() != null) {
+                    Utils.invalidateChart(fridgeItem.getEurostatData(), radarChart);
+                }
+            } else {
+                radarChart.setVisibility(View.INVISIBLE);
+                imageView.setVisibility(View.VISIBLE);
+                res = getString(R.string.quest);
             }
 
             tvType.setText(res);
-
             TextView tvDescr = expandedFridgeItem.findViewById(R.id.typeFridgeDescr);
-            tvDescr.setText(fridgeItem.getDescription());
+            tvDescr.setText(fridgeItem.getName());
 
 
         };
@@ -309,5 +244,76 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
         if (BuildConfig.DEBUG) Log.d(TAG, "launchRanking()");
 
         startActivity(new Intent(MainActivity.this, RankingActivity.class));
+    }
+
+
+    private static class FridgePrepare extends AsyncTask<Void, Void, List<Product>>
+    {
+        private WeakReference<MainActivity> activityReference;
+        FridgePrepare(MainActivity context) {
+            activityReference = new WeakReference<>(context);
+        }
+
+        @Override
+        protected List<Product> doInBackground(Void... voids)
+        {
+            return AppDatabase.getsInstance(activityReference.get()).productDao().getAll();
+        }
+
+        @Override
+        protected void onPostExecute(List<Product> products)
+        {
+            List<Product> quests = products.stream().filter(p -> !p.isScanned()).collect(Collectors.toList());
+            List<Product> badges = products.stream().filter(p -> p.isScanned()).collect(Collectors.toList());
+
+            activityReference.get().badgesAdapter.invalidateData(badges);
+            activityReference.get().questsAdapter.invalidateData(quests);
+        }
+    }
+
+
+    private static class QuizPrepare extends AsyncTask<Void, Void, List<Question>>
+    {
+        private WeakReference<MainActivity> activityReference;
+        QuizPrepare(MainActivity context) {
+            activityReference = new WeakReference<>(context);
+        }
+
+        @Override
+        protected List<Question> doInBackground(Void... voids)
+        {
+            return AppDatabase.getsInstance(activityReference.get()).questionDao().getAll();
+        }
+
+        @Override
+        protected void onPostExecute(List<Question> questions)
+        {
+            CharSequence [] optionsChars = new CharSequence[4];
+            boolean [] corectness = new boolean[4];
+            int randomIndex = ThreadLocalRandom.current().nextInt(0, questions.size());
+            Question q = questions.get(randomIndex);
+            for (int i = 0; i < 4; i++)
+            {
+                optionsChars[i] = q.getAnswers()[i];
+                corectness[i] = (i == q.getCorrectAnswer());
+            }
+
+            MainActivity mainActivity = activityReference.get();
+            AlertDialog.Builder builder = new AlertDialog.Builder(mainActivity);
+            builder.setTitle(q.getQuestion());
+            TextView textView = new TextView(mainActivity);
+            textView.setText(q.getQuestion());
+            textView.setPadding(32,32,32,32);
+            textView.setTypeface(null, BOLD);
+            builder.setCustomTitle(textView);
+            builder.setItems(optionsChars, (dialog, which) -> {
+
+                if (corectness[which]) {
+                    mainActivity.addPoints(10);
+                    Toast.makeText(mainActivity, R.string.rightAnswer, Toast.LENGTH_SHORT).show();
+                }
+            });
+            builder.show();
+        }
     }
 }

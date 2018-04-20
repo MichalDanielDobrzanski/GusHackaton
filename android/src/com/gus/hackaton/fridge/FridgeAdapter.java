@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.gus.hackaton.R;
+import com.gus.hackaton.db.entity.Product;
 
 import java.util.Collections;
 import java.util.List;
@@ -25,7 +26,7 @@ import butterknife.ButterKnife;
  */
 public class FridgeAdapter extends RecyclerView.Adapter<FridgeAdapter.ViewHolder>  {
 
-    private List<FridgeItem> fridgeItemList;
+    private List<Product> fridgeItemList;
 
     private final OnItemClicked onItemClicked;
 
@@ -61,15 +62,11 @@ public class FridgeAdapter extends RecyclerView.Adapter<FridgeAdapter.ViewHolder
         return fridgeItemList.size();
     }
 
-    public void invalidateData(List<FridgeItem> fridgeItems) {
+    public void invalidateData(List<Product> fridgeItems) {
         if (fridgeItems != null) {
             this.fridgeItemList = fridgeItems;
             notifyDataSetChanged();
         }
-    }
-
-    public List<FridgeItem> getData() {
-        return fridgeItemList;
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -87,10 +84,10 @@ public class FridgeAdapter extends RecyclerView.Adapter<FridgeAdapter.ViewHolder
 
         }
 
-        void bind(int position, OnItemClicked onItemClicked, FridgeItem fridgeItem) {
+        void bind(int position, OnItemClicked onItemClicked, Product fridgeItem) {
 
             imageView.setPadding(20, 20, 20, 20);
-            imageView.setImageResource(fridgeItem.getDrawableRes());
+            imageView.setImageResource(fridgeItem.getDrawableId());
 
             imageView.setOnClickListener(v -> onItemClicked.onClick(position, v));
 
@@ -113,7 +110,7 @@ public class FridgeAdapter extends RecyclerView.Adapter<FridgeAdapter.ViewHolder
     }
 
     public interface OnFridgeItemClicked {
-        void onClick(FridgeItem fridgeItem, View view);
+        void onClick(Product fridgeItem, View view);
     }
 
 

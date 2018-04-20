@@ -19,7 +19,7 @@ android {
     }
     defaultConfig {
         applicationId "com.gus.hackaton"
-        minSdkVersion 21
+        minSdkVersion 26
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"

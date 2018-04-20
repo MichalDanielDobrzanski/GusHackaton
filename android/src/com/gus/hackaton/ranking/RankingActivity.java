@@ -13,6 +13,7 @@ import com.gus.hackaton.R;
 import com.gus.hackaton.db.AppDatabase;
 import com.gus.hackaton.db.entity.Ranking;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 import butterknife.BindView;
@@ -43,25 +44,31 @@ public class RankingActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
-        new AsyncTask<Void, Void, List<Ranking>>() {
-
-            @Override
-            protected List<Ranking> doInBackground(Void... voids)
-            {
-                return AppDatabase.getsInstance(RankingActivity.this).rankingDao().getAll();
-            }
-
-            @Override
-            protected void onPostExecute(List<Ranking> r)
-            {
-                rankingAdapter.setData(r);
-            }
-        }.execute();
+        new UpdateRanking(this).execute();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+    }
+
+    private static class UpdateRanking extends AsyncTask<Void, Void, List<Ranking>>
+    {
+        private WeakReference<RankingActivity> activityReference;
+        UpdateRanking(RankingActivity context) {
+            activityReference = new WeakReference<>(context);
+        }
+
+        @Override
+        protected List<Ranking> doInBackground(Void... voids)
+        {
+            return AppDatabase.getsInstance(activityReference.get()).rankingDao().getAll();
+        }
+
+        @Override
+        protected void onPostExecute(List<Ranking> r)
+        {
+            activityReference.get().rankingAdapter.setData(r);
+        }
     }
 }

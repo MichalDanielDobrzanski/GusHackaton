@@ -1,8 +1,10 @@
 package com.gus.hackaton;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -12,21 +14,18 @@ import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.RadarChart;
 import com.google.android.cameraview.CameraView;
-import com.gus.hackaton.model.Points;
-import com.gus.hackaton.model.ProductInfo;
-import com.gus.hackaton.net.Api;
-import com.gus.hackaton.net.ApiService;
-import com.gus.hackaton.shared.FlowManager;
-import com.gus.hackaton.utils.Utils;
+import com.gus.hackaton.db.AppDatabase;
+import com.gus.hackaton.db.entity.Product;
+
+import java.lang.ref.WeakReference;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.dm7.barcodescanner.zbar.Result;
 import me.dm7.barcodescanner.zbar.ZBarScannerView;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+
+import static com.gus.hackaton.MainActivity.POINTS_KEY;
 
 
 public class ScanActivity extends AppCompatActivity implements ZBarScannerView.ResultHandler
@@ -139,67 +138,18 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
 
         // If you would like to resume scanning, call this method below:
         //mScannerView.resumeCameraPreview(this);
+        Toast.makeText(this, rawResult.getContents(), Toast.LENGTH_SHORT).show();
         mScannerView.stopCamera();
         scanned = true;
         setContentView(R.layout.scan_activity);
-
         ButterKnife.bind(this);
 
         toggleVisibility(false);
 
         mCameraView.start();
-        sendRequest(rawResult.getContents());
+
+        new ReadProductInfo(this).execute(rawResult.getContents().toString());
     }
-
-    private void sendRequest(String id)
-    {
-        ApiService api = Api.getApi();
-
-        if (BuildConfig.DEBUG) Log.d(TAG, "sendRequest: " + id);
-        api.getProductInfo(id).enqueue(new Callback<ProductInfo>()
-        {
-            @Override
-            public void onResponse(@NonNull Call<ProductInfo> call, @NonNull Response<ProductInfo> response)
-            {
-                if (BuildConfig.DEBUG) Log.d(TAG, "onResponse: " + response.body().toString());
-
-
-                ProductInfo productInfo = response.body();
-                if (productInfo != null && productInfo.nutricalInfo != null) {
-
-                    toggleVisibility(true);
-
-                    if (BuildConfig.DEBUG) Log.d(TAG, "onResponse: " + productInfo.name);
-                    name.setText(productInfo.name);
-                    health_indicator.setText(String.valueOf(productInfo.health_indicator));
-                    calories.setText(String.valueOf(productInfo.nutricalInfo.calories));
-                    fat.setText(String.valueOf(productInfo.nutricalInfo.fat));
-                    carbohydrate.setText(String.valueOf(productInfo.nutricalInfo.carbohydrate));
-                    sugar.setText(String.valueOf(productInfo.nutricalInfo.sugar));
-                    protein.setText(String.valueOf(productInfo.nutricalInfo.protein));
-
-                    Utils.invalidateChart(productInfo.eurostatDataList, radarChart);
-
-                    // global update
-                    FlowManager.getInstance().markScanned(ScanActivity.this, productInfo.name, productInfo.eurostatDataList);
-
-                    api.addPoints(new Points(productInfo.points));
-
-                } else {
-                    if (BuildConfig.DEBUG) Log.d(TAG, "onResponse: productInfo is NULL");
-                    Toast.makeText(ScanActivity.this, getString(R.string.errorNoScanResult), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ProductInfo> call, Throwable t) {
-                Utils.showError(ScanActivity.this, t);
-
-                scanChartProgressBar.setVisibility(View.GONE);
-            }
-        });
-    }
-
 
 
     @OnClick(R.id.scanTryButton)
@@ -208,5 +158,53 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
         Intent intent = new Intent(this, ScanActivity.class);
         intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivity(intent);
+    }
+
+    private static class ReadProductInfo extends AsyncTask<String, Void, Product> {
+
+        private WeakReference<ScanActivity> activityReference;
+
+        ReadProductInfo(ScanActivity context) {
+            activityReference = new WeakReference<>(context);
+        }
+
+        @Override
+        protected Product doInBackground(String... id)
+        {
+            AppDatabase appDatabase = AppDatabase.getsInstance(activityReference.get());
+            Product product = appDatabase.productDao().getProduct(id[0]);
+            if (!product.isScanned()) {
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activityReference.get());
+                int oldPoints = prefs.getInt(POINTS_KEY, 0);
+                prefs.edit().putInt(POINTS_KEY, oldPoints + product.getPoints()).apply();
+                appDatabase.productDao().productWasScanned(id[0]);
+            }
+
+            return product;
+        }
+
+        @Override
+        protected void onPostExecute(Product product)
+        {
+            ScanActivity scanActivity = activityReference.get();
+            if (product != null) {
+                scanActivity.toggleVisibility(true);
+
+                if (BuildConfig.DEBUG) Log.d(TAG, "onResponse: " + product.getName());
+                scanActivity.name.setText(product.getName());
+                scanActivity.health_indicator.setText(String.valueOf(product.getHealth_indicator()));
+                scanActivity.calories.setText(String.valueOf(product.getCalories()));
+                scanActivity.fat.setText(String.valueOf(product.getFat()));
+                scanActivity.carbohydrate.setText(String.valueOf(product.getCarbohydrate()));
+                scanActivity.sugar.setText(String.valueOf(product.getSugar()));
+                scanActivity.protein.setText(String.valueOf(product.getProtein()));
+
+                //Utils.invalidateChart(product.getEurostatData(), radarChart);
+
+            } else {
+                if (BuildConfig.DEBUG) Log.d(TAG, "onResponse: productInfo is NULL");
+                Toast.makeText(scanActivity, scanActivity.getString(R.string.errorNoScanResult), Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }
