@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -30,6 +31,9 @@ import com.google.android.flexbox.FlexWrap;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.google.ar.core.Session;
 import com.gus.hackaton.ar.ARActivity;
+import com.gus.hackaton.db.AppDatabase;
+import com.gus.hackaton.db.entity.Question;
+import com.gus.hackaton.db.entity.Ranking;
 import com.gus.hackaton.db.preferences.Storage;
 import com.gus.hackaton.db.preferences.StorageImpl;
 import com.gus.hackaton.fridge.FridgeAdapter;
@@ -45,6 +49,7 @@ import com.gus.hackaton.utils.Utils;
 import com.gus.hackaton.utils.ZoomAnimator;
 
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -191,7 +196,46 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
 
     private void prepareQuiz()
     {
-        ApiService ap = Api.getApi();
+        new AsyncTask<Void, Void, List<Question>>() {
+
+            @Override
+            protected List<Question> doInBackground(Void... voids)
+            {
+                return AppDatabase.getsInstance(MainActivity.this).questionDao().getAll();
+            }
+
+            @Override
+            protected void onPostExecute(List<Question> questions)
+            {
+                CharSequence [] optionsChars = new CharSequence[4];
+                boolean [] corectness = new boolean[4];
+                int randomIndex = ThreadLocalRandom.current().nextInt(0, questions.size());
+                Question q = questions.get(randomIndex);
+                for (int i = 0; i < 4; i++)
+                {
+                    optionsChars[i] = q.getAnswers()[i];
+                    corectness[i] = (i == q.getCorrectAnswer());
+                }
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle(q.getQuestion());
+                TextView textView = new TextView(MainActivity.this);
+                textView.setText(q.getQuestion());
+                textView.setPadding(32,32,32,32);
+                textView.setTypeface(null, BOLD);
+                builder.setCustomTitle(textView);
+                builder.setItems(optionsChars, (dialog, which) -> {
+
+                    if (corectness[which]) {
+                        addPoints(10);
+                        Toast.makeText(MainActivity.this, R.string.rightAnswer, Toast.LENGTH_SHORT).show();
+                    }
+                });
+                builder.show();
+            }
+        }.execute();
+
+        /*ApiService ap = Api.getApi();
         ap.getQuiz().enqueue(new Callback<Quiz>()
         {
             @Override
@@ -232,7 +276,7 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
             {
                 t.printStackTrace();
             }
-        });
+        });*/
     }
 
     private void addPoints(int pnts)

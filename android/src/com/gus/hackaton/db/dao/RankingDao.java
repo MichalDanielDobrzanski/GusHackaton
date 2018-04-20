@@ -14,10 +14,4 @@ public interface RankingDao
 {
     @Query("SELECT * FROM ranking")
     List<Ranking> getAll();
-
-    @Insert
-    void insertAll(List<Ranking> rankings);
-
-    @Delete
-    void delete(Ranking ranking);
 }

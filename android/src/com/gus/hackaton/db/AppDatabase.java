@@ -9,12 +9,14 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 
+import com.gus.hackaton.db.dao.QuestionDao;
 import com.gus.hackaton.db.dao.RankingDao;
+import com.gus.hackaton.db.entity.Question;
 import com.gus.hackaton.db.entity.Ranking;
 
 import java.util.List;
 
-@Database(entities = {Ranking.class}, version = 1)
+@Database(entities = {Ranking.class, Question.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase
 {
     private static AppDatabase sInstance;
@@ -22,6 +24,7 @@ public abstract class AppDatabase extends RoomDatabase
     public static final String DATABASE_NAME = "helth-pet-database";
 
     public abstract RankingDao rankingDao();
+    public abstract QuestionDao questionDao();
 
     public static AppDatabase getsInstance(final Context context){
         if (sInstance == null) {
@@ -45,6 +48,18 @@ public abstract class AppDatabase extends RoomDatabase
                     contentValues.put("user_name", r.getUserName());
                     contentValues.put("points", r.getPoints());
                     db.insert("ranking", SQLiteDatabase.CONFLICT_IGNORE, contentValues);
+                }
+
+                List<Question> questions = DataGenerator.generateQuestions();
+                for (Question q : questions) {
+                    ContentValues contentValues = new ContentValues();
+                    contentValues.put("question", q.getQuestion());
+                    contentValues.put("answer1", q.getAnswers()[0]);
+                    contentValues.put("answer2", q.getAnswers()[1]);
+                    contentValues.put("answer3", q.getAnswers()[2]);
+                    contentValues.put("answer4", q.getAnswers()[3]);
+                    contentValues.put("correct_answer", q.getCorrectAnswer());
+                    db.insert("question", SQLiteDatabase.CONFLICT_IGNORE, contentValues);
                 }
             }
         }).build();
