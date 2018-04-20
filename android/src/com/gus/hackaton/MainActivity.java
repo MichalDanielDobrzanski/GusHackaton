@@ -68,6 +68,7 @@ import static com.gus.hackaton.utils.Utils.COLUMNS_COUNT;
 public class MainActivity extends AppCompatActivity implements AndroidFragmentApplication.Callbacks {
 
     public static final int CAMERA_PERMISSION = 101;
+    public static final String POINTS_KEY = "points";
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -163,33 +164,11 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
         badgesAdapter.invalidateData(badges);
         questsAdapter.invalidateData(quests);
 
-        refreshPoints();
+        updatePointsTextView();
     }
 
-    private void refreshPoints()
-    {
-        ApiService api = Api.getApi();
-        api.getPoints().enqueue(new Callback<Points>()
-        {
-            @Override
-            public void onResponse(@NonNull Call<Points> call, @NonNull Response<Points> response)
-            {
-                HeroGame.score = response.body().points;
-
-                if (BuildConfig.DEBUG) Log.d(TAG, "refreshPoints() onResponse: " + response.body().toString());
-
-                updatePointsTextView(response);
-            }
-
-            @Override
-            public void onFailure(Call<Points> call, Throwable t) {
-                Utils.showError(MainActivity.this, t);
-            }
-        });
-    }
-
-    private void updatePointsTextView(Response<Points> response) {
-        int points = response.body().points;
+    private void updatePointsTextView() {
+        int points = prefs.getInt(POINTS_KEY, 0);
         String text = String.format(getString(R.string.points), points);
         pointsTextView.setText(text);
     }
@@ -234,90 +213,26 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
                 builder.show();
             }
         }.execute();
-
-        /*ApiService ap = Api.getApi();
-        ap.getQuiz().enqueue(new Callback<Quiz>()
-        {
-            @Override
-            public void onResponse(Call<Quiz> call, Response<Quiz> response)
-            {
-                Quiz quiz = response.body();
-                if (BuildConfig.DEBUG) Log.d(TAG, "onResponse: " + quiz.question);
-                CharSequence [] optionsChars = new CharSequence[4];
-                boolean [] corectness = new boolean[4];
-                List<Option> options = quiz.options;
-                for(int i = 0; i < options.size(); ++i) {
-                    if (BuildConfig.DEBUG) Log.d(TAG, "onResponse: " + options.get(i).value);
-                    optionsChars[i] = options.get(i).value;
-                    corectness[i] = options.get(i).isCorrect;
-                }
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setTitle(quiz.question);
-                TextView textView = new TextView(MainActivity.this);
-                textView.setText(quiz.question);
-                textView.setPadding(32,32,32,32);
-                textView.setTypeface(null, BOLD);
-                builder.setCustomTitle(textView);
-                builder.setItems(optionsChars, (dialog, which) -> {
-
-                    if (corectness[which]) {
-
-                        addPoints(10);
-
-                        Toast.makeText(MainActivity.this, R.string.rightAnswer, Toast.LENGTH_SHORT).show();
-                    }
-                });
-                builder.show();
-            }
-
-            @Override
-            public void onFailure(Call<Quiz> call, Throwable t)
-            {
-                t.printStackTrace();
-            }
-        });*/
     }
 
     private void addPoints(int pnts)
     {
-        ApiService api = Api.getApi();
-        Points p = new Points(pnts);
-        api.addPoints(p).enqueue(new Callback<Points>()
-        {
-            @Override
-            public void onResponse(Call<Points> call, Response<Points> response)
-            {
-                updatePointsTextView(response);
-
-                HeroGame.score = response.body().points;
-            }
-
-            @Override
-            public void onFailure(Call<Points> call, Throwable t) {
-                Utils.showError(MainActivity.this, t);
-            }
-        });
+        int oldPoints = prefs.getInt(POINTS_KEY, 0);
+        prefs.edit().putInt(POINTS_KEY, oldPoints + pnts).apply();
+        updatePointsTextView();
     }
 
     private void setupRecyclerViews() {
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         badgesRecyclerView.setHasFixedSize(true);
-
         FlexboxLayoutManager layoutManager = new FlexboxLayoutManager();
         layoutManager.setFlexWrap(FlexWrap.WRAP);
-
         badgesRecyclerView.setLayoutManager(layoutManager);
 
-
         FridgeAdapter.OnFridgeItemClicked onFridgeItemClicked = createFridgeItemHandler();
-
-
         badgesAdapter = new FridgeAdapter(onFridgeItemClicked);
-
         badgesRecyclerView.setAdapter(badgesAdapter);
-
 
         questsRecyclerView.setHasFixedSize(true);
         questsRecyclerView.setLayoutManager(new GridLayoutManager(this, COLUMNS_COUNT, LinearLayoutManager.VERTICAL, false));
