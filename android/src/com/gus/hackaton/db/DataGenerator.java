@@ -20,7 +20,7 @@ public class DataGenerator
     };
     static int [] CORRECT_INDEX = {0, 1, 2, 3};
 
-    static String [] PRODUCT_IDS = new String[] {"17", "18"};
+    static String [] PRODUCT_IDS = new String[] {"CP01147A", "CP01113A"};
     static String [] PRODUCT_NAMES = new String[] {"Eggs", "Bread"};
     static int [] PRODUCT_HEALTH_INDICATORS = new int[] {1, 2};
     static int [] PRODUCT_POINTS = new int[] {20, 10};

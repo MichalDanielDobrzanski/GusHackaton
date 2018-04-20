@@ -14,16 +14,28 @@ import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.RadarChart;
 import com.google.android.cameraview.CameraView;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.gus.hackaton.db.AppDatabase;
 import com.gus.hackaton.db.entity.Product;
+import com.gus.hackaton.net.Api;
+import com.gus.hackaton.net.ApiService;
+import com.gus.hackaton.utils.Utils;
+
+import org.json.JSONArray;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.dm7.barcodescanner.zbar.Result;
 import me.dm7.barcodescanner.zbar.ZBarScannerView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static com.gus.hackaton.MainActivity.POINTS_KEY;
 
@@ -136,6 +148,26 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
         // Do something with the result here
         if (BuildConfig.DEBUG) Log.d(TAG, rawResult.getContents()); // Prints scan results
 
+        ApiService api = Api.getEurostatApi();
+        api.getEurostatData(rawResult.getContents()).enqueue(new Callback<JsonObject>()
+        {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response)
+            {
+                JsonObject eurostatData = response.body();
+                Log.d(TAG, "onResponse: " + eurostatData.toString());
+                JsonObject countryInfo = eurostatData.getAsJsonObject("value");
+
+                new ReadProductInfo(ScanActivity.this).execute(rawResult.getContents().toString(),
+                        countryInfo.toString());
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t)
+            {
+
+            }
+        });
         // If you would like to resume scanning, call this method below:
         //mScannerView.resumeCameraPreview(this);
         Toast.makeText(this, rawResult.getContents(), Toast.LENGTH_SHORT).show();
@@ -145,10 +177,7 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
         ButterKnife.bind(this);
 
         toggleVisibility(false);
-
         mCameraView.start();
-
-        new ReadProductInfo(this).execute(rawResult.getContents().toString());
     }
 
 
@@ -177,7 +206,7 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activityReference.get());
                 int oldPoints = prefs.getInt(POINTS_KEY, 0);
                 prefs.edit().putInt(POINTS_KEY, oldPoints + product.getPoints()).apply();
-                appDatabase.productDao().productWasScanned(id[0]);
+                appDatabase.productDao().productWasScanned(id[0], id[1]);
             }
 
             return product;
@@ -199,7 +228,7 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
                 scanActivity.sugar.setText(String.valueOf(product.getSugar()));
                 scanActivity.protein.setText(String.valueOf(product.getProtein()));
 
-                //Utils.invalidateChart(product.getEurostatData(), radarChart);
+                Utils.invalidateChart(product.getEurostatData(), scanActivity.radarChart);
 
             } else {
                 if (BuildConfig.DEBUG) Log.d(TAG, "onResponse: productInfo is NULL");

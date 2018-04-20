@@ -17,6 +17,6 @@ public interface ProductDao
     @Query("SELECT * FROM product where id = :id")
     Product getProduct(String id);
 
-    @Query("UPDATE product SET scanned = 1 WHERE id = :id")
-    void productWasScanned(String id);
+    @Query("UPDATE product SET scanned = 1, eurostat_data = :edata WHERE id = :id")
+    void productWasScanned(String id, String edata);
 }

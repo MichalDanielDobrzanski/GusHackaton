@@ -10,9 +10,16 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
+
+import static com.gus.hackaton.net.Api.EUROSTAT_DATASET;
+import static com.gus.hackaton.net.Api.EUROSTAT_LOCATION;
 
 public interface ApiService
 {
+    @GET(EUROSTAT_DATASET + EUROSTAT_LOCATION)
+    Call<JsonObject> getEurostatData(@Query("coicop") String id);
+
     @GET("/api/product/{id}")
     Call<ProductInfo> getProductInfo(@Path("id") String id);
 

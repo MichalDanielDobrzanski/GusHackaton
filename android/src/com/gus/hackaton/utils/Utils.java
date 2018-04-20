@@ -22,21 +22,20 @@ public class Utils {
 
     public static final int COLUMNS_COUNT = 2;
 
-    public static void invalidateChart(List<EurostatData> eurostatDatas, RadarChart radarChart) {
+    public static void invalidateChart(List<Float> eurostatDatas, RadarChart radarChart) {
 
         radarChart.setBackgroundColor(Color.argb(77, 60, 65, 82));
 
         List<RadarEntry> entries = new ArrayList<>();
-        Stream.of(eurostatDatas)
-                .forEach(eurostatData -> entries.add(new RadarEntry((float)eurostatData.price)));
+        for (int i = 0; i < eurostatDatas.size(); ++i) {
+            entries.add(new RadarEntry(eurostatDatas.get(i)));
+        }
 
         XAxis xAxis = radarChart.getXAxis();
         xAxis.setTextSize(11f);
         xAxis.setYOffset(0f);
         xAxis.setXOffset(0f);
-        List<String> labels = new ArrayList<>();
-        Stream.of(eurostatDatas)
-                .forEach(eurostatData -> labels.add(EurostatData.Country.values()[eurostatData.country].name()));
+        List<String> labels = Arrays.asList(new String[]{"ES", "HR", "IT", "PL", "FIN"});
 
         xAxis.setValueFormatter((value, axis) -> labels.get(((int) value) % labels.size()));
         xAxis.setTextColor(Color.WHITE);
@@ -48,6 +47,7 @@ public class Utils {
         yAxis.setDrawLabels(false);
         yAxis.setTextColor(Color.WHITE);
 
+        //TODO translate this
         RadarDataSet radarDataSet = new RadarDataSet(entries, "średnia cena produktu w EUR");
         radarDataSet.setColor(Color.CYAN);
 

@@ -8,6 +8,7 @@ import android.arch.persistence.room.TypeConverters;
 import android.support.annotation.NonNull;
 
 import com.gus.hackaton.db.DataConverter;
+import com.gus.hackaton.db.DataGenerator;
 import com.gus.hackaton.model.EurostatData;
 
 import java.util.List;
@@ -52,7 +53,7 @@ public class Product
 
     @TypeConverters(DataConverter.class)
     @ColumnInfo(name = "eurostat_data")
-    private List<EurostatData> eurostatData;
+    private List<Float> eurostatData;
 
 
     public String getId()
@@ -155,12 +156,12 @@ public class Product
         this.protein = protein;
     }
 
-    public List<EurostatData> getEurostatData()
+    public List<Float> getEurostatData()
     {
         return eurostatData;
     }
 
-    public void setEurostatData(List<EurostatData> eurostatData)
+    public void setEurostatData(List<Float> eurostatData)
     {
         this.eurostatData = eurostatData;
     }

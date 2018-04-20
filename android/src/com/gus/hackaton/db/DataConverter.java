@@ -2,36 +2,44 @@ package com.gus.hackaton.db;
 
 import android.arch.persistence.room.TypeConverter;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.gus.hackaton.model.EurostatData;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
 
-import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DataConverter
 {
     @TypeConverter
-    public String fromEurostatList(List<EurostatData> eurostatData) {
+    public String fromFloatList(List<Float> eurostatData) {
         if (eurostatData == null) {
             return (null);
         }
-        Gson gson = new Gson();
-        Type type = new TypeToken<List<EurostatData>>() {
-        }.getType();
-        String json = gson.toJson(eurostatData, type);
-        return json;
+
+        JsonObject o = new JsonObject();
+        for (int i = 0; i < eurostatData.size(); ++i) {
+            o.addProperty(String.valueOf(i), eurostatData.get(i));
+        }
+        return o.toString();
     }
 
     @TypeConverter
-    public List<EurostatData> toEurostatDataList(String eurostatDataString) {
+    public List<Float> toFloatList(String eurostatDataString) {
         if (eurostatDataString == null) {
             return (null);
         }
-        Gson gson = new Gson();
-        Type type = new TypeToken<List<EurostatData>>() {
-        }.getType();
-        List<EurostatData> eurostatData = gson.fromJson(eurostatDataString, type);
+
+        JsonParser parser = new JsonParser();
+        JsonObject o = parser.parse(eurostatDataString).getAsJsonObject();
+        List<Float> eurostatData = new ArrayList<>();
+
+        for(int i = 0; i < 5; ++i) {
+            JsonPrimitive prim = o.getAsJsonPrimitive(String.valueOf(i));
+            if(prim != null)
+                eurostatData.add(prim.getAsFloat());
+        }
+
         return eurostatData;
     }
 }
