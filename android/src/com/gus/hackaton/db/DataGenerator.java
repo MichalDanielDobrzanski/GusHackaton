@@ -7,11 +7,15 @@ import java.util.List;
 
 public class DataGenerator
 {
+    static String [] NAMES = new String[] {"Konrad", "Dariusz", "Michał", "Radek"};
+    static int [] POINTS = new int[] {200, 10, 150, 100};
+
     public static List<Ranking> generateRanking() {
         List<Ranking> rankingList = new ArrayList<>();
-        rankingList.add(new Ranking("Konrad", 200));
-        rankingList.add(new Ranking("Dariusz", 100));
-        rankingList.add(new Ranking("Radek", 150));
+        for(int i = 0; i < NAMES.length; ++ i) {
+            Ranking r = new Ranking(i, NAMES[i], POINTS[i]);
+            rankingList.add(r);
+        }
 
         return rankingList;
     }

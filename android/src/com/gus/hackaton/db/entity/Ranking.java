@@ -16,10 +16,9 @@ public class Ranking
     @ColumnInfo(name = "points")
     private int points;
 
-    public Ranking(int uid, String userName, int points){}
-
-    public Ranking(String name, int points){
-        this.userName = name;
+    public Ranking(int uid, String userName, int points){
+        this.uid = uid;
+        this.userName = userName;
         this.points = points;
     }
 

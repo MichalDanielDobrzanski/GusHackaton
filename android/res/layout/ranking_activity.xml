@@ -9,15 +9,6 @@
     android:layout_height="match_parent"
     android:padding="32dp">
 
-
-    <ProgressBar
-        android:id="@+id/rankingProgressBar"
-        style="?android:progressBarStyle"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_gravity="center"
-        />
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rankingRecyclerView"
         android:layout_width="match_parent"
