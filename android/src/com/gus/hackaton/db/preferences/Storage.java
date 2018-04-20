@@ -1,4 +1,4 @@
-package com.gus.hackaton.db;
+package com.gus.hackaton.db.preferences;
 
 import com.gus.hackaton.fridge.FridgeItem;
 

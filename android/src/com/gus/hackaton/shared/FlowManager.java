@@ -3,8 +3,8 @@ package com.gus.hackaton.shared;
 import android.content.Context;
 
 import com.gus.hackaton.R;
-import com.gus.hackaton.db.Storage;
-import com.gus.hackaton.db.StorageImpl;
+import com.gus.hackaton.db.preferences.Storage;
+import com.gus.hackaton.db.preferences.StorageImpl;
 import com.gus.hackaton.fridge.FridgeItem;
 import com.gus.hackaton.fridge.FridgeType;
 import com.gus.hackaton.model.EurostatData;

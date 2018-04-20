@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.gus.hackaton.R;
+import com.gus.hackaton.db.entity.Ranking;
 
 import java.util.Collections;
 import java.util.List;
@@ -17,10 +18,10 @@ import butterknife.ButterKnife;
 
 public class RankingAdapter extends RecyclerView.Adapter<RankingAdapter.ViewHolder> {
 
-    private List<RankingItem> rankingItemList;
+    private List<Ranking> rankingList;
 
     RankingAdapter() {
-        rankingItemList = Collections.emptyList();
+        rankingList = Collections.emptyList();
     }
 
     @NonNull
@@ -34,16 +35,16 @@ public class RankingAdapter extends RecyclerView.Adapter<RankingAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.bind(rankingItemList.get(position), position);
+        holder.bind(rankingList.get(position), position);
     }
 
     @Override
     public int getItemCount() {
-        return rankingItemList.size();
+        return rankingList.size();
     }
 
-    public void setData(List<RankingItem> rankingItemList) {
-        this.rankingItemList = rankingItemList;
+    public void setData(List<Ranking> rankingItemList) {
+        this.rankingList = rankingItemList;
         notifyDataSetChanged();
     }
 
@@ -64,10 +65,10 @@ public class RankingAdapter extends RecyclerView.Adapter<RankingAdapter.ViewHold
             ButterKnife.bind(this, itemView);
         }
 
-        void bind(RankingItem rankingItem, int position) {
+        void bind(Ranking ranking, int position) {
             tvPosition.setText(String.valueOf(position + 1));
-            tvPoints.setText(String.valueOf(rankingItem.getPoints()));
-            tvUserName.setText(rankingItem.getUserName());
+            tvPoints.setText(String.valueOf(ranking.getPoints()));
+            tvUserName.setText(ranking.getUserName());
         }
     }
 }

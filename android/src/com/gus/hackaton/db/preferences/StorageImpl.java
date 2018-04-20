@@ -1,4 +1,4 @@
-package com.gus.hackaton.db;
+package com.gus.hackaton.db.preferences;
 
 import android.content.Context;
 import android.content.SharedPreferences;

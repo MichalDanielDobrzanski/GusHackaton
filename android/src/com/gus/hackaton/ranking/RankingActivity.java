@@ -15,6 +15,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.gus.hackaton.BuildConfig;
 import com.gus.hackaton.R;
+import com.gus.hackaton.db.AppDatabase;
 import com.gus.hackaton.net.Api;
 import com.gus.hackaton.net.ApiService;
 import com.gus.hackaton.utils.Utils;
@@ -68,7 +69,9 @@ public class RankingActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        ApiService api = Api.getApi();
+        rankingAdapter.setData(AppDatabase.getsInstance(this).rankingDao().getAll());
+
+        /*ApiService api = Api.getApi();
 
         recyclerView.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
@@ -99,7 +102,7 @@ public class RankingActivity extends AppCompatActivity {
                     public void onFailure(Call<JsonObject> call, Throwable t) {
                         Utils.showError(RankingActivity.this, t);
                     }
-                }));
+                }));*/
     }
 
     @Override
