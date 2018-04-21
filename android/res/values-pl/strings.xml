@@ -35,4 +35,13 @@
     <string name="points">Punkty : %1$d</string>
     <string name="errorNetwork">Problem z siecią!</string>
     <string name="errorNoScanResult">Nie znaleziono produktu, spróbuj ponownie!</string>
+    <string name="itemApple">Jabłko</string>
+    <string name="itemBanana">Banan</string>
+    <string name="itemGrahamRoll">Bułka grahamka</string>
+    <string name="itemRoll">Bułka</string>
+    <string name="itemOnion">Cebula</string>
+    <string name="itemPickledCucumber">Ogórek kiszony</string>
+    <string name="questionHowMany">Jak dużo?</string>
+    <string name="questionHow">Jak ?</string>
+    <string name="questionFromWhere">Skąd ?</string>
 </resources>

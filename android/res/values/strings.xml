@@ -36,5 +36,14 @@
     <string name="scanHealth">Health</string>
     <string name="rightAnswer">Correct Answer!</string>
     <string name="quest">QUEST: \n Scan this product</string>
+    <string name="itemApple">Apple</string>
+    <string name="itemBanana">Banana</string>
+    <string name="itemGrahamRoll">Graham Roll</string>
+    <string name="itemRoll">Roll</string>
+    <string name="itemOnion">Onion</string>
+    <string name="itemPickledCucumber">Pickled Cucumber</string>
+    <string name="questionHowMany">How many ?</string>
+    <string name="questionHow">How ?</string>
+    <string name="questionFromWhere">From Where ?</string>
 
 </resources>

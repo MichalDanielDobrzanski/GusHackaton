@@ -53,7 +53,7 @@ public abstract class AppDatabase extends RoomDatabase
                     db.insert("ranking", SQLiteDatabase.CONFLICT_IGNORE, contentValues);
                 }
 
-                List<Question> questions = DataGenerator.generateQuestions();
+                List<Question> questions = DataGenerator.generateQuestions(context);
                 for (Question q : questions) {
                     ContentValues contentValues = new ContentValues();
                     contentValues.put("question", q.getQuestion());
@@ -65,7 +65,7 @@ public abstract class AppDatabase extends RoomDatabase
                     db.insert("question", SQLiteDatabase.CONFLICT_IGNORE, contentValues);
                 }
 
-                List<Product> products = DataGenerator.generateProducts();
+                List<Product> products = DataGenerator.generateProducts(context);
                 for (Product p : products) {
                     ContentValues contentValues = new ContentValues();
                     contentValues.put("id", p.getId());
