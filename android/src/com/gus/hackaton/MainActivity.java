@@ -198,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
                 radarChart.setVisibility(View.VISIBLE);
                 imageView.setVisibility(View.INVISIBLE);
                 if (fridgeItem.getEurostatData() != null) {
-                    Utils.invalidateChart(fridgeItem.getEurostatData(), radarChart);
+                    Utils.invalidateChart(fridgeItem.getEurostatData(), radarChart, this);
                 }
             } else {
                 radarChart.setVisibility(View.INVISIBLE);

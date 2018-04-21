@@ -228,7 +228,7 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
                 scanActivity.sugar.setText(String.valueOf(product.getSugar()));
                 scanActivity.protein.setText(String.valueOf(product.getProtein()));
 
-                Utils.invalidateChart(product.getEurostatData(), scanActivity.radarChart);
+                Utils.invalidateChart(product.getEurostatData(), scanActivity.radarChart, scanActivity);
 
             } else {
                 if (BuildConfig.DEBUG) Log.d(TAG, "onResponse: productInfo is NULL");

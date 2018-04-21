@@ -29,7 +29,7 @@ public class DataGenerator
     static double [] PRODUCT_CARBOHDRATES = new double[] {28, 28};
     static double [] PRODUCT_SUGARS = new double[] {53, 23};
     static double [] PRODUCT_PROTEINS = new double[] {20, 21};
-    static int [] DRAWABLE_IDS = new int[] {R.drawable.egg, R.drawable.bread};
+    static int [] DRAWABLE_IDS = new int[] {R.drawable.eggs, R.drawable.bread};
 
 
     public static List<Ranking> generateRanking() {

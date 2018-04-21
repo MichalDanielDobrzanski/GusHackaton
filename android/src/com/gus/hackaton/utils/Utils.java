@@ -22,7 +22,7 @@ public class Utils {
 
     public static final int COLUMNS_COUNT = 2;
 
-    public static void invalidateChart(List<Float> eurostatDatas, RadarChart radarChart) {
+    public static void invalidateChart(List<Float> eurostatDatas, RadarChart radarChart, Context context) {
 
         radarChart.setBackgroundColor(Color.argb(77, 60, 65, 82));
 
@@ -48,7 +48,7 @@ public class Utils {
         yAxis.setTextColor(Color.WHITE);
 
         //TODO translate this
-        RadarDataSet radarDataSet = new RadarDataSet(entries, "średnia cena produktu w EUR");
+        RadarDataSet radarDataSet = new RadarDataSet(entries, context.getString(R.string.average_price));
         radarDataSet.setColor(Color.CYAN);
 
         radarDataSet.setValueTextColor(Color.WHITE);
@@ -65,7 +65,6 @@ public class Utils {
     public static void showError(Context context, Throwable t) {
         Toast.makeText(context, R.string.errorNetwork, Toast.LENGTH_SHORT).show();
         t.printStackTrace();
-
     }
 
 }

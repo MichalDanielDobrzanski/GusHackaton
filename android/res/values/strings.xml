@@ -36,5 +36,6 @@
     <string name="scanHealth">Health</string>
     <string name="rightAnswer">Correct Answer!</string>
     <string name="quest">QUEST: \n Scan this product</string>
+    <string name="average_price">średnia cena produktu w EUR</string>
 
 </resources>

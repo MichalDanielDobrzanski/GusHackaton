@@ -1,7 +1,9 @@
 package com.gus.hackaton.ranking;
 
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,10 +16,13 @@ import com.gus.hackaton.db.AppDatabase;
 import com.gus.hackaton.db.entity.Ranking;
 
 import java.lang.ref.WeakReference;
+import java.util.Comparator;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.gus.hackaton.MainActivity.POINTS_KEY;
 
 public class RankingActivity extends AppCompatActivity {
 
@@ -68,6 +73,10 @@ public class RankingActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(List<Ranking> r)
         {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activityReference.get());
+            //TODO me albo ja
+            r.add(new Ranking(3121212, "Me", prefs.getInt(POINTS_KEY, 0)));
+            r.sort((o1, o2) -> o2.getPoints() - o1.getPoints());
             activityReference.get().rankingAdapter.setData(r);
         }
     }
