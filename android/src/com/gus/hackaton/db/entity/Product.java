@@ -17,9 +17,11 @@ import java.util.List;
 @Entity(tableName = "product")
 public class Product
 {
-    @NonNull
     @PrimaryKey
-    private String id;
+    private int id;
+
+    @ColumnInfo(name = "eurostat_id")
+    private String eurostat_id;
 
     @ColumnInfo(name = "name")
     private String name;
@@ -55,15 +57,24 @@ public class Product
     @ColumnInfo(name = "eurostat_data")
     private List<Float> eurostatData;
 
-
-    public String getId()
+    public int getId()
     {
         return id;
     }
 
-    public void setId(String id)
+    public void setId(int id)
     {
         this.id = id;
+    }
+
+    public String getEurostat_id()
+    {
+        return eurostat_id;
+    }
+
+    public void setEurostat_id(String eurostat_id)
+    {
+        this.eurostat_id = eurostat_id;
     }
 
     public String getName()

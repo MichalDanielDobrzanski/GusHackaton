@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.RadarChart;
 import com.google.android.cameraview.CameraView;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.gus.hackaton.db.AppDatabase;
 import com.gus.hackaton.db.entity.Product;
@@ -22,11 +21,7 @@ import com.gus.hackaton.net.Api;
 import com.gus.hackaton.net.ApiService;
 import com.gus.hackaton.utils.Utils;
 
-import org.json.JSONArray;
-
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -148,8 +143,12 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
         // Do something with the result here
         if (BuildConfig.DEBUG) Log.d(TAG, rawResult.getContents()); // Prints scan results
 
+        new ReadProduct(this).execute(rawResult.getContents());
+    }
+
+    private void showScannedProductInfo(int id, String eurostat_id) {
         ApiService api = Api.getEurostatApi();
-        api.getEurostatData(rawResult.getContents()).enqueue(new Callback<JsonObject>()
+        api.getEurostatData(eurostat_id).enqueue(new Callback<JsonObject>()
         {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response)
@@ -158,7 +157,7 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
                 Log.d(TAG, "onResponse: " + eurostatData.toString());
                 JsonObject countryInfo = eurostatData.getAsJsonObject("value");
 
-                new ReadProductInfo(ScanActivity.this).execute(rawResult.getContents().toString(),
+                new ScanProduct(ScanActivity.this).execute(String.valueOf(id),
                         countryInfo.toString());
             }
 
@@ -170,7 +169,7 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
         });
         // If you would like to resume scanning, call this method below:
         //mScannerView.resumeCameraPreview(this);
-        Toast.makeText(this, rawResult.getContents(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, eurostat_id, Toast.LENGTH_SHORT).show();
         mScannerView.stopCamera();
         scanned = true;
         setContentView(R.layout.scan_activity);
@@ -189,11 +188,33 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
         startActivity(intent);
     }
 
-    private static class ReadProductInfo extends AsyncTask<String, Void, Product> {
+    private static class ReadProduct extends AsyncTask<String, Void, Product> {
 
         private WeakReference<ScanActivity> activityReference;
+        ReadProduct(ScanActivity context) {
+            activityReference = new WeakReference<>(context);
+        }
 
-        ReadProductInfo(ScanActivity context) {
+        @Override
+        protected Product doInBackground(String... id)
+        {
+            AppDatabase appDatabase = AppDatabase.getsInstance(activityReference.get());
+            return appDatabase.productDao().getProduct(id[0]);
+        }
+
+        @Override
+        protected void onPostExecute(Product product)
+        {
+            super.onPostExecute(product);
+            activityReference.get().showScannedProductInfo(product.getId(), product.getEurostat_id());
+
+        }
+    }
+
+    private static class ScanProduct extends AsyncTask<String, Void, Product> {
+
+        private WeakReference<ScanActivity> activityReference;
+        ScanProduct(ScanActivity context) {
             activityReference = new WeakReference<>(context);
         }
 
@@ -207,6 +228,7 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
                 int oldPoints = prefs.getInt(POINTS_KEY, 0);
                 prefs.edit().putInt(POINTS_KEY, oldPoints + product.getPoints()).apply();
                 appDatabase.productDao().productWasScanned(id[0], id[1]);
+                product = appDatabase.productDao().getProduct(id[0]);
             }
 
             return product;
