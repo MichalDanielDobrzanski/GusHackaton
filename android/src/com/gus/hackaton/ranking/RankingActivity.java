@@ -16,7 +16,6 @@ import com.gus.hackaton.db.AppDatabase;
 import com.gus.hackaton.db.entity.Ranking;
 
 import java.lang.ref.WeakReference;
-import java.util.Comparator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -74,8 +73,7 @@ public class RankingActivity extends AppCompatActivity {
         protected void onPostExecute(List<Ranking> r)
         {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activityReference.get());
-            //TODO me albo ja
-            r.add(new Ranking(3121212, "Me", prefs.getInt(POINTS_KEY, 0)));
+            r.add(new Ranking(3121212, activityReference.get().getString(R.string.me), prefs.getInt(POINTS_KEY, 0)));
             r.sort((o1, o2) -> o2.getPoints() - o1.getPoints());
             activityReference.get().rankingAdapter.setData(r);
         }

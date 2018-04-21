@@ -36,7 +36,7 @@
     <string name="scanHealth">Health</string>
     <string name="rightAnswer">Correct Answer!</string>
     <string name="quest">QUEST: \n Scan this product</string>
-    <string name="average_price">średnia cena produktu w EUR</string>
+    <string name="average_price">Average price in Europe</string>
     <string name="itemApple">Apple</string>
     <string name="itemBanana">Banana</string>
     <string name="itemGrahamRoll">Graham Roll</string>
@@ -46,5 +46,6 @@
     <string name="questionHowMany">How many ?</string>
     <string name="questionHow">How ?</string>
     <string name="questionFromWhere">From Where ?</string>
+    <string name="me">Me</string>
 
 </resources>

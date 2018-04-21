@@ -44,4 +44,6 @@
     <string name="questionHowMany">Jak dużo?</string>
     <string name="questionHow">Jak ?</string>
     <string name="questionFromWhere">Skąd ?</string>
+    <string name="average_price">średnia cena produktu w EUR</string>
+    <string name="me">Ja</string>
 </resources>
