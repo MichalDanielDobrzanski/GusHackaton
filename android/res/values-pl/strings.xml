@@ -41,9 +41,24 @@
     <string name="itemRoll">Bułka</string>
     <string name="itemOnion">Cebula</string>
     <string name="itemPickledCucumber">Ogórek kiszony</string>
-    <string name="questionHowMany">Jak dużo?</string>
-    <string name="questionHow">Jak ?</string>
-    <string name="questionFromWhere">Skąd ?</string>
+    <string name="questionHowMany">Gdzie najmniej kosztuje cebula?</string>
+    <string name="questionHow">Jakie jest najbardziej pożywne jedzenie na śniadanie?</string>
+    <string name="questionFromWhere">Gdzie najmniej w Europie kosztują jajka?</string>
     <string name="average_price">średnia cena produktu w EUR</string>
     <string name="me">Ja</string>
+
+    <string name="questionHowManyA">Niemcy</string>
+    <string name="questionHowManyB">Włochy</string>
+    <string name="questionHowManyC">Polska</string>
+    <string name="questionHowManyD">Francja</string>
+
+    <string name="questionHowA">Płatki śniadaniowe</string>
+    <string name="questionHowB">Łosoś</string>
+    <string name="questionHowC">Jabłko</string>
+    <string name="questionHowD">Jajka</string>
+
+    <string name="questionFromWhereA">Hiszpania</string>
+    <string name="questionFromWhereB">Francja</string>
+    <string name="questionFromWhereC">Polska</string>
+    <string name="questionFromWhereD">Grecja</string>
 </resources>

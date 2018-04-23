@@ -42,9 +42,9 @@ public class DataGenerator
     public static List<Question> generateQuestions(Context context) {
         String [] QUESTIONS = {context.getString(R.string.questionHowMany), context.getString(R.string.questionHow), context.getString(R.string.questionFromWhere)};
         String [][] ANSWERS = {
-                {"a", "b", "c", "d"},
-                {"e", "f", "g", "h"},
-                {"i", "j", "k", "l"}
+                {context.getString(R.string.questionHowManyA), context.getString(R.string.questionHowManyB), context.getString(R.string.questionHowManyC), context.getString(R.string.questionHowManyD)},
+                {context.getString(R.string.questionHowA), context.getString(R.string.questionHowB), context.getString(R.string.questionHowC), context.getString(R.string.questionHowD)},
+                {context.getString(R.string.questionFromWhereA), context.getString(R.string.questionFromWhereB), context.getString(R.string.questionFromWhereC), context.getString(R.string.questionFromWhereD)}
         };
         int [] CORRECT_INDEX = {0, 1, 2, 3};
         List<Question> questions = new ArrayList<>();

@@ -43,9 +43,25 @@
     <string name="itemRoll">Roll</string>
     <string name="itemOnion">Onion</string>
     <string name="itemPickledCucumber">Pickled Cucumber</string>
-    <string name="questionHowMany">How many ?</string>
-    <string name="questionHow">How ?</string>
-    <string name="questionFromWhere">From Where ?</string>
+    <string name="questionHowMany">Where in the Union Europe onion is cheapest?</string>
+    <string name="questionHow">What is the most nutritious food for breakfast?</string>
+    <string name="questionFromWhere">Where in the Union Europe eggs is cheapest?</string>
+
+    <string name="questionHowManyA">German</string>
+    <string name="questionHowManyB">Italy</string>
+    <string name="questionHowManyC">Poland</string>
+    <string name="questionHowManyD">France</string>
+
+    <string name="questionHowA">Cornflakes</string>
+    <string name="questionHowB">Salmon</string>
+    <string name="questionHowC">Apple</string>
+    <string name="questionHowD">Eggs</string>
+
+    <string name="questionFromWhereA">Spain</string>
+    <string name="questionFromWhereB">France</string>
+    <string name="questionFromWhereC">Poland</string>
+    <string name="questionFromWhereD">Greece</string>
+
     <string name="me">Me</string>
 
 </resources>
