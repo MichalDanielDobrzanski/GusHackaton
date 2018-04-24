@@ -63,5 +63,6 @@
     <string name="questionFromWhereD">Greece</string>
 
     <string name="me">Me</string>
+    <string name="internet_error">Error when connecting to internet</string>
 
 </resources>

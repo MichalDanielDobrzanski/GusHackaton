@@ -61,4 +61,5 @@
     <string name="questionFromWhereB">Francja</string>
     <string name="questionFromWhereC">Polska</string>
     <string name="questionFromWhereD">Grecja</string>
+    <string name="internet_error">Brak połączenia z internetem</string>
 </resources>

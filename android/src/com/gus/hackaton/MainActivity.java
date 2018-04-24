@@ -29,13 +29,10 @@ import com.badlogic.gdx.backends.android.AndroidFragmentApplication;
 import com.github.mikephil.charting.charts.RadarChart;
 import com.google.android.flexbox.FlexWrap;
 import com.google.android.flexbox.FlexboxLayoutManager;
-import com.google.ar.core.Session;
 import com.gus.hackaton.ar.ARActivity;
 import com.gus.hackaton.db.AppDatabase;
 import com.gus.hackaton.db.entity.Product;
 import com.gus.hackaton.db.entity.Question;
-import com.gus.hackaton.db.preferences.Storage;
-import com.gus.hackaton.db.preferences.StorageImpl;
 import com.gus.hackaton.fridge.FridgeAdapter;
 import com.gus.hackaton.ranking.RankingActivity;
 import com.gus.hackaton.utils.Utils;
@@ -54,9 +51,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 import static android.graphics.Typeface.BOLD;
 import static com.gus.hackaton.utils.Utils.COLUMNS_COUNT;
 
-/**
- * https://stackoverflow.com/questions/24618829/how-to-add-dividers-and-spaces-between-items-in-recyclerview
- */
+
 public class MainActivity extends AppCompatActivity implements AndroidFragmentApplication.Callbacks {
 
     public static final int CAMERA_PERMISSION = 101;
@@ -91,8 +86,6 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
     private FridgeAdapter badgesAdapter;
     private FridgeAdapter questsAdapter;
 
-    private Storage storage;
-
     private SharedPreferences prefs;
 
     @Override
@@ -125,15 +118,6 @@ public class MainActivity extends AppCompatActivity implements AndroidFragmentAp
 				.commit();
 
 		setupRecyclerViews();
-
-		try {
-            Session session = new Session(/* context= */ this);
-        } catch (Exception e) {
-		    e.printStackTrace();
-		    showAr.setVisibility(View.INVISIBLE);
-        }
-		storage = new StorageImpl(this);
-
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
 	}
 

@@ -164,12 +164,11 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t)
             {
-
+                Toast.makeText(ScanActivity.this, R.string.internet_error, Toast.LENGTH_SHORT).show();
             }
         });
         // If you would like to resume scanning, call this method below:
         //mScannerView.resumeCameraPreview(this);
-        Toast.makeText(this, eurostat_id, Toast.LENGTH_SHORT).show();
         mScannerView.stopCamera();
         scanned = true;
         setContentView(R.layout.scan_activity);
