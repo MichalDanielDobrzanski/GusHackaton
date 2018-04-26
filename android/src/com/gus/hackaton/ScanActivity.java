@@ -165,17 +165,9 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
             public void onFailure(Call<JsonObject> call, Throwable t)
             {
                 Toast.makeText(ScanActivity.this, R.string.internet_error, Toast.LENGTH_SHORT).show();
+                ScanActivity.this.mScannerView.resumeCameraPreview(ScanActivity.this);
             }
         });
-        // If you would like to resume scanning, call this method below:
-        //mScannerView.resumeCameraPreview(this);
-        mScannerView.stopCamera();
-        scanned = true;
-        setContentView(R.layout.scan_activity);
-        ButterKnife.bind(this);
-
-        toggleVisibility(false);
-        mCameraView.start();
     }
 
 
@@ -207,8 +199,10 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
             super.onPostExecute(product);
             if (product != null)
                 activityReference.get().showScannedProductInfo(product.getId(), product.getEurostat_id());
-            else
+            else {
                 Toast.makeText(activityReference.get(), R.string.no_barcode_database, Toast.LENGTH_SHORT).show();
+                activityReference.get().mScannerView.resumeCameraPreview(activityReference.get());
+            }
         }
     }
 
@@ -240,6 +234,13 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
         {
             ScanActivity scanActivity = activityReference.get();
             if (product != null) {
+                // If you would like to resume scanning, call this method below:;
+                scanActivity.mScannerView.stopCamera();
+                scanActivity.scanned = true;
+                scanActivity.setContentView(R.layout.scan_activity);
+                ButterKnife.bind(scanActivity);
+
+                scanActivity.mCameraView.start();
                 scanActivity.toggleVisibility(true);
 
                 if (BuildConfig.DEBUG) Log.d(TAG, "onResponse: " + product.getName());
