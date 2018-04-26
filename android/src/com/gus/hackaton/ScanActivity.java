@@ -205,8 +205,10 @@ public class ScanActivity extends AppCompatActivity implements ZBarScannerView.R
         protected void onPostExecute(Product product)
         {
             super.onPostExecute(product);
-            activityReference.get().showScannedProductInfo(product.getId(), product.getEurostat_id());
-
+            if (product != null)
+                activityReference.get().showScannedProductInfo(product.getId(), product.getEurostat_id());
+            else
+                Toast.makeText(activityReference.get(), R.string.no_barcode_database, Toast.LENGTH_SHORT).show();
         }
     }
 

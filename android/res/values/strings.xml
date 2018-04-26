@@ -64,5 +64,6 @@
 
     <string name="me">Me</string>
     <string name="internet_error">Error when connecting to internet</string>
+    <string name="no_barcode_database">No such barcode in database</string>
 
 </resources>
